@@ -1,4 +1,6 @@
-package swingComponents;
+package modelo;
+
+import vista.GameFrame;
 
 public class MyGame {
 
