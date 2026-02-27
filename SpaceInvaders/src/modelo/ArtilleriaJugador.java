@@ -1,14 +1,19 @@
 package modelo;
 
 import java.util.LinkedList;
-
+import java.util.Observable;
+@SuppressWarnings("deprecation")
 public class ArtilleriaJugador {
 	private LinkedList<BalaJugador> listaBalas;
 	private static ArtilleriaJugador miArtilleriaJugador;
 	
 	public static ArtilleriaJugador getArtilleria() {
-		if (miArtilleriaJugador == null) miArtilleriaJugador = new ArtilleriaJugador();
+		if (miArtilleriaJugador == null) iniciar();
 		return miArtilleriaJugador;
+	}
+	
+	public static void iniciar() {
+		miArtilleriaJugador = new ArtilleriaJugador();
 	}
 	
 	public void tick() {

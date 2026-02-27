@@ -7,6 +7,20 @@ public class Flota {
 	private ArrayList<Alien> listaAliens;
 	private boolean movDir;
 	private int tickCount;
+	private static Flota miFlota;
+	
+	public Flota getFlota() {
+		if(miFlota == null) inicializar();
+		
+		return miFlota;
+	}
+	
+	/*
+	 * TODO iniciar la lista de Aliens en formación
+	 */
+	public static void inicializar() {
+		miFlota = new Flota();
+	}
 	
 	public void tick(LinkedList<int[]> listaBalas) {
 		

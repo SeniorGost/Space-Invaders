@@ -1,8 +1,10 @@
 package modelo;
 
 import java.awt.Color;
+import java.util.Observable;
 
-public final class Jugador {
+@SuppressWarnings("deprecation")
+public final class Jugador extends Observable {
 	private int posX;
 	private int posY;
 	private Color color;
@@ -16,15 +18,18 @@ public final class Jugador {
 	private Jugador() {
 		
 	}
+	public static void inicializar() {
+		miJugador = new Jugador();
+	}
 	
 	public static Jugador getJugador() {
-		if (miJugador == null) miJugador = new Jugador();
+		if (miJugador == null) inicializar();
 		
 		return miJugador;
 	}
 	
-	public void tick() {
-		
+	public void tick(long cosa) {
+		System.out.println(cosa);
 	}
 	
 	public void move(boolean pWillMove) {

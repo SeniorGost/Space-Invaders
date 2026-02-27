@@ -1,8 +1,9 @@
 package modelo;
 
 import java.util.LinkedList;
-
-public class Alien {
+import java.util.Observable;
+@SuppressWarnings("deprecation")
+public class Alien extends Observable{
 	private int posX;
 	private int posY;
 	
