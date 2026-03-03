@@ -9,7 +9,7 @@ public class Flota {
 	private int tickCount;
 	private static Flota miFlota;
 	
-	public Flota getFlota() {
+	public static Flota getFlota() {
 		if(miFlota == null) inicializar();
 		
 		return miFlota;
@@ -22,7 +22,7 @@ public class Flota {
 		miFlota = new Flota();
 	}
 	
-	public void tick(LinkedList<int[]> listaBalas) {
+	public void tick(LinkedList<int[]> listaBalas) throws JuegoCambiadoException {
 		
 	}
 	

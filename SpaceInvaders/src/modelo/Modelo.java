@@ -33,7 +33,13 @@ public class Modelo extends Observable{
 				@Override
 				public void run() {
 					contador = System.currentTimeMillis();
-					Jugador.getJugador().tick(contador);
+					
+					try {
+						Jugador.getJugador().tick(contador);
+					} catch (JuegoCambiadoException e) {
+						// TODO: handle exception
+					}
+					
 					
 				}
 			}, 0, 50);

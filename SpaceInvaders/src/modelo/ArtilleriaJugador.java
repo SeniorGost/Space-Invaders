@@ -16,8 +16,8 @@ public class ArtilleriaJugador {
 		miArtilleriaJugador = new ArtilleriaJugador();
 	}
 	
-	public void tick() {
-		
+	public void tick() throws JuegoCambiadoException{
+		Flota.getFlota().tick(null);
 	}
 	
 	public void tick(int posX, int posY) {

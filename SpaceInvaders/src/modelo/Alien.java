@@ -7,7 +7,7 @@ public class Alien extends Observable{
 	private int posX;
 	private int posY;
 	
-	public boolean tick(LinkedList<int[]> listaPosicionesBalas) {
+	public boolean tick(int x, int y)  throws JuegoPerdidoException {
 		return false;
 	}
 	

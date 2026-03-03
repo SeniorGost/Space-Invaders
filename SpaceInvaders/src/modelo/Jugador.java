@@ -28,8 +28,14 @@ public final class Jugador extends Observable {
 		return miJugador;
 	}
 	
-	public void tick(long cosa) {
-		System.out.println(cosa);
+	public void tick(long cosa) throws JuegoCambiadoException {
+		
+		/*
+		 * Añadir cosas
+		 */
+		
+		
+		ArtilleriaJugador.getArtilleria().tick();
 	}
 	
 	public void move(boolean pWillMove) {
