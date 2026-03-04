@@ -1,13 +1,11 @@
 package modelo;
 
-import java.awt.Color;
 import java.util.Observable;
 
 @SuppressWarnings("deprecation")
 public final class Jugador extends Observable {
 	private int posX;
 	private int posY;
-	private Color color;
 	// posible método de movimiento: int movDir = [-1,0,1]
 	// útil para definir x += movDir*velocidad(CONSTANTE)
 	private boolean movDir;
