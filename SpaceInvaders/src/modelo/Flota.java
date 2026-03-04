@@ -21,20 +21,15 @@ public class Flota {
 	public static void inicializar() {
 		miFlota = new Flota();
 	}
-	
-	public void tick(LinkedList<int[]> listaBalas) throws JuegoCambiadoException {
+
+	public void tick(int x, int y)  throws JuegoCambiadoException {
 		
 	}
 	
-	private void moverAliens() {
+	public boolean hit(int x, int y) {
+		boolean rdo = false;
 		
+		return rdo;
 	}
 	
-	private void decidirDireccion() {
-		
-	}
-	
-	private void decidirAlien() {
-		
-	}
 }
