@@ -55,7 +55,7 @@ public class Flota {
 
         //Comprobacion Limites laterales
         for (Alien a : listaAliens) {
-            if (a.estaEnLimite(8000, 0)) { // Límites de la pantalla 
+            if (a.estaEnLimite(800, 0)) { // Límites de la pantalla 
                 cambiarDireccion = true;
                 break;
             }
