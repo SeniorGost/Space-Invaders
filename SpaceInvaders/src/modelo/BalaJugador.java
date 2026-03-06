@@ -11,13 +11,15 @@ public class BalaJugador extends Observable{
 		posY = pPosY;
 	}
 	
-	public boolean tick() {
-		boolean rdo = Flota.getFlota().hit(posX, ++posY);
+	public boolean tick() throws JuegoCambiadoException {
+		boolean rdo = false;
+		
+		rdo = Flota.getFlota().hit(posX, ++posY);
+		
 		
 		if (!rdo) {
 			setChanged();
-			int[] pos = {posX, posY};
-			notifyObservers(pos);
+			notifyObservers(new int[] {posX, posY});
 		}
 		
 		return rdo;

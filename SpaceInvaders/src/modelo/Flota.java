@@ -6,14 +6,14 @@ import java.util.Iterator;
 public class Flota {
     private ArrayList<Alien> listaAliens;
     private boolean movDir; // false = izquierda, true = derecha
+    private boolean willFall;
     private int tickCount;
     private static Flota miFlota;
 
     private Flota() {
         listaAliens = new ArrayList<>();
-        tickCount = 0;
-        movDir = true; // Empiezan moviéndose a la derecha
-        inicializarAliens();
+        movDir = true;
+        willFall = false;
     }
 
     public static Flota getFlota() {
@@ -25,6 +25,8 @@ public class Flota {
 
    //Matriz de aliens ej 1x10
     private void inicializarAliens() {
+    	listaAliens = new ArrayList<Alien>();
+    	
         for (int fila = 0; fila < 1; fila++) {
             for (int col = 0; col < 10; col++) {
                 // Espaciado de 40px entre ellos
@@ -33,59 +35,61 @@ public class Flota {
         }
     }
 
-    public static void inicializar() {
-        miFlota = new Flota();
+    public void inicializar() {
+        tickCount = 0;
+        movDir = true; // Empiezan moviéndose a la derecha
+        inicializarAliens();
     }
-
-   //movimiento cada 4 ticks
+    //movimiento cada 4 ticks
     public void tick(int x, int y) throws JuegoGanadoException, JuegoPerdidoException {
-        tickCount++;
-        hit(x, y);
-        if (tickCount >= 4) {
-            moverFlota();
-            tickCount = 0;
-        }
-        if (listaAliens.isEmpty()) {//comprobaos si no quedan aliens
-        	  throw new JuegoGanadoException();
-        }
+    	tickCount++;
+    	
+    	int deltaX = 0;
+    	int deltaY = 0;
+    	
+    	if (tickCount == 4) {
+    		tickCount = 0;
+    		
+    		deltaX = 1;
+    		
+    		if (!movDir) {
+    			deltaX = -deltaX;
+    		}
+    		if (willFall) {
+    			deltaY = -1;
+    			willFall = false;
+    		}
+    		
+    		for (Alien a : listaAliens) {    			
+    			if (a.tick(deltaX, deltaY, x, y)) {
+    				willFall = true;
+    				movDir = !movDir;
+    			}
+    		}
+    		
+    	}
     }
-
-    private void moverFlota() {
-        boolean cambiarDireccion = false;
-
-        //Comprobacion Limites laterales
-        for (Alien a : listaAliens) {
-            if (a.estaEnLimite(800, 0)) { // Límites de la pantalla 
-                cambiarDireccion = true;
-                break;
-            }
-        }
-
-        if (cambiarDireccion) {
-            movDir = !movDir; 
-            for (Alien a : listaAliens) {
-                a.mover(0, 20); //bajar unaa fila
-            }
-        } else {
-            int avance = movDir ? 10 : -10;
-            for (Alien a : listaAliens) {
-                a.mover(avance, 0);
-            }
-        }
-    }
-
+    
+    
+    
    //si se alcanza un alien se elimina de la flota
-    public boolean hit(int x, int y) throws JuegoPerdidoException {
+    public boolean hit(int x, int y) throws JuegoGanadoException {
+    	boolean alienEncontrado = false;
+    	
         Iterator<Alien> it = listaAliens.iterator();
-        while (it.hasNext()) {
+        while (it.hasNext() && !alienEncontrado) {
             Alien a = it.next();
             // El tick del alien devuelve true si hay colisión
-                if (a.tick(x, y)) {
+                if (a.hit(x, y)) {
                     it.remove(); 
-                    return true; 
+                    alienEncontrado = true;
                 }
          }
-        return false;
+        
+        if (listaAliens.isEmpty()) {//comprobaos si no quedan aliens
+        	throw new JuegoGanadoException();
+        }
+        return alienEncontrado;
     }
 
   

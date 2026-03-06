@@ -8,64 +8,86 @@ public final class Jugador extends Observable {
     private int posY;
     
     //  movDir false='izquierda', true='derecha'
-    private boolean movDir;
+    private boolean movDirX;
+    private boolean movDirY;
     private boolean willMove;
     private boolean willShoot;
     
     private static Jugador miJugador;
     
     // Constantes de juego
-    private static final int VELOCIDAD = 10;
-    private static final int LIMITE_IZQ = 0;
-    private static final int LIMITE_DER = 8000;
+    private int VELOCIDAD;
+    private int LIMITE_IZQ;
+    private int LIMITE_DER;
+    private int LIMITE_ABAJO;
+    private int LIMITE_ARRIBA;
 
     private Jugador() {
-        // Posición inicial 
-        this.posX = 400;
-        this.posY = 550;
         this.willMove = false;
         this.willShoot = false;
+        
+        int LIMITE_IZQ = 0;
+        int LIMITE_DER = Modelo.getModelo().getWidth();
+        int LIMITE_ABAJO = Modelo.getModelo().getHeight();
+        int LIMITE_ARRIBA = 0;
+        
+        
     }
 
-    public static void inicializar() {
-        miJugador = new Jugador();
+    public void inicializar() {
+    	// Posición inicial 
+    	posX = 50;
+        posY = 55;
+        
+        ArtilleriaJugador.getArtilleria().iniciar();
     }
 
     public static Jugador getJugador() {
-        if (miJugador == null) inicializar();
+        if (miJugador == null) miJugador = new Jugador();
         return miJugador;
     }
 
     public void tick() throws JuegoCambiadoException {
         
-        // logica dde Movimiento
+       // logica de Movimiento
         if (willMove) {
-            if (movDir) { // Derecha
+            if (movDirX) {	// Derecha
                 if (posX + VELOCIDAD <= LIMITE_DER) posX += VELOCIDAD;
-            } else { // Izquierda
+            } else { 		// Izquierda
                 if (posX - VELOCIDAD >= LIMITE_IZQ) posX -= VELOCIDAD;
             }
+            
+            if (movDirY) {	// Abajo
+                if (posY + VELOCIDAD <= LIMITE_ABAJO) posY += VELOCIDAD;
+            } else { 		// Arriba
+                if (posY - VELOCIDAD >= LIMITE_ARRIBA) posY -= VELOCIDAD;
+            }            
             willMove = false;
         }
         //logica de Disparo
         if (willShoot) {
-            ArtilleriaJugador.getArtilleria().tick(this.posX, this.posY, this.willShoot);
+        	ArtilleriaJugador.getArtilleria().tick(this.posX, this.posY, this.willShoot);
             willShoot = false;
         } else {
-        	ArtilleriaJugador.getArtilleria().tick(this.posX, this.posY, this.willShoot);
+        	ArtilleriaJugador.getArtilleria().tick();
         }
+        
         setChanged();
-        notifyObservers();
+        notifyObservers(new int[] {posX, posY});
     }
 
   
     // @param pMovDir false para izquierda, true para derecha.
-    public void move(boolean pMovDir) {
-        this.movDir = pMovDir;
+    public void moveX(boolean movX) {
+        this.movDirX = movX;
+        this.willMove = true;
+    }
+    
+    public void moveY(boolean movY) {
+        this.movDirY = movY;
         this.willMove = true;
     }
 
-    
     public void shoot() {
         this.willShoot = true;
     }

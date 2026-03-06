@@ -16,39 +16,43 @@ public class Alien extends Observable {
     }
 
     /**
-     * @return true si el alien ha sido impactado (muere), false en caso contrario.
-     * @throws JuegoPerdidoException Si el alien alcanza el final
+     * @return {@code true} si el alien ha alcanzado uno de los limites horizontales del grid, {@code false} en caso contrario.
+     * @throws JuegoPerdidoException Si el alien alcanza el final o si colisiona con el jugador
      */
-    public boolean tick(int balaX, int balaY) throws JuegoPerdidoException {
-        if (this.posX == balaX && this.posY == balaY) {
-            setChanged();
-            notifyObservers(); 
-            return true; 
-        }
+    public boolean tick(int deltaX, int deltaY, int jugadorX, int jugadorY) throws JuegoPerdidoException {
+    	
+    	// Verifica si su posicion es la misma que la del jugador
+    	if (posX == jugadorX && posY == jugadorY) {
+    		throw new JuegoPerdidoException();
+    	}
+    	
+    	// Verificación de límite inferior (si el alien llega abajo, se pierde el juego)
+    	if (posY == Modelo.getModelo().getHeight()) {    		
+    		throw new JuegoPerdidoException();
+    	}
+    	
+        this.posX += deltaX;
+        this.posY += deltaY;
         
-        // Verificación de límite inferior (si el alien llega abajo, se pierde el juego)
-        if (estaEnLimite()) {
-            throw new JuegoPerdidoException();
-        }
+        setChanged();
+        notifyObservers(new int[] {posX, posY});
         
-        return false;
+        return (posX == 0 || posX == Modelo.getModelo().getWidth());
+    }
+    
+
+    /**
+     * @return {@code true} Si su posicion cohencide con la recibida, {@code false} en caso contrario.
+     */
+    
+    public boolean hit(int balaX, int balaY) {
+    	if (this.posX == balaX && this.posY == balaY) {return true;}
+    	return false;
     }
 
     //verifica si ha llegado a una de las paredes
     public boolean estaEnLimite(int limiteDerecho, int limiteIzquierdo) {
         return (this.posX >= limiteDerecho || this.posX <= limiteIzquierdo);
-    }
-    
-    private boolean estaEnLimite() {
-        // Lógica para detectar si el alien llegó al borde inferior (suponiendo 500 como límite)
-        return this.posY >= 500;
-    }
-
-    public void mover(int deltaX, int deltaY) {
-        this.posX += deltaX;
-        this.posY += deltaY;
-        setChanged();
-        notifyObservers();
     }
 
     public void disparar() {

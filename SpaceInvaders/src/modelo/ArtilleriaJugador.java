@@ -1,5 +1,6 @@
 package modelo;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Observable;
@@ -9,15 +10,21 @@ public class ArtilleriaJugador {
 	private static ArtilleriaJugador miArtilleriaJugador;
 	
 	public static ArtilleriaJugador getArtilleria() {
-		if (miArtilleriaJugador == null) iniciar();
+		if (miArtilleriaJugador == null) miArtilleriaJugador = new ArtilleriaJugador();
 		return miArtilleriaJugador;
+	}
+	
+	private ArtilleriaJugador() {
+		listaBalas = new LinkedList<BalaJugador>();
 	}
 	
 	/**
 	 * Crea una nueva instancia de {@code ArtilleriaJugador}
 	 */
-	public static void iniciar() {
-		miArtilleriaJugador = new ArtilleriaJugador();
+	public void iniciar() {
+		listaBalas = new LinkedList<BalaJugador>();
+		
+		Flota.getFlota().inicializar();
 	}
 	
 	/**

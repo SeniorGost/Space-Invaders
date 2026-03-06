@@ -5,13 +5,15 @@ import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import vista.GameFrame;
 @SuppressWarnings("deprecation")
 public class Modelo extends Observable{
 	private int ventana;
 	private static Modelo miModelo;
 	private long contador;
 	private Timer miTimer;
+	
+	private int gridWidth = 60;
+	private int gridHeight = 100;
 	
 	public static Modelo getModelo() {
 		if(miModelo == null) miModelo = new Modelo();
@@ -20,33 +22,59 @@ public class Modelo extends Observable{
 	//
 	public Modelo() {
 		miTimer = new Timer();
-		
-		Jugador.inicializar();
-		Flota.inicializar();
-		ArtilleriaJugador.iniciar();
 	}
 	
 	public void notifyKey(int keyCode) {
-		if(keyCode == KeyEvent.VK_ENTER && ventana == 0) {
-			cambiarVentana();
-			miTimer.schedule(new TimerTask() {
-				@Override
-				public void run() {
+		if(keyCode == KeyEvent.VK_ENTER) {
+			if (ventana == 0) {				
+				cambiarVentana(1);
+				empezarJuego();
+			}
+			if (ventana == 2 || ventana == 3) {
+				cambiarVentana(0);
+			}
+		}
+	}
+	
+	private void empezarJuego() {
+		
+		Jugador.getJugador().inicializar();
+		
+		miTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (ventana == 1) {
 					contador = System.currentTimeMillis();
 					
 					try {
-						Jugador.getJugador().tick(contador);
+						Jugador.getJugador().tick();
 					} catch (JuegoCambiadoException e) {
-						// TODO: handle exception
+						miTimer.cancel();
+						
+						if (e instanceof JuegoGanadoException) {
+							cambiarVentana(2); // 2: Pantalla de ganar
+						};
+						if (e instanceof JuegoPerdidoException) {
+							cambiarVentana(3); // 3: Pantalla de perder
+						};
 					}
-					
-					
 				}
-			}, 0, 50);
-		}
+				
+			}
+		}, 0, 50);
 	}
-
-	public void cambiarVentana(){
-		ventana = 1;
+	
+	private void cambiarVentana(int pVentana) {
+		ventana = pVentana;
+		setChanged();
+		notifyObservers(new int[] {pVentana});
+	}
+	
+	public int getWidth() {
+		return gridWidth;
+	}
+	
+	public int getHeight() {
+		return gridHeight;
 	}
 }
