@@ -18,9 +18,6 @@ public class ArtilleriaJugador {
 		listaBalas = new LinkedList<BalaJugador>();
 	}
 	
-	/**
-	 * Crea una nueva instancia de {@code ArtilleriaJugador}
-	 */
 	public void iniciar() {
 		listaBalas = new LinkedList<BalaJugador>();
 		
@@ -51,16 +48,19 @@ public class ArtilleriaJugador {
 			listaBalas.add(nuevaBala);
 		}
 		
+		// Se envia el tick a cada una de la balas del jugador
 		if (!listaBalas.isEmpty()) {
 			Iterator<BalaJugador> it = listaBalas.iterator();
 			
 			while (it.hasNext()) {
 				BalaJugador curBala = it.next();
 				
+				// Una bala es eliminada si devuelve 'true' en su metodo tick
 				if(curBala.tick()) {it.remove();}
 			}
 		}
 		
+		// Propaga el tick
 		Flota.getFlota().tick(posX, posY);
 		
 	}

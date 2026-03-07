@@ -26,10 +26,11 @@ public final class Jugador extends Observable {
         this.willMove = false;
         this.willShoot = false;
         
-        int LIMITE_IZQ = 0;
-        int LIMITE_DER = Modelo.getModelo().getWidth();
-        int LIMITE_ABAJO = Modelo.getModelo().getHeight();
-        int LIMITE_ARRIBA = 0;
+        VELOCIDAD = 1;
+        LIMITE_IZQ = 0;
+        LIMITE_DER = Modelo.getModelo().getWidth();
+        LIMITE_ABAJO = Modelo.getModelo().getHeight();
+        LIMITE_ARRIBA = 0;
         
         
     }

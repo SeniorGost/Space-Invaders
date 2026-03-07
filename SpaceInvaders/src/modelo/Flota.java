@@ -2,11 +2,12 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class Flota {
     private ArrayList<Alien> listaAliens;
     private boolean movDir; // false = izquierda, true = derecha
-    private boolean willFall;
+    private boolean willFall; // Los aliens descenderan una posicion cuando este atributo es 'true' 
     private int tickCount;
     private static Flota miFlota;
 
@@ -23,23 +24,49 @@ public class Flota {
         return miFlota;
     }
 
-   //Matriz de aliens ej 1x10
-    private void inicializarAliens() {
-    	listaAliens = new ArrayList<Alien>();
-    	
-        for (int fila = 0; fila < 1; fila++) {
-            for (int col = 0; col < 10; col++) {
-                // Espaciado de 40px entre ellos
-                listaAliens.add(new Alien(50 + (col * 40), 50 + (fila * 40)));
-            }
-        }
-    }
-
     public void inicializar() {
         tickCount = 0;
         movDir = true; // Empiezan moviéndose a la derecha
+        willFall = false;
         inicializarAliens();
     }
+    
+    //Matriz de aliens
+    private void inicializarAliens() {
+    	listaAliens = new ArrayList<Alien>();
+    	
+    	// Definimos un margen derecho de 6px en el que ningun alien puede aparecer
+    	int maxHPos = Modelo.getModelo().getWidth() - 6;
+    	
+    	// Los aliens tienen que tener al menos in pixel de separacion entre ellos, por lo que vamos a 
+    	// considerar solo las posiciones horizontalmente pares como posiciones validas para que aparezca un alien.
+    	ArrayList<Integer> validHPos = new ArrayList<Integer>();
+    	for (int i = 0; i <= maxHPos; i += 2) {
+    		validHPos.add(i);
+    	}
+    	
+    	// Se encoge una cantidad de aliens aleatoria entre 4 y 8 (ambos incluidos)
+    	Random rand = new Random();
+    	int alienAmount = rand.nextInt(4) + 4; 
+    	
+    	// De manera aleatoria se eligen posiciones de entre las posiciones validas. La cantidad será la misma que la cantidad
+    	// de aliens que queremos crear
+    	int i = 0;
+    	ArrayList<Integer> spawnHPos = new ArrayList<Integer>();
+    	while (i < alienAmount && validHPos.size() > 0) {
+    		int nextSpawnPos = rand.nextInt(validHPos.size() - 1);
+    		spawnHPos.add(validHPos.remove(nextSpawnPos)); 
+    		
+    		i++;
+    	}
+    	
+    	// Se instancian los aliens en las posiciones aleatorias
+    	for (int j : spawnHPos) {
+    		Alien nAlien = new Alien(j, 0);
+    		listaAliens.add(nAlien);
+    	}
+    }
+    
     //movimiento cada 4 ticks
     public void tick(int x, int y) throws JuegoGanadoException, JuegoPerdidoException {
     	tickCount++;
@@ -47,11 +74,13 @@ public class Flota {
     	int deltaX = 0;
     	int deltaY = 0;
     	
+    	// Los aliens solo se mueven 1 de cada 4 ticks
     	if (tickCount == 4) {
     		tickCount = 0;
     		
     		deltaX = 1;
     		
+    		// Derecha: movDir == true | Izquierda: movDir == false
     		if (!movDir) {
     			deltaX = -deltaX;
     		}
@@ -60,8 +89,12 @@ public class Flota {
     			willFall = false;
     		}
     		
-    		for (Alien a : listaAliens) {    			
-    			if (a.tick(deltaX, deltaY, x, y)) {
+    		// Se les propaga el tick a los aliens para moverlos
+    		for (Alien a : listaAliens) {
+    			// Si al menos una de las llamadas del metodo devuelve 'true', la proxima vez que los aliens
+    			// se muevan sera en la direccion contraria. Ademas, los aliens descenderan una posicion en 
+    			// su siguiente movimiento.
+    			if (a.tick(deltaX, deltaY, x, y) && !willFall) {
     				willFall = true;
     				movDir = !movDir;
     			}
