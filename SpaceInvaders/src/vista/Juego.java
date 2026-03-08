@@ -48,7 +48,7 @@ public class Juego extends JFrame implements Observer{
 	/**
 	 * Create the frame.
 	 */
-	public Juego(Observable Modelo) {
+	public Juego(Observable Modelo) {						// Modelo en minúscula
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
@@ -66,15 +66,15 @@ public class Juego extends JFrame implements Observer{
 		    public void keyPressed(KeyEvent e) {
 		    	//Aqui llamarias a controlador, esto es por ahora para comprobar que funciona y como
 		    	
-		    	//e es un código que equivale al evento de la key que se ha pulsado (para A es 65, para B 68)
-		        System.out.println(e.getKeyCode());
+		    	//e es un código que equivale al evento de la key que se ha pulsado (para A es 65, para B 66)
+//		        System.out.println(e.getKeyCode());
 		        
-		        if (e.getKeyCode() == 65 ) { 
+		        if (e.getKeyCode() == KeyEvent.VK_A ) { 
 		            System.out.println("Se ha pulsado A");
 		            int[] objeto = new int[]{-1,-1,10,20};
 		            moverJugador(objeto);
 		        }
-		        else if (e.getKeyCode() == 68 ) { 
+		        else if (e.getKeyCode() == KeyEvent.VK_B ) { 
 		            System.out.println("Se ha pulsado B");
 		            int[] objeto = new int[]{10,20,11,20};
 		            moverJugador(objeto);

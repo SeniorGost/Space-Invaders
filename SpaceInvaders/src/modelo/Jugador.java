@@ -16,23 +16,15 @@ public final class Jugador extends Observable {
     private static Jugador miJugador;
     
     // Constantes de juego
-    private int VELOCIDAD;
-    private int LIMITE_IZQ;
-    private int LIMITE_DER;
-    private int LIMITE_ABAJO;
-    private int LIMITE_ARRIBA;
+    private static final int VELOCIDAD = 1;
+    private static final int LIMITE_IZQ = 0;
+    private static final int LIMITE_DER = Modelo.getModelo().getWidth();
+    private static final int LIMITE_ABAJO = Modelo.getModelo().getHeight();
+    private static final int LIMITE_ARRIBA = 0;
 
     private Jugador() {
         this.willMove = false;
         this.willShoot = false;
-        
-        VELOCIDAD = 1;
-        LIMITE_IZQ = 0;
-        LIMITE_DER = Modelo.getModelo().getWidth();
-        LIMITE_ABAJO = Modelo.getModelo().getHeight();
-        LIMITE_ARRIBA = 0;
-        
-        
     }
 
     public void inicializar() {
@@ -77,7 +69,6 @@ public final class Jugador extends Observable {
         notifyObservers(new int[] {posX, posY});
     }
 
-  
     // @param pMovDir false para izquierda, true para derecha.
     public void moveX(boolean movX) {
         this.movDirX = movX;

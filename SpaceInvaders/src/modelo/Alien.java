@@ -42,7 +42,7 @@ public class Alien extends Observable {
     
 
     /**
-     * @return {@code true} Si su posicion cohencide con la recibida, {@code false} en caso contrario.
+     * @return {@code true} Si su posicion coincide con la recibida, {@code false} en caso contrario.
      */
     
     public boolean hit(int balaX, int balaY) {

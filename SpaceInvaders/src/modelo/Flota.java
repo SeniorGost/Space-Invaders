@@ -38,7 +38,7 @@ public class Flota {
     	// Definimos un margen derecho de 6px en el que ningun alien puede aparecer
     	int maxHPos = Modelo.getModelo().getWidth() - 6;
     	
-    	// Los aliens tienen que tener al menos in pixel de separacion entre ellos, por lo que vamos a 
+    	// Los aliens tienen que tener al menos un pixel de separacion entre ellos, por lo que vamos a 
     	// considerar solo las posiciones horizontalmente pares como posiciones validas para que aparezca un alien.
     	ArrayList<Integer> validHPos = new ArrayList<Integer>();
     	for (int i = 0; i <= maxHPos; i += 2) {
