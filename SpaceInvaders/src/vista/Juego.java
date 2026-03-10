@@ -27,7 +27,13 @@ public class Juego extends JFrame implements Observer{
 	private JPanel contentPane;
 	
 	//creamos una matriz de JLabels para no perder las JLabels y asi poder modificarlas despues (De momento va a tener un tamaño fijo de 60 filas *100 columnas)
-	private JLabel[][] pixel = new JLabel[60][100];
+	private JLabel[][] pixel= new JLabel[60][100];
+	
+	/* //forma alt para matriz de cualquier tamaño (commentada ahora para hacer las pruebas)
+	   private JLabel[][] pixel;
+	   private int filas;
+	   private int columnas;
+	 */
 
 	/**
 	 * Launch the application.
@@ -48,7 +54,7 @@ public class Juego extends JFrame implements Observer{
 	/**
 	 * Create the frame.
 	 */
-	public Juego(Observable Modelo) {						// Modelo en minúscula
+	public Juego(Observable Modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
@@ -58,7 +64,7 @@ public class Juego extends JFrame implements Observer{
 		    protected void paintComponent(java.awt.Graphics componente) {
 		         super.paintComponent(componente);
 		         componente.drawImage(new ImageIcon(Menu.class.getResource("/spritesEpicos/background.jpg")).getImage(),0, 0, getWidth(), getHeight(), this);
-		        }
+		    }
 		};
 		
 		contentPane.addKeyListener(new KeyAdapter() {
@@ -66,17 +72,19 @@ public class Juego extends JFrame implements Observer{
 		    public void keyPressed(KeyEvent e) {
 		    	//Aqui llamarias a controlador, esto es por ahora para comprobar que funciona y como
 		    	
-		    	//e es un código que equivale al evento de la key que se ha pulsado (para A es 65, para B 66)
-//		        System.out.println(e.getKeyCode());
+		    	//e es un código que equivale al evento de la key que se ha pulsado (para A es 65, para B 68)
+		        System.out.println(e.getKeyCode());
 		        
-		        if (e.getKeyCode() == KeyEvent.VK_A ) { 
+		        if (e.getKeyCode() == 65 ) { 
 		            System.out.println("Se ha pulsado A");
-		            int[] objeto = new int[]{-1,-1,10,20};
+		            int[] objeto = new int[]{10,20};
+		            cleanClean();
 		            moverJugador(objeto);
 		        }
-		        else if (e.getKeyCode() == KeyEvent.VK_B ) { 
+		        else if (e.getKeyCode() == 68 ) { 
 		            System.out.println("Se ha pulsado B");
-		            int[] objeto = new int[]{10,20,11,20};
+		            int[] objeto = new int[]{11,20};
+		            cleanClean();
 		            moverJugador(objeto);
 		        }
 		    }
@@ -97,6 +105,18 @@ public class Juego extends JFrame implements Observer{
 		        contentPane.add(pixel[f][c]);
 			}
 		}
+		
+		/*//en el caso de matriz de cualquier tamaño (comentado para hacer las pruebas)
+		 
+		for (int f = 0; f < this.filas; f++) {
+			for(int c = 0; c < this.columnas; c++){
+				//Todas las Jlabels se añaden a la matriz para no perderlas y luego se meten en la vista
+		        pixel[f][c] = new JLabel();
+		        contentPane.add(pixel[f][c]);
+			}
+		}
+		
+		*/
 	}
 
 	@Override
@@ -104,13 +124,14 @@ public class Juego extends JFrame implements Observer{
 	    // 	Metodo de actualización de la vista 
 		
 		//Yo aqui entiendo que cuando le llega una instancia le llegara SOLO la de una bala o un jugador cada vez que se le envia, por aquello de que se envia una bala, se avanza en el bucle, se envia otra...;
-		//Tambien entiendo que se le enviará lo siguiente: (11,20,12,20) -> Posicion antigua (a borrar), Posicion nueva (A escribir)
+		//De momento se envia solo la posicion actual
 		
 		if (o instanceof Jugador)
 		{
 			if (arg instanceof int[])
 			{
 				int[] datos=(int[])arg;
+				cleanClean(); //como de momento solo hay un jugador, la vez que le llega instancia de jugador se limpia la pantalla
 				moverJugador(datos);
 			}
 		}
@@ -133,11 +154,18 @@ public class Juego extends JFrame implements Observer{
 			}
 		}
 		
+		// para hacer lo de matriz de cualquier tamaño voy a necesitar que me envieis el tamaño por aqui
 		if (o instanceof Modelo)
 		{
 			if (arg instanceof int[])
 			{
 				int[] datos=(int[])arg;
+				if(datos[0]==1){
+					
+					//esto le dice que si se pasa a la pantalla 1, que primero defina la matriz con las dimensiones que me pasa modelo
+					//definirMatriz(datos[1],datos[2]);
+					
+				}
 				cambiarPantalla(datos[0]);
 			}
 		}
@@ -145,62 +173,34 @@ public class Juego extends JFrame implements Observer{
 	}
 	
 	private void moverJugador (int posicion[] ){
-    //se envia primero la fila y luego la columna (V -> viejo, N -> Nuevo)    
-		int fV = posicion[0];
-	    int cV = posicion[1];
-	    int fN = posicion[2];
-	    int cN = posicion[3];
+    //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
+	    int fN = posicion[0];
+	    int cN = posicion[1];
 	    
-	//la primera vez que se escribe, posicion vieja esta a -1,-1
-	    if(!(posicion[0] == -1 && posicion[1] == -1) ){
-	    	
-	    	pixel[fV][cV].setOpaque(false); // asi no se ve el color
-	    	pixel[fV][cV].setBackground(null);
-	    	
-	    }
-	  //el jugador es ROJO
-	    
-	    pixel[fN][cN].setOpaque(true); // para que se vea el color
-	    pixel[fN][cN].setBackground(Color.RED);
+	    //el jugador es ROJO
+	    pixel[fN][cN].setBackground(Color.RED);  // le da el color
+        pixel[fN][cN].setOpaque(true); // para que se vea el pixel
 	}
 	
 	private void moverMarciano (int posicion[] ){
-	    //se envia primero la fila y luego la columna (V -> viejo, N -> Nuevo)    
-			int fV = posicion[0];
-		    int cV = posicion[1];
-		    int fN = posicion[2];
-		    int cN = posicion[3];
+	    //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
+	    int fN = posicion[0];
+	    int cN = posicion[1];
 		    
-		//la primera vez que se escribe, posicion vieja esta a -1,-1
-		    if(!(posicion[0] == -1 && posicion[1] == -1) ){
-		    	
-		    	pixel[fV][cV].setOpaque(false); // asi no se ve el color
-		    	pixel[fV][cV].setBackground(null);
-		    	
-		    }
-		  //el marciano es VERDE
-		    pixel[fN][cN].setOpaque(true); // para que se vea el color
-		    pixel[fN][cN].setBackground(Color.GREEN);
-		}
+		//el marciano es VERDE
+		pixel[fN][cN].setBackground(Color.GREEN); //le da el color
+		pixel[fN][cN].setOpaque(true); // para que se vea el pixel
+	}
 	
 	private void moverBala (int posicion[] ){
-	    //se envia primero la fila y luego la columna (V -> viejo, N -> Nuevo)    
-			int fV = posicion[0];
-		    int cV = posicion[1];
-		    int fN = posicion[2];
-		    int cN = posicion[3];
+	   //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
+	   int fN = posicion[0];
+	   int cN = posicion[1];
 		    
-		//la primera vez que se escribe, posicion vieja esta a -1,-1
-		    if(!(posicion[0] == -1 && posicion[1] == -1) ){
-		    	
-		        pixel[fV][cV].setOpaque(false); // asi no se ve el color
-		    	pixel[fV][cV].setBackground(null);
-		    	
-		    }
-		  //la bala es BLANCA
-		    pixel[fN][cN].setOpaque(true); // para que se vea el color
-		    pixel[fN][cN].setBackground(Color.WHITE);
-		}
+	   //la bala es BLANCA
+	   pixel[fN][cN].setBackground(Color.WHITE); //le da el color
+	   pixel[fN][cN].setOpaque(true); // para que se vea el pixel	
+	}
 	
 	//Este es el tema, cada vez que se notifica a los observers, se notifica a todas las pantallas a la vez entonces se tiene que poner una sentencia como esta, donde se distinga el numero de pantalla en que estamos
 	private void cambiarPantalla (int pValor){
@@ -213,6 +213,39 @@ public class Juego extends JFrame implements Observer{
 		{
 			this.setVisible(true);
 		}
+	}
+	
+	//este método limpia la pantalla
+	private void cleanClean(){
+		
+		for (int f = 0; f < 60; f++) {
+			for(int c = 0; c < 100; c++){
+				
+				pixel[f][c].setOpaque(false); // asi no se ve el pixel (si no estuviese esto aqui al quitarles el color se quedarian como pixeles visibles en gris)
+				pixel[f][c].setBackground(null); // asi se quita el color (si no estuviese esto aqui aun poniendo el Opaque a false se queda el pixel coloreado en Rojo visible)
+				//para que el pixel no sea visible tiene que NO ser opaco y NO tener color de fondo
+			}
+		}
+		
+		/*//en el caso de matriz de cualquier tamaño (comentado para hacer las pruebas)
+		 
+		for (int f = 0; f < this.filas; f++) {
+			for(int c = 0; c < this.columnas; c++){
+                pixel[f][c].setOpaque(false); // asi no se ve el pixel
+				pixel[f][c].setBackground(null); // asi se quita el color
+			}
+		}
+		
+		*/
+		
+	}
+	
+	private void definirMatriz( int f, int c) {
+		 
+		 pixel= new JLabel[f][c];
+		 //filas = f;
+		 //columnas = c;
+		 
 	}
 
 }
