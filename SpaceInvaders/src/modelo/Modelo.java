@@ -76,7 +76,11 @@ public class Modelo extends Observable {
 	private void cambiarVentana(int pVentana) {
 		ventana = pVentana;
 		setChanged();
-		notifyObservers(new int[] { pVentana });
+		if(ventana != VENTANA_JUEGO) {
+			notifyObservers(new int[] { pVentana });
+		} else {
+			notifyObservers(new int[] { pVentana, GRID_WIDTH, GRID_HEIGHT });
+		}
 	}
 
 	public int getWidth() {

@@ -56,7 +56,7 @@ public class ArtilleriaJugador extends Observable {
 				BalaJugador curBala = it.next();
 				
 				// Una bala es eliminada si devuelve 'true' en su metodo tick
-				if(curBala.tick()) {it.remove();}
+				if(curBala.tick()) it.remove();
 			}
 		}
 		

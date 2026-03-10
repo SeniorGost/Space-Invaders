@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -30,13 +31,13 @@ public class Juego extends JFrame implements Observer{
 	private JPanel contentPane;
 	
 	//creamos una matriz de JLabels para no perder las JLabels y asi poder modificarlas despues (De momento va a tener un tamaño fijo de 60 filas *100 columnas)
-	private JLabel[][] pixel= new JLabel[60][100];
+	//private JLabel[][] pixel= new JLabel[60][100];
 	
 	//forma alt para matriz de cualquier tamaño (commentada ahora para hacer las pruebas)
-	   //private JLabel[][] pixel;
+	   private JLabel[][] pixel;
 	   private ArrayList<JLabel> pixelesPintados = new ArrayList<JLabel>();
-	   // private int filas;
-	   // private int columnas;
+	   private int filas;
+	   private int columnas;
 	
 
 	/**
@@ -76,30 +77,7 @@ public class Juego extends JFrame implements Observer{
 		    }
 		};
 		
-		contentPane.addKeyListener(new KeyAdapter() {
-		    @Override
-		    public void keyPressed(KeyEvent e) {
-		    	//Aqui llamarias a controlador, esto es por ahora para comprobar que funciona y como
-		    	
-		    	//e es un código que equivale al evento de la key que se ha pulsado (para A es 65, para B 68)
-		        System.out.println(e.getKeyCode());
-		        
-		        if (e.getKeyCode() == 65 ) { 
-		            System.out.println("Se ha pulsado A");
-		            int[] objeto = new int[]{10,20};
-		            cleanClean();
-		            moverJugador(objeto);
-		            pixelesPintados.add(pixel[10][20]);
-		        }
-		        else if (e.getKeyCode() == 68 ) { 
-		            System.out.println("Se ha pulsado B");
-		            int[] objeto = new int[]{11,20};
-		            cleanClean();
-		            moverJugador(objeto);
-		            pixelesPintados.add(pixel[11][20]);
-		        }
-		    }
-		});
+		contentPane.addKeyListener(new Controller());
 		
 		//esto lo que hace es hacer que el Pane empieze a capturar teclas, es como clicar en una barra donde puedes empezar a rellenar
 		contentPane.setFocusable(true);
@@ -108,26 +86,7 @@ public class Juego extends JFrame implements Observer{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(60, 100, 0, 0));
-		
-		for (int f = 0; f < 60; f++) {
-			for(int c = 0; c < 100; c++){
-				//Todas las Jlabels se añaden a la matriz para no perderlas y luego se meten en la vista
-		        pixel[f][c] = new JLabel();
-		        contentPane.add(pixel[f][c]);
-			}
-		}
-		
-		//en el caso de matriz de cualquier tamaño (comentado para hacer las pruebas)
-		 
-		/*
-		for (int f = 0; f < this.filas; f++) {
-			for(int c = 0; c < this.columnas; c++){
-				//Todas las Jlabels se añaden a la matriz para no perderlas y luego se meten en la vista
-		        pixel[f][c] = new JLabel();
-		        contentPane.add(pixel[f][c]);
-			}
-		}
-		 */
+	 
 		
 		
 	}
@@ -145,24 +104,28 @@ public class Juego extends JFrame implements Observer{
 			{
 				int[] datos=(int[])arg;
 				cleanClean(); //como de momento solo hay un jugador, la vez que le llega instancia de jugador se limpia la pantalla
+				System.out.println("J: " + datos[0] + " " + datos[1]);
 				moverJugador(datos);
 			}
 		}
 		
-		if (o instanceof BalaJugador)
+		if (o instanceof ArtilleriaJugador)
 		{
 			if (arg instanceof int[])
 			{
 				int[] datos=(int[])arg;
+				System.out.println("B: " + datos[0] + " " + datos[1]);
 				moverBala(datos);
 			}
 		}
 		
-		if (o instanceof Alien)
+		if (o instanceof Flota)
 		{
 			if (arg instanceof int[])
 			{
+				
 				int[] datos=(int[])arg;
+			    System.out.println("M: " + datos[0] + " " + datos[1]);
 				moverMarciano(datos);
 			}
 		}
@@ -176,7 +139,7 @@ public class Juego extends JFrame implements Observer{
 				if(datos[0]==1){
 					
 					//esto le dice que si se pasa a la pantalla 1, que primero defina la matriz con las dimensiones que me pasa modelo
-					//definirMatriz(datos[1],datos[2]);
+					definirMatriz(datos[1],datos[2]);
 					
 				}
 				cambiarPantalla(datos[0]);
@@ -187,8 +150,8 @@ public class Juego extends JFrame implements Observer{
 	
 	private void moverJugador (int posicion[] ){
     //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
-	    int fN = posicion[0];
-	    int cN = posicion[1];
+	    int fN = posicion[1];
+	    int cN = posicion[0];
 	    
 	    //el jugador es ROJO
 	    pixel[fN][cN].setBackground(Color.RED);  // le da el color
@@ -199,8 +162,8 @@ public class Juego extends JFrame implements Observer{
 	
 	private void moverMarciano (int posicion[] ){
 	    //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
-	    int fN = posicion[0];
-	    int cN = posicion[1];
+	    int fN = posicion[1];
+	    int cN = posicion[0];
 		    
 		//el marciano es VERDE
 		pixel[fN][cN].setBackground(Color.GREEN); //le da el color
@@ -211,8 +174,8 @@ public class Juego extends JFrame implements Observer{
 	
 	private void moverBala (int posicion[] ){
 	   //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
-	   int fN = posicion[0];
-	   int cN = posicion[1];
+	   int fN = posicion[1];
+	   int cN = posicion[0];
 		    
 	   //la bala es BLANCA
 	   pixel[fN][cN].setBackground(Color.WHITE); //le da el color
@@ -244,12 +207,57 @@ public class Juego extends JFrame implements Observer{
 		pixelesPintados.clear();
 	}
 	
-	private void definirMatriz( int f, int c) {
+	private void definirMatriz( int c, int f) {
 		 
 		 pixel= new JLabel[f][c];
-		 // filas = f;
-		 // columnas = c;
+		 filas = f;
+		 columnas = c; 
 		 
+//			for (int fila = 0; fila < 60; fila++) {
+//				for(int columna = 0; columna < 100; columna++){
+//					//Todas las Jlabels se añaden a la matriz para no perderlas y luego se meten en la vista
+//			        pixel[fila][columna] = new JLabel();
+//			        contentPane.add(pixel[fila][columna]);
+//				}
+//			}
+			
+			//en el caso de matriz de cualquier tamaño (comentado para hacer las pruebas)
+			
+			for (int fila = 0; fila < this.filas; fila++) {
+				for(int columna = 0; columna < this.columnas; columna++){
+					//Todas las Jlabels se añaden a la matriz para no perderlas y luego se meten en la vista
+			        pixel[fila][columna] = new JLabel();
+			        contentPane.add(pixel[fila][columna]);
+				}
+			}
+		
 	}
-
+	
+	private class Controller implements KeyListener {
+		@Override
+		public void keyTyped(KeyEvent e) {}
+		@Override
+		public void keyPressed(KeyEvent e) {
+			switch(e.getKeyCode()) {
+			case KeyEvent.VK_A:
+				Jugador.getJugador().moveX(false);
+				break;
+			case KeyEvent.VK_D:
+				Jugador.getJugador().moveX(true);
+				break;
+			case KeyEvent.VK_W:
+				Jugador.getJugador().moveY(false);
+				break;
+			case KeyEvent.VK_S:
+				Jugador.getJugador().moveY(true);
+				break;
+			case KeyEvent.VK_ENTER:
+				System.out.println("POW\n");
+				Jugador.getJugador().shoot();
+				break;
+			}
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {}
+	}
 }

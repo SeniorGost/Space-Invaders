@@ -86,7 +86,7 @@ public class Flota extends Observable {
     			deltaX = -deltaX;
     		}
     		if (willFall) {
-    			deltaY = -1;
+    			deltaY = 1;
     			willFall = false;
     		}
     		

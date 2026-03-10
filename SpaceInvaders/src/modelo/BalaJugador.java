@@ -18,9 +18,11 @@ public class BalaJugador {
 	
 	public boolean tick() throws JuegoGanadoException {
 		boolean rdo = false;
-		
-		rdo = Flota.getFlota().hit(posX, ++posY);
-		
+		if(posY > 0) {
+			rdo = Flota.getFlota().hit(posX, --posY);
+		} else {
+			rdo = true;
+		}
 		return rdo;
 	}
 	

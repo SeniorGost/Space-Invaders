@@ -3,8 +3,8 @@ package vista;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -41,7 +41,7 @@ public class Ganador extends JFrame implements Observer {
 	/**
 	 * Create the frame.
 	 */
-	public Ganador(Observable Modelo) {
+	public Ganador(Observable modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 
@@ -55,12 +55,7 @@ public class Ganador extends JFrame implements Observer {
 		    }
 		};;
 		
-		contentPane.addKeyListener(new KeyAdapter() {
-		    @Override
-		    public void keyPressed(KeyEvent e) {
-		        System.out.println("Ahora aqui se llamaría a controler para cambiar de ventana");
-		    }
-		});
+		contentPane.addKeyListener(new Controller());
 		
 		//esto lo que hace es hacer que el Pane empieze a capturar teclas, es como clicar en una barra donde puedes empezar a rellenar
 		contentPane.setFocusable(true);
@@ -136,5 +131,15 @@ public class Ganador extends JFrame implements Observer {
 		}
 	}
 	
+	private class Controller implements KeyListener {
+		@Override
+		public void keyTyped(KeyEvent e) {}
+		@Override
+		public void keyPressed(KeyEvent e) {
+			Modelo.getModelo().cambiarVentana();
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {}
+	}
 }
 

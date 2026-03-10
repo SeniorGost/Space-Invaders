@@ -25,14 +25,14 @@ public class Alien {
     	}
     	
     	// Verificación de límite inferior (si el alien llega abajo, se pierde el juego)
-    	if (posY == Modelo.getModelo().getHeight()) {    		
+    	if (posY == (Modelo.getModelo().getHeight()-1)) {    		
     		throw new JuegoPerdidoException();
     	}
     	
         this.posX += deltaX;
         this.posY += deltaY;
         
-        return (posX == 0 || posX == Modelo.getModelo().getWidth());
+        return (posX == 0 || posX == (Modelo.getModelo().getWidth()-1));
     }
     
 

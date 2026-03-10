@@ -1,26 +1,24 @@
 package vista;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.event.KeyAdapter;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 // MODELO SE IMPORTA PARA LA LINEA 26 Y PARA EL OBSERVABLE
 import modelo.Modelo;
-import java.awt.BorderLayout;
-
-import javax.swing.ImageIcon;
-import javax.swing.JEditorPane;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.Font;
 
 public class Menu extends JFrame implements Observer{
 
@@ -46,7 +44,7 @@ public class Menu extends JFrame implements Observer{
 	/**
 	 * Create the frame.
 	 */
-	public Menu(Observable Modelo) {
+	public Menu(Observable modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
@@ -65,12 +63,7 @@ public class Menu extends JFrame implements Observer{
 		};
 		
 
-		contentPane.addKeyListener(new KeyAdapter() {
-		    @Override
-		    public void keyPressed(KeyEvent e) {
-		        System.out.println("Ahora aqui se llamaría a controler para cambiar de ventana");
-		    }
-		});
+		contentPane.addKeyListener(new Controller());
 		
 		//esto lo que hace es hacer que el Pane empieze a capturar teclas, es como clicar en una barra donde puedes empezar a rellenar
 		contentPane.setFocusable(true);
@@ -133,6 +126,17 @@ public class Menu extends JFrame implements Observer{
 		{
 			this.setVisible(true);
 		}
+	}
+	
+	private class Controller implements KeyListener {
+		@Override
+		public void keyTyped(KeyEvent e) {}
+		@Override
+		public void keyPressed(KeyEvent e) {
+			Modelo.getModelo().cambiarVentana();
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {}
 	}
 }
 

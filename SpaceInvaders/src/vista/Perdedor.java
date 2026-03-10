@@ -1,21 +1,21 @@
 package vista;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.event.KeyAdapter;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import modelo.Modelo;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 public class Perdedor extends JFrame implements Observer {
 
@@ -41,7 +41,7 @@ public class Perdedor extends JFrame implements Observer {
 	/**
 	 * Create the frame.
 	 */
-	public Perdedor(Observable Modelo) {
+	public Perdedor(Observable modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 
@@ -57,12 +57,7 @@ public class Perdedor extends JFrame implements Observer {
 		};
 		
 		//Keylistener
-		contentPane.addKeyListener(new KeyAdapter() {
-		    @Override
-		    public void keyPressed(KeyEvent e) {
-		        System.out.println("Ahora aqui se llamaría a controler para cambiar de ventana");
-		    }
-		});
+		contentPane.addKeyListener(new Controller());
 		
 		//esto lo que hace es hacer que el Pane empieze a capturar teclas, es como clicar en una barra donde puedes empezar a rellenar
 		contentPane.setFocusable(true);
@@ -133,6 +128,16 @@ public class Perdedor extends JFrame implements Observer {
 			this.setVisible(true);
 		}
 	}
-
+	
+	private class Controller implements KeyListener {
+		@Override
+		public void keyTyped(KeyEvent e) {}
+		@Override
+		public void keyPressed(KeyEvent e) {
+			Modelo.getModelo().cambiarVentana();
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {}
+	}
 }
 
