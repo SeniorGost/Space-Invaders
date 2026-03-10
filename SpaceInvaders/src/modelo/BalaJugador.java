@@ -1,8 +1,6 @@
 package modelo;
 
-import java.util.Observable;
-@SuppressWarnings("deprecation")
-public class BalaJugador extends Observable{
+public class BalaJugador {
 	private int posX;
 	private int posY;
 	
@@ -23,12 +21,13 @@ public class BalaJugador extends Observable{
 		
 		rdo = Flota.getFlota().hit(posX, ++posY);
 		
-		
-		if (!rdo) {
-			setChanged();
-			notifyObservers(new int[] {posX, posY});
-		}
-		
 		return rdo;
+	}
+	
+	public int getPosX() {
+		return posX;
+	}
+	public int getPosY() {
+		return posY;
 	}
 }

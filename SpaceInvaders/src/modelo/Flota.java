@@ -2,9 +2,10 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Observable;
 import java.util.Random;
 
-public class Flota {
+public class Flota extends Observable {
     private ArrayList<Alien> listaAliens;
     private boolean movDir; // false = izquierda, true = derecha
     private boolean willFall; // Los aliens descenderan una posicion cuando este atributo es 'true' 
@@ -98,9 +99,11 @@ public class Flota {
     				willFall = true;
     				movDir = !movDir;
     			}
-    		}
-    		
+    		}	
     	}
+    	
+    	notifyView();
+    	
     }
     
     
@@ -119,12 +122,22 @@ public class Flota {
                 }
          }
         
-        if (listaAliens.isEmpty()) {//comprobaos si no quedan aliens
+      // Comprobamos si no quedan aliens
+        if (listaAliens.isEmpty()) {
+        	// Si no quedan aliens, se lanza la excepcion
         	throw new JuegoGanadoException();
         }
         return alienEncontrado;
     }
 
-  
+    /**
+	 * Mediante el 'Patron Observer' notifica al vista de las posiciones de los Aliens
+	 */
+	private void notifyView() {
+		for (Alien a : listaAliens) {
+			setChanged();
+			notifyObservers(new int[] {a.getPosX(), a.getPosY()});
+		}
+	}
     
 }

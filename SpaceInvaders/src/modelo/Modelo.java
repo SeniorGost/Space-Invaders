@@ -17,7 +17,6 @@ public class Modelo extends Observable {
 	private static final int GRID_HEIGHT = 60;
 
 	private static Modelo miModelo;
-	private long contador;
 	private Timer miTimer;
 
 	public static Modelo getModelo() {
@@ -30,20 +29,22 @@ public class Modelo extends Observable {
 	public Modelo() {
 		miTimer = new Timer();
 	}
-
-	public void notifyKey(int keyCode) {
-		if (keyCode == KeyEvent.VK_ENTER) {
-			switch (ventana) {
-			case VENTANA_MENU:
-				cambiarVentana(VENTANA_JUEGO);
-				empezarJuego();
-				break;
-
-			case VENTANA_GANADO:
-			case VENTANA_PERDIDO:
-				cambiarVentana(VENTANA_MENU);
-				break;
-			}
+	
+	/**
+	 * Siempre llamar este metodo de manera externa (idealmente desde 'Controller'). Cambia la ventana actual del juego
+	 * por la siguiente.
+	 */
+	public void cambiarVentana() {		
+		switch (ventana) {
+		case VENTANA_MENU:
+			cambiarVentana(VENTANA_JUEGO);
+			empezarJuego();
+			break;
+			
+		case VENTANA_GANADO:
+		case VENTANA_PERDIDO:
+			cambiarVentana(VENTANA_MENU);
+			break;
 		}
 	}
 
@@ -55,8 +56,6 @@ public class Modelo extends Observable {
 			@Override
 			public void run() {
 				if (ventana == VENTANA_JUEGO) {
-					contador = System.currentTimeMillis();
-
 					try {
 						Jugador.getJugador().tick();	
 

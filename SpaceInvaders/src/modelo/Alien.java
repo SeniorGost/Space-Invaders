@@ -1,8 +1,6 @@
 package modelo;
 
-import java.util.Observable;
-@SuppressWarnings("deprecation")
-public class Alien extends Observable {
+public class Alien {
     private int posX;
     private int posY;
 
@@ -34,9 +32,6 @@ public class Alien extends Observable {
         this.posX += deltaX;
         this.posY += deltaY;
         
-        setChanged();
-        notifyObservers(new int[] {posX, posY});
-        
         return (posX == 0 || posX == Modelo.getModelo().getWidth());
     }
     
@@ -53,5 +48,12 @@ public class Alien extends Observable {
     public void disparar() {
         // De momento vacío 
     }
+
+	public int getPosX() {
+		return posX;
+	}
+	public int getPosY() {
+		return posY;
+	}
 
 }

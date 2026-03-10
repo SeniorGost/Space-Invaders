@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Observable;
 @SuppressWarnings("deprecation")
-public class ArtilleriaJugador {
+public class ArtilleriaJugador extends Observable {
 	private LinkedList<BalaJugador> listaBalas;
 	private static ArtilleriaJugador miArtilleriaJugador;
 	
@@ -60,8 +60,19 @@ public class ArtilleriaJugador {
 			}
 		}
 		
+		notifyView();
+		
 		// Propaga el tick
 		Flota.getFlota().tick(posX, posY);
-		
+	}
+	
+	/**
+	 * Mediante el 'Patron Observer' notifica al vista de las posiciones de las balas
+	 */
+	private void notifyView() {
+		for (BalaJugador b : listaBalas) {
+			setChanged();
+			notifyObservers(new int[] {b.getPosX(), b.getPosY()});
+		}
 	}
 }

@@ -18,6 +18,7 @@ import modelo.Flota;
 // MODELO SE IMPORTA PARA LA LINEA 26 Y PARA EL OBSERVABLE, EL RESTO SOLO PARA EL OBSERVABLE
 import modelo.Jugador;
 import modelo.Alien;
+import modelo.ArtilleriaJugador;
 import modelo.Modelo;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -64,7 +65,7 @@ public class Juego extends JFrame implements Observer{
 		Modelo.getModelo().addObserver(this);
 		Jugador.getJugador().addObserver(this);
 		Flota.getFlota().addObserver(this);
-		Modelo.getModelo().addObserver(this);
+		ArtilleriaJugador.getArtilleria().addObserver(this);
 		
 		//esto de aqui hace funcionar la imagen de fondo
 	    contentPane = new JPanel() {
