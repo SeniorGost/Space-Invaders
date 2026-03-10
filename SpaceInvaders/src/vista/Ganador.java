@@ -44,6 +44,9 @@ public class Ganador extends JFrame implements Observer {
 	public Ganador(Observable Modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+
+		Modelo.getModelo().addObserver(this);
+		
 		contentPane = new JPanel() {
 		    @Override
 		    protected void paintComponent(java.awt.Graphics componente) {
@@ -134,3 +137,4 @@ public class Ganador extends JFrame implements Observer {
 	}
 	
 }
+
