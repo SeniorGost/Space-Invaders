@@ -50,6 +50,8 @@ public class Menu extends JFrame implements Observer{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
+	    Modelo.getModelo().addObserver(this);
+		
 		//Se activa el "COCO TACTICO", EXTREMADAMENTE IMPORTANTE: NO TOCAR//
 		ImageIcon COCOTACTICO = new ImageIcon(Menu.class.getResource("/coconut.png"));
 		
@@ -133,3 +135,4 @@ public class Menu extends JFrame implements Observer{
 		}
 	}
 }
+
