@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import modelo.BalaJugador;
+import modelo.Flota;
 // MODELO SE IMPORTA PARA LA LINEA 26 Y PARA EL OBSERVABLE, EL RESTO SOLO PARA EL OBSERVABLE
 import modelo.Jugador;
 import modelo.Alien;
@@ -29,11 +31,12 @@ public class Juego extends JFrame implements Observer{
 	//creamos una matriz de JLabels para no perder las JLabels y asi poder modificarlas despues (De momento va a tener un tamaño fijo de 60 filas *100 columnas)
 	private JLabel[][] pixel= new JLabel[60][100];
 	
-	/* //forma alt para matriz de cualquier tamaño (commentada ahora para hacer las pruebas)
-	   private JLabel[][] pixel;
-	   private int filas;
-	   private int columnas;
-	 */
+	//forma alt para matriz de cualquier tamaño (commentada ahora para hacer las pruebas)
+	   //private JLabel[][] pixel;
+	   private ArrayList<JLabel> pixelesPintados = new ArrayList<JLabel>();
+	   // private int filas;
+	   // private int columnas;
+	
 
 	/**
 	 * Launch the application.
@@ -54,9 +57,14 @@ public class Juego extends JFrame implements Observer{
 	/**
 	 * Create the frame.
 	 */
-	public Juego(Observable Modelo) {
+	public Juego(Observable modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		
+		Modelo.getModelo().addObserver(this);
+		Jugador.getJugador().addObserver(this);
+		Flota.getFlota().addObserver(this);
+		Modelo.getModelo().addObserver(this);
 		
 		//esto de aqui hace funcionar la imagen de fondo
 	    contentPane = new JPanel() {
@@ -80,12 +88,14 @@ public class Juego extends JFrame implements Observer{
 		            int[] objeto = new int[]{10,20};
 		            cleanClean();
 		            moverJugador(objeto);
+		            pixelesPintados.add(pixel[10][20]);
 		        }
 		        else if (e.getKeyCode() == 68 ) { 
 		            System.out.println("Se ha pulsado B");
 		            int[] objeto = new int[]{11,20};
 		            cleanClean();
 		            moverJugador(objeto);
+		            pixelesPintados.add(pixel[11][20]);
 		        }
 		    }
 		});
@@ -106,8 +116,9 @@ public class Juego extends JFrame implements Observer{
 			}
 		}
 		
-		/*//en el caso de matriz de cualquier tamaño (comentado para hacer las pruebas)
+		//en el caso de matriz de cualquier tamaño (comentado para hacer las pruebas)
 		 
+		/*
 		for (int f = 0; f < this.filas; f++) {
 			for(int c = 0; c < this.columnas; c++){
 				//Todas las Jlabels se añaden a la matriz para no perderlas y luego se meten en la vista
@@ -115,8 +126,9 @@ public class Juego extends JFrame implements Observer{
 		        contentPane.add(pixel[f][c]);
 			}
 		}
+		 */
 		
-		*/
+		
 	}
 
 	@Override
@@ -180,6 +192,8 @@ public class Juego extends JFrame implements Observer{
 	    //el jugador es ROJO
 	    pixel[fN][cN].setBackground(Color.RED);  // le da el color
         pixel[fN][cN].setOpaque(true); // para que se vea el pixel
+        
+        pixelesPintados.add(pixel[fN][cN]);
 	}
 	
 	private void moverMarciano (int posicion[] ){
@@ -190,6 +204,8 @@ public class Juego extends JFrame implements Observer{
 		//el marciano es VERDE
 		pixel[fN][cN].setBackground(Color.GREEN); //le da el color
 		pixel[fN][cN].setOpaque(true); // para que se vea el pixel
+
+        pixelesPintados.add(pixel[fN][cN]);
 	}
 	
 	private void moverBala (int posicion[] ){
@@ -199,7 +215,9 @@ public class Juego extends JFrame implements Observer{
 		    
 	   //la bala es BLANCA
 	   pixel[fN][cN].setBackground(Color.WHITE); //le da el color
-	   pixel[fN][cN].setOpaque(true); // para que se vea el pixel	
+	   pixel[fN][cN].setOpaque(true); // para que se vea el pixel
+
+       pixelesPintados.add(pixel[fN][cN]);
 	}
 	
 	//Este es el tema, cada vez que se notifica a los observers, se notifica a todas las pantallas a la vez entonces se tiene que poner una sentencia como esta, donde se distinga el numero de pantalla en que estamos
@@ -218,33 +236,18 @@ public class Juego extends JFrame implements Observer{
 	//este método limpia la pantalla
 	private void cleanClean(){
 		
-		for (int f = 0; f < 60; f++) {
-			for(int c = 0; c < 100; c++){
-				
-				pixel[f][c].setOpaque(false); // asi no se ve el pixel (si no estuviese esto aqui al quitarles el color se quedarian como pixeles visibles en gris)
-				pixel[f][c].setBackground(null); // asi se quita el color (si no estuviese esto aqui aun poniendo el Opaque a false se queda el pixel coloreado en Rojo visible)
-				//para que el pixel no sea visible tiene que NO ser opaco y NO tener color de fondo
-			}
+		for (JLabel pixel : pixelesPintados) {
+			pixel.setOpaque(false); // asi no se ve el pixel
+			pixel.setBackground(null); // asi se quita el color
 		}
-		
-		/*//en el caso de matriz de cualquier tamaño (comentado para hacer las pruebas)
-		 
-		for (int f = 0; f < this.filas; f++) {
-			for(int c = 0; c < this.columnas; c++){
-                pixel[f][c].setOpaque(false); // asi no se ve el pixel
-				pixel[f][c].setBackground(null); // asi se quita el color
-			}
-		}
-		
-		*/
-		
+		pixelesPintados.clear();
 	}
 	
 	private void definirMatriz( int f, int c) {
 		 
 		 pixel= new JLabel[f][c];
-		 //filas = f;
-		 //columnas = c;
+		 // filas = f;
+		 // columnas = c;
 		 
 	}
 
