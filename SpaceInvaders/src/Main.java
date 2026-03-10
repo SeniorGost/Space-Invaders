@@ -16,6 +16,14 @@ public class Main {
 		//Creamos Pantalla 2//
 		Menu pantalla2=new Menu(modelo);
 		
+		//Creamos Pantalla 3//
+	    Perdedor pantalla3=new Perdedor(modelo);
+				
+	    //Creamos Pantalla 4//
+	    Ganador pantalla4=new Ganador(modelo);
+		
 	}
 	
 }
+
+
