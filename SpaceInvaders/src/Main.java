@@ -8,13 +8,13 @@ public class Main {
 		Modelo modelo = Modelo.getModelo();
 		
 		//Creamos Pantalla 1//
-		Juego pantalla1=new Juego(modelo);
+		Menu pantalla1=new Menu(modelo);
 		
 		//Hacemos Visible//
 		pantalla1.setVisible(true);
 		
 		//Creamos Pantalla 2//
-		Menu pantalla2=new Menu(modelo);
+		Juego pantalla2=new Juego(modelo);
 		
 		//Creamos Pantalla 3//
 	    Perdedor pantalla3=new Perdedor(modelo);
@@ -25,5 +25,3 @@ public class Main {
 	}
 	
 }
-
-
