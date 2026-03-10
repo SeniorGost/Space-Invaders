@@ -44,6 +44,8 @@ public class Perdedor extends JFrame implements Observer {
 	public Perdedor(Observable Modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+
+		Modelo.getModelo().addObserver(this);
 		
 		//fondo EPICO
 		contentPane = new JPanel() {
@@ -133,3 +135,4 @@ public class Perdedor extends JFrame implements Observer {
 	}
 
 }
+
