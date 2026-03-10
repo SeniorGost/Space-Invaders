@@ -50,6 +50,9 @@ public class Menu extends JFrame implements Observer{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
+		//Se activa el "COCO TACTICO", EXTREMADAMENTE IMPORTANTE: NO TOCAR//
+		ImageIcon COCOTACTICO = new ImageIcon(Menu.class.getResource("/coconut.png"));
+		
 		//esto de aqui hace funcionar la imagen de fondo
 	    contentPane = new JPanel() {
 		    @Override
@@ -63,7 +66,7 @@ public class Menu extends JFrame implements Observer{
 		contentPane.addKeyListener(new KeyAdapter() {
 		    @Override
 		    public void keyPressed(KeyEvent e) {
-		        System.out.println("Ahora aqui se llamaría a controler para cambiar de clase");
+		        System.out.println("Ahora aqui se llamaría a controler para cambiar de ventana");
 		    }
 		});
 		
@@ -108,8 +111,10 @@ public class Menu extends JFrame implements Observer{
 		{
 			if (arg instanceof int[])
 			{
+				// 0 Menu, 1 Juego, 2 Ganar, 3 Perder
 				int[] datos=(int[])arg;
 				cambiarPantalla(datos[0]);
+				
 			}
 		}
 		
