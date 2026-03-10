@@ -19,8 +19,8 @@ public final class Jugador extends Observable {
     // Constantes de juego
     private static final int VELOCIDAD = 1;
     private static final int LIMITE_IZQ = 0;
-    private static final int LIMITE_DER = Modelo.getModelo().getWidth();
-    private static final int LIMITE_ABAJO = Modelo.getModelo().getHeight();
+    private static final int LIMITE_DER = Modelo.getModelo().getWidth() - 1;
+    private static final int LIMITE_ABAJO = Modelo.getModelo().getHeight() - 1;
     private static final int LIMITE_ARRIBA = 0;
 
     private Jugador() {
@@ -70,7 +70,7 @@ public final class Jugador extends Observable {
         	ArtilleriaJugador.getArtilleria().tick(this.posX, this.posY, this.willShoot);
             willShoot = false;
         } else {
-        	ArtilleriaJugador.getArtilleria().tick();
+        	ArtilleriaJugador.getArtilleria().tick(this.posX, this.posY);
         }
         
     }

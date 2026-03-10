@@ -30,8 +30,8 @@ public class ArtilleriaJugador extends Observable {
 	 * 
 	 * Puede ser llamado con parametros. En cuyo caso, se generará una nueva bala del jugador.
 	*/
-	public void tick() throws JuegoCambiadoException {
-		tick(0, 0, false);
+	public void tick(int posX, int posY) throws JuegoCambiadoException {
+		tick(posX, posY, false);
 	}
 	
 	/**
