@@ -73,7 +73,7 @@ public class Menu extends JFrame implements Observer{
 		    @Override
 		    protected void paintComponent(java.awt.Graphics componente) {
 		         super.paintComponent(componente);
-		         componente.drawImage(new ImageIcon(Menu.class.getResource("/spritesEpicos/background.jpg")).getImage(),0, 0, getWidth(), getHeight(), this);
+		         componente.drawImage(new ImageIcon(Menu.class.getResource("/spritesEpicos/menu_Background.jpg")).getImage(),0, 0, getWidth(), getHeight(), this);
 		        }
 		};
 		
@@ -154,6 +154,7 @@ public class Menu extends JFrame implements Observer{
 		public void keyReleased(KeyEvent e) {}
 	}
 }
+
 
 
 
