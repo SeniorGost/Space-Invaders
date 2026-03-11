@@ -17,6 +17,10 @@ import javax.swing.border.EmptyBorder;
 
 import modelo.Modelo;
 
+//Estas dos son para hacer lo de pillar las dimensiones de la pantalla
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 public class Ganador extends JFrame implements Observer {
 
 	private static final long serialVersionUID = 1L;
@@ -43,7 +47,13 @@ public class Ganador extends JFrame implements Observer {
 	 */
 	public Ganador(Observable modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		//esto es para pillar el tamaño de la pantalla del usuario
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+		
+		//le damos a la ventana las dimensiones de la pantalla de usuario
+		setBounds(0, 0, (int)width, (int)height);
 
 		Modelo.getModelo().addObserver(this);
 		
@@ -142,4 +152,5 @@ public class Ganador extends JFrame implements Observer {
 		public void keyReleased(KeyEvent e) {}
 	}
 }
+
 
