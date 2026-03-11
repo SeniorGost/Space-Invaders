@@ -24,6 +24,10 @@ import modelo.Modelo;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 
+//Estas dos son para hacer lo de pillar las dimensiones de la pantalla
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 //para Observable-Observer todas las clases que observan implementan (herencia de interfaz) Observer
 public class Juego extends JFrame implements Observer{
 
@@ -61,7 +65,14 @@ public class Juego extends JFrame implements Observer{
 	 */
 	public Juego(Observable modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+
+		//esto es para pillar el tamaño de la pantalla del usuario
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+		
+		//le damos a la ventana las dimensiones de la pantalla de usuario
+		setBounds(0, 0, (int)width, (int)height);
 		
 		Modelo.getModelo().addObserver(this);
 		Jugador.getJugador().addObserver(this);
@@ -350,3 +361,4 @@ public class Juego extends JFrame implements Observer{
 
 	}
 }
+
