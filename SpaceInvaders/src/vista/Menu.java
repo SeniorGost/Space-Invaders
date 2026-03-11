@@ -17,6 +17,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+//Estas dos son para hacer lo de pillar las dimensiones de la pantalla
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 // MODELO SE IMPORTA PARA LA LINEA 26 Y PARA EL OBSERVABLE
 import modelo.Modelo;
 
@@ -46,7 +50,18 @@ public class Menu extends JFrame implements Observer{
 	 */
 	public Menu(Observable modelo) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		
+		//esto es para pillar el tamaño de la pantalla del usuario
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+
+		//Mostramos por pantalla por si las moscas
+		System.out.println("Dimensiones de Pantalla PC: " + width + "," + height);
+		
+		//Hacemos la ventana tan grande como la pantalla (Los castings son porque el dato es double no int)
+		//Los dos primeros numeros son la posicion en la que 'spawnea' la ventana, la pongo en el 0,0 porque va ha ser tan grande como la pantalla, luego de estar movida se vería cortada
+		setBounds(0, 0, (int)width, (int)height);
 		
 	    Modelo.getModelo().addObserver(this);
 		
@@ -139,5 +154,6 @@ public class Menu extends JFrame implements Observer{
 		public void keyReleased(KeyEvent e) {}
 	}
 }
+
 
 
