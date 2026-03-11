@@ -104,13 +104,21 @@ public class Menu extends JFrame implements Observer{
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblNewLabel_1 = new JLabel("Pulsa Cualquier boton para continuar");
-		lblNewLabel_1.setFont(new Font("Comic Sans MS", Font.PLAIN, 10));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Comic Sans MS", Font.PLAIN, 10));
 		lblNewLabel_1.setForeground(Color.WHITE);
-		panel.add(lblNewLabel_1, BorderLayout.CENTER);
+		panel.add(lblNewLabel_1);
 		
 		//esto permite que panel no obstruya la imagen
-		panel.setOpaque(false); 
+		panel.setOpaque(false);
+		
+		JLabel AlienitoLabel = new JLabel("");
+		AlienitoLabel.setIcon(new ImageIcon(Menu.class.getResource("/spritesEpicos/horrores_eldricos.gif")));
+		panel.add(AlienitoLabel, BorderLayout.WEST);
+		
+		JLabel LabelOBNI = new JLabel("");
+		LabelOBNI.setIcon(new ImageIcon(Menu.class.getResource("/spritesEpicos/ovnmi.gif")));
+		panel.add(LabelOBNI, BorderLayout.EAST);
 	}
 
 	@Override
@@ -154,7 +162,3 @@ public class Menu extends JFrame implements Observer{
 		public void keyReleased(KeyEvent e) {}
 	}
 }
-
-
-
-
