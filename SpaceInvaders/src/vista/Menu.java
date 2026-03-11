@@ -118,7 +118,7 @@ public class Menu extends JFrame implements Observer{
 	//Este es el tema, cada vez que se notifica a los observers, se notifica a todas las pantallas a la vez entonces se tiene que poner una sentencia como esta, donde se distinga el numero de pantalla en que estamos
 	private void cambiarPantalla (int pValor){
 		
-		if (pValor!=1)
+		if (pValor!=0)
 		{
 			this.setVisible(false);
 		}
@@ -139,4 +139,5 @@ public class Menu extends JFrame implements Observer{
 		public void keyReleased(KeyEvent e) {}
 	}
 }
+
 
