@@ -34,10 +34,10 @@ public class Juego extends JFrame implements Observer{
 	//private JLabel[][] pixel= new JLabel[60][100];
 	
 	//forma alt para matriz de cualquier tamaño (commentada ahora para hacer las pruebas)
-	   private JLabel[][] pixel;
-	   private ArrayList<JLabel> pixelesPintados = new ArrayList<JLabel>();
-	   private int filas;
-	   private int columnas;
+	private JLabel[][] pixel;
+	private ArrayList<JLabel> pixelesPintados = new ArrayList<JLabel>();
+	private int filas;
+	private int columnas;
 	
 
 	/**
@@ -208,7 +208,16 @@ public class Juego extends JFrame implements Observer{
 	}
 	
 	private void definirMatriz( int c, int f) {
-		 
+		
+		//si ya existen las labels (ya se ha jugado una partida) Hay que borrar las labels de la partida anterior
+		if(pixel != null) {
+			for (int fila = 0; fila < this.filas; fila++) {
+				for(int columna = 0; columna < this.columnas; columna++){
+			        contentPane.remove(pixel[fila][columna]);
+				}
+			}
+		}
+		
 		 pixel= new JLabel[f][c];
 		 filas = f;
 		 columnas = c; 
@@ -236,6 +245,7 @@ public class Juego extends JFrame implements Observer{
 	private class Controller implements KeyListener {
 		@Override
 		public void keyTyped(KeyEvent e) {}
+		
 		@Override
 		public void keyPressed(KeyEvent e) {
 			switch(e.getKeyCode()) {
