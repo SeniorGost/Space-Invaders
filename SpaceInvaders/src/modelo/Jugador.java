@@ -8,11 +8,13 @@ public final class Jugador extends Observable {
     private int posY;
     
     //  movDir false='izquierda', true='derecha'
-    private boolean movDirX;
-    private boolean movDirY;
+    private boolean movLeft;
+    private boolean movRight;
+    private boolean movUp;
+    private boolean movDown;
+    
+    
     private boolean willShoot;
-	private boolean willMoveX;
-	private boolean willMoveY;
     
     private static Jugador miJugador;
     
@@ -24,15 +26,23 @@ public final class Jugador extends Observable {
     private static final int LIMITE_ARRIBA = 0;
 
     private Jugador() {
-        this.willMoveX = false;
-        this.willMoveY = false;
-        this.willShoot = false;
+        movLeft = false;
+        movRight = false;
+        movUp = false;
+        movDown = false;
+        willShoot = false;
     }
 
     public void inicializar() {
     	// Posición inicial 
     	posX = 50;
         posY = 55;
+        
+        movLeft = false;
+        movRight = false;
+        movUp = false;
+        movDown = false;
+        willShoot = false;
         
         ArtilleriaJugador.getArtilleria().iniciar();
     }
@@ -43,6 +53,12 @@ public final class Jugador extends Observable {
     }
 
     public void tick() throws JuegoCambiadoException {
+    	
+    	boolean willMoveX = movRight || movLeft;
+    	boolean willMoveY = movDown || movUp;    	
+    	
+    	boolean movDirX = movRight && !movLeft;
+    	boolean movDirY = movDown && !movUp;
         
        // logica de Movimiento
         if (willMoveX) {
@@ -75,17 +91,81 @@ public final class Jugador extends Observable {
         
     }
 
-    // @param pMovDir false para izquierda, true para derecha.
-    public void moveX(boolean movX) {
-        this.movDirX = movX;
-        this.willMoveX = true;
+    /**
+     * Indica que la nave del jugador debe empezar a moverse a la izquierda.
+     * Continuara este movimiento hasta que especifique lo contrario.
+     */
+    public void moveLeft() {
+        moveLeft(true);
     }
     
-    public void moveY(boolean movY) {
-        this.movDirY = movY;
-        this.willMoveY = true;
+    /**
+     * Indica que la nave del jugador debe empezar a moverse a la derecha.
+     * Continuara este movimiento hasta que especifique lo contrario.
+     */
+    public void moveRight() {
+    	moveRight(true);
     }
-
+    
+    /**
+     * Indica que la nave del jugador debe empezar a moverse hacia arriba.
+     * Continuara este movimiento hasta que especifique lo contrario.
+     */
+    public void moveUp() {
+    	moveUp(true);
+    }
+    
+    /**
+     * Indica que la nave del jugador debe empezar a moverse hacia abajo.
+     * Continuara este movimiento hasta que especifique lo contrario.
+     */
+    public void moveDown() {
+    	moveDown(true);;
+    }
+    
+    /**
+     * Especifica si la nave va a comenzar o va a detener su movimiento hacia la izquierda.
+     * Continuara este movimiento hasta que especifique lo contrario.
+     * @param doMove - {@code true} inicia el movimiento (funcionalmente igual a llamar a {@code moveLeft()}.
+     * {@code false} detiene el movimiento.
+     */
+    public void moveLeft(boolean doMove) {
+    	movLeft = doMove;
+    }
+    
+    /**
+     * Especifica si la nave va a comenzar o va a detener su movimiento hacia la derecha.
+     * Continuara este movimiento hasta que especifique lo contrario.
+     * @param doMove - {@code true} inicia el movimiento (funcionalmente igual a llamar a {@code moveRight()}.
+     * {@code false} detiene el movimiento.
+     */
+    public void moveRight(boolean doMove) {
+    	movRight = doMove;
+    }
+    
+    /**
+     * Especifica si la nave va a comenzar o va a detener su movimiento hacia arriba.
+     * Continuara este movimiento hasta que especifique lo contrario.
+     * @param doMove - {@code true} inicia el movimiento (funcionalmente igual a llamar a {@code moveUp()}.
+     * {@code false} detiene el movimiento.
+     */
+    public void moveUp(boolean doMove) {
+    	movUp = doMove;
+    }
+    
+    /**
+     * Especifica si la nave va a comenzar o va a detener su movimiento hacia abajo.
+     * Continuara este movimiento hasta que especifique lo contrario.
+     * @param doMove - {@code true} inicia el movimiento (funcionalmente igual a llamar a {@code moveDown()}.
+     * {@code false} detiene el movimiento.
+     */
+    public void moveDown(boolean doMove) {
+    	movDown = doMove;
+    }
+    
+    /**
+     * Indica que debe disparar un bala (singular).
+     */
     public void shoot() {
         this.willShoot = true;
     }

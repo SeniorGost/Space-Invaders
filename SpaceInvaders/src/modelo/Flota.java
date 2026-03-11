@@ -72,35 +72,40 @@ public class Flota extends Observable {
     public void tick(int x, int y) throws JuegoGanadoException, JuegoPerdidoException {
     	tickCount++;
     	
+    	boolean willMove = tickCount == 4;
+
     	int deltaX = 0;
     	int deltaY = 0;
     	
     	// Los aliens solo se mueven 1 de cada 4 ticks
-    	if (tickCount == 4) {
+    	if (willMove) {
     		tickCount = 0;
     		
-    		deltaX = 1;
-    		
-    		// Derecha: movDir == true | Izquierda: movDir == false
-    		if (!movDir) {
-    			deltaX = -deltaX;
-    		}
     		if (willFall) {
     			deltaY = 1;
-    			willFall = false;
+    			movDir = !movDir;
+    		} else {	
+    			// Derecha: movDir == true | Izquierda: movDir == false
+    			if (movDir) {
+    				deltaX = 1;
+    			} else {    				
+    				deltaX = -1;
+    			}
     		}
     		
-    		// Se les propaga el tick a los aliens para moverlos
-    		for (Alien a : listaAliens) {
-    			// Si al menos una de las llamadas del metodo devuelve 'true', la proxima vez que los aliens
-    			// se muevan sera en la direccion contraria. Ademas, los aliens descenderan una posicion en 
-    			// su siguiente movimiento.
-    			if (a.tick(deltaX, deltaY, x, y) && !willFall) {
-    				willFall = true;
-    				movDir = !movDir;
-    			}
-    		}	
     	}
+    	
+    	// Se les propaga el tick a los aliens para moverlos
+    	boolean mustFall = false;
+    	for (Alien a : listaAliens) {
+    		// Si al menos una de las llamadas del metodo devuelve 'true', la proxima vez que los aliens
+    		// se muevan sera en la direccion contraria. Ademas, los aliens descenderan una posicion en 
+    		// su siguiente movimiento.
+    		
+    		if (a.tick(deltaX, deltaY, x, y)) mustFall = true;
+    	}
+    	
+    	if (willMove) willFall = mustFall && !willFall;
     	
     	notifyView();
     	

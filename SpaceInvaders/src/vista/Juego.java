@@ -104,7 +104,7 @@ public class Juego extends JFrame implements Observer{
 			{
 				int[] datos=(int[])arg;
 				cleanClean(); //como de momento solo hay un jugador, la vez que le llega instancia de jugador se limpia la pantalla
-				System.out.println("J: " + datos[0] + " " + datos[1]);
+//				System.out.println("J: " + datos[0] + " " + datos[1]);
 				moverJugador(datos);
 			}
 		}
@@ -114,7 +114,7 @@ public class Juego extends JFrame implements Observer{
 			if (arg instanceof int[])
 			{
 				int[] datos=(int[])arg;
-				System.out.println("B: " + datos[0] + " " + datos[1]);
+//				System.out.println("B: " + datos[0] + " " + datos[1]);
 				moverBala(datos);
 			}
 		}
@@ -125,7 +125,7 @@ public class Juego extends JFrame implements Observer{
 			{
 				
 				int[] datos=(int[])arg;
-			    System.out.println("M: " + datos[0] + " " + datos[1]);
+//			    System.out.println("M: " + datos[0] + " " + datos[1]);
 				moverMarciano(datos);
 			}
 		}
@@ -243,31 +243,110 @@ public class Juego extends JFrame implements Observer{
 	}
 	
 	private class Controller implements KeyListener {
-		@Override
-		public void keyTyped(KeyEvent e) {}
+		boolean isShootPressed = false;
+		boolean isRightPressed = false;
+		boolean isLeftPressed = false;
+		boolean isDownPressed = false;
+		boolean isUpPressed = false;
 		
 		@Override
+		public void keyTyped(KeyEvent e) {}
+
+		@Override
 		public void keyPressed(KeyEvent e) {
-			switch(e.getKeyCode()) {
+			
+			int keyCode = e.getKeyCode();
+			
+			switch (keyCode) {
 			case KeyEvent.VK_A:
-				Jugador.getJugador().moveX(false);
+				if(!isLeftPressed) {
+					System.out.println("Tecla pulsada: A");
+
+					isLeftPressed = true;
+					Jugador.getJugador().moveLeft();
+				}
 				break;
 			case KeyEvent.VK_D:
-				Jugador.getJugador().moveX(true);
+				if(!isRightPressed) {
+					System.out.println("Tecla pulsada: D");
+					
+					isRightPressed = true;
+					Jugador.getJugador().moveRight();
+				}
 				break;
 			case KeyEvent.VK_W:
-				Jugador.getJugador().moveY(false);
+				if(!isUpPressed) {
+					System.out.println("Tecla pulsada: W");
+					
+					isUpPressed = true;
+					Jugador.getJugador().moveUp();
+				}
 				break;
 			case KeyEvent.VK_S:
-				Jugador.getJugador().moveY(true);
+				if(!isDownPressed) {
+					System.out.println("Tecla pulsada: S");
+					
+					isDownPressed = true;
+					Jugador.getJugador().moveDown();
+				}
 				break;
 			case KeyEvent.VK_ENTER:
-				System.out.println("POW\n");
-				Jugador.getJugador().shoot();
-				break;
+				if (!isShootPressed) {
+					System.out.println("POW\n");
+					
+					isShootPressed = true;
+					Jugador.getJugador().shoot();
+				}
+				break;					
 			}
 		}
+			
+		
 		@Override
-		public void keyReleased(KeyEvent e) {}
+		public void keyReleased(KeyEvent e) {
+			
+			int keyCode = e.getKeyCode();
+			
+			switch (keyCode) {
+			case KeyEvent.VK_A:
+				if(isLeftPressed) {
+					System.out.println("Tecla soltada: A");
+					
+					isLeftPressed = false;
+					Jugador.getJugador().moveLeft(false);
+				}
+				break;
+			case KeyEvent.VK_D:
+				if(isRightPressed) {
+					System.out.println("Tecla soltada: D");
+					
+					isRightPressed = false;
+					Jugador.getJugador().moveRight(false);
+				}
+				break;
+			case KeyEvent.VK_W:
+				if(isUpPressed) {
+					System.out.println("Tecla soltada: W");
+					
+					isUpPressed = false;
+					Jugador.getJugador().moveUp(false);
+				}
+				break;
+			case KeyEvent.VK_S:
+				if(isDownPressed) {
+					System.out.println("Tecla soltada: S");
+					
+					isDownPressed = false;
+					Jugador.getJugador().moveDown(false);
+				}
+				break;
+			case KeyEvent.VK_ENTER:
+				if (isShootPressed) isShootPressed = false;
+				break;					
+			}
+			
+		}
+
+
 	}
 }

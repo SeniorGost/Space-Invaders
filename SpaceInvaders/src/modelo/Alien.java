@@ -32,7 +32,7 @@ public class Alien {
         this.posX += deltaX;
         this.posY += deltaY;
         
-        return (posX == 0 || posX == (Modelo.getModelo().getWidth()-1));
+        return (posX - 1 < 0 || posX  + 1 > Modelo.getModelo().getWidth() - 1);
     }
     
 
