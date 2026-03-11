@@ -27,8 +27,38 @@ public class Modelo extends Observable {
 
 	//
 	public Modelo() {
-		miTimer = new Timer();
+		//ta vacio, lo chento :c
 	}
+	
+	// Breve disertación de switches en java:
+	/*
+	 * los switches tienen que tener breaks en java porque si no java lo interpreta como; si case A o si case B hacer x
+	 * 
+	 * ej: (hacer import java.util.Scanner; arriba para q funcione)
+	 * 
+	 * Scanner prueba = new Scanner(System.in);
+	 *
+	 * System.out.print("Mete Letra: ");  
+	 * 
+	 * char letra = prueba.nextLine();
+	 * 
+	 * switch(letra){
+	 * case A:
+	 * 		System.out.print("haz esto")
+	 * case B:
+	 * 		System.out.print("y esto")
+	 * case C:
+	 *      System.out.print("Si la letra es A,B,C")
+	 *      break;
+	 * case D:
+	 * 		System.out.print("y haz esto para D")
+	 *      break;
+	 * }
+	 * 
+	 * prueba.close();
+	 * 
+	 * */
+	
 	
 	/**
 	 * Siempre llamar este metodo de manera externa (idealmente desde 'Controller'). Cambia la ventana actual del juego
@@ -51,7 +81,10 @@ public class Modelo extends Observable {
 	private void empezarJuego() {
 
 		Jugador.getJugador().inicializar();
-
+		
+		//esto esta aqui porque si no, cuando se vuelva a lanzar no va a funcionar
+		miTimer = new Timer();
+		
 		miTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -77,8 +110,10 @@ public class Modelo extends Observable {
 		ventana = pVentana;
 		setChanged();
 		if(ventana != VENTANA_JUEGO) {
+			System.out.print("Cambio:" + pVentana + "\n");
 			notifyObservers(new int[] { pVentana });
 		} else {
+			System.out.println("Cambio:" + pVentana);
 			notifyObservers(new int[] { pVentana, GRID_WIDTH, GRID_HEIGHT });
 		}
 	}
