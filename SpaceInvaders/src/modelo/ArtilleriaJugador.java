@@ -41,12 +41,7 @@ public class ArtilleriaJugador extends Observable {
 	 * @param posX - La posición horizontal de la nave en el momento del disparo.
 	 * @param willShoot - El método generará una nueva bala cuando este parametro es {@code true}, no generará una bala cuando sea {@code false}.
 	*/
-	public void tick(int posX, int posY, boolean willShoot) throws JuegoCambiadoException {
-		if (willShoot && posY > 0) {
-			BalaJugador nuevaBala = new BalaJugador(posX, posY - 1);
-			// Cuando se implementen las entidades multipixel, cambiar el segundo parametro de la constructora.
-			listaBalas.add(nuevaBala);
-		}
+	public void tick(int posX, int posY, boolean willShoot) throws JuegoCambiadoException {		
 		
 		// Se envia el tick a cada una de la balas del jugador
 		if (!listaBalas.isEmpty()) {
@@ -60,10 +55,15 @@ public class ArtilleriaJugador extends Observable {
 			}
 		}
 		
-		notifyView();
-		
+		if (willShoot && posY > 0) {
+			BalaJugador nuevaBala = new BalaJugador(posX, posY - 1);
+			// Cuando se implementen las entidades multipixel, cambiar el segundo parametro de la constructora.
+			listaBalas.add(nuevaBala);
+		}
 		// Propaga el tick
 		Flota.getFlota().tick(posX, posY);
+		
+		notifyView();
 	}
 	
 	/**
