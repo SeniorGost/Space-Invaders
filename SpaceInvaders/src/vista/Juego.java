@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+//Para hacer la cola de instrucciones necesitamos estas dos
+import java.util.Queue;
+import java.util.LinkedList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -44,9 +48,8 @@ public class Juego extends JFrame implements Observer{
 	private JLabel[][] pixel;
 	private ArrayList<JLabel> pixelesPintados = new ArrayList<JLabel>();
 	
-	// Las siguientes dos arrays contienen la informacion relevante para pintar los labels
-	private ArrayList<JLabel> pixelesParaPintar = new ArrayList<JLabel>();
-	private ArrayList<Color> coloresParaPintar = new ArrayList<Color>();
+	// Aqui guardaremos las instrucciones para luego ejecutarlas todas de un tiron cada tick (El tipo de datos Runnable se usa para guardar comandos)
+	private Queue<Runnable> aPintar  = new LinkedList();
 	
 
 	/**
@@ -116,7 +119,7 @@ public class Juego extends JFrame implements Observer{
 			if (arg instanceof int[])
 			{
 				int[] datos=(int[])arg;
-//				System.out.println("J: " + datos[0] + " " + datos[1]);
+				//System.out.println("J: " + datos[0] + " " + datos[1]);
 				moverJugador(datos);
 			}
 		}
@@ -126,7 +129,7 @@ public class Juego extends JFrame implements Observer{
 			if (arg instanceof int[])
 			{
 				int[] datos=(int[])arg;
-//				System.out.println("B: " + datos[0] + " " + datos[1]);
+				//System.out.println("B: " + datos[0] + " " + datos[1]);
 				moverBala(datos);
 			}
 		}
@@ -137,7 +140,7 @@ public class Juego extends JFrame implements Observer{
 			{
 				
 				int[] datos=(int[])arg;
-//			    System.out.println("M: " + datos[0] + " " + datos[1]);
+				//System.out.println("M: " + datos[0] + " " + datos[1]);
 				moverMarciano(datos);
 			}
 		}
@@ -145,16 +148,21 @@ public class Juego extends JFrame implements Observer{
 		// para hacer lo de matriz de cualquier tamaño voy a necesitar que me envieis el tamaño por aqui
 		if (o instanceof Modelo)
 		{
-			if (arg instanceof int[]) {
+
+			//Aqui he cambiado el orden para revisar primero si se ha dado un tick y después si se ha cambiado a esta pantalla (Esto es porque como ocurrirá más frecuentemente que se de un tick a que se cambie a esta pantalla es ligeramente más eficiente)
+			//Por cierto, esta comprobación de aqui abajo funciona porque desde modelo enviamos solo notifyobservers(-1), luego por lo del 'autoboxing' que hace el metodo, java asume que el -1 es integer, luego no hay instancia de int (Lo mismo ocurre si envias un objeto int tal que: int a = -1; notifyObservers(a); por defecto java lo combierte a integer al enviarlo)
+			if (arg instanceof Integer) {
+				cleanClean();
+				pintarPantalla();		
+			} else {
+				//Si llegamos a este else sabemos que nos esta llegando instanceof int[], porque no puede ser de otra forma
 				int[] datos=(int[])arg;
 				if(datos[0]==1){
 					//esto le dice que si se pasa a la pantalla 1, que primero defina la matriz con las dimensiones que me pasa modelo
 					definirMatriz(datos[1],datos[2]);
 				}
-				cambiarPantalla(datos[0]);					
-			} else {
-				pintarPantalla();
-			}
+				cambiarPantalla(datos[0]);			
+			} 
 		}
 		
 	}
@@ -166,8 +174,10 @@ public class Juego extends JFrame implements Observer{
 	    int cN = posicion[0];
 	    
 	    //el jugador es ROJO
-	    pixelesParaPintar.add(pixel[fN][cN]);
-	    coloresParaPintar.add(Color.RED);
+	    //AQUI lo que estoy haciendo es meter la instruccion en la pila de instrucciones (El ()-> es para que en lugar de ejecutarse la accion inmediatamente, se guarde la accion, creo, a ver a si lo ponian en StackOverflow y yo confio en esa gente)
+	    aPintar.add(() -> pixel[fN][cN].setBackground(Color.RED)); // le da el color  
+	    aPintar.add(() -> pixel[fN][cN].setOpaque(true)); // para que se vea el pixel
+	    aPintar.add(() -> pixelesPintados.add(pixel[fN][cN])); // añadirá el pixel a la lista de pixeles pintados para que sepamos que se ha pintado
 	}
 	
 	private void moverMarciano (int posicion[] ){
@@ -176,8 +186,9 @@ public class Juego extends JFrame implements Observer{
 	    int cN = posicion[0];
 		    
 		//el marciano es VERDE
-	    pixelesParaPintar.add(pixel[fN][cN]);
-	    coloresParaPintar.add(Color.GREEN);
+	    aPintar.add(() -> pixel[fN][cN].setBackground(Color.GREEN)); // le da el color  
+	    aPintar.add(() ->pixel[fN][cN].setOpaque(true)); // para que se vea el pixel
+	    aPintar.add(() -> pixelesPintados.add(pixel[fN][cN])); // añadirá el pixel a la lista de pixeles pintados para que sepamos que se ha pintado
 	}
 	
 	private void moverBala (int posicion[] ){
@@ -186,8 +197,9 @@ public class Juego extends JFrame implements Observer{
 	   int cN = posicion[0];
 		    
 	   //la bala es BLANCA
-	   pixelesParaPintar.add(pixel[fN][cN]);
-	   coloresParaPintar.add(Color.WHITE);
+	    aPintar.add(() -> pixel[fN][cN].setBackground(Color.WHITE)); // le da el color  
+	    aPintar.add(() ->pixel[fN][cN].setOpaque(true)); // para que se vea el pixel
+	    aPintar.add(() -> pixelesPintados.add(pixel[fN][cN])); // añadirá el pixel a la lista de pixeles pintados para que sepamos que se ha pintado
 	}
 	
 	//Este es el tema, cada vez que se notifica a los observers, se notifica a todas las pantallas a la vez entonces se tiene que poner una sentencia como esta, donde se distinga el numero de pantalla en que estamos
@@ -199,24 +211,20 @@ public class Juego extends JFrame implements Observer{
 	}
 	
 	private void pintarPantalla() {
-		cleanClean();
 		
-		for (int i = 0; i < pixelesParaPintar.size(); i++) {
-			JLabel pixel = pixelesParaPintar.get(i);
-			pixel.setBackground(coloresParaPintar.get(i));
-			pixel.setOpaque(true);
-			pixelesPintados.add(pixel);
+		//Como es una pila cada instruccion que saquemos se borrará de la cola, osea acabaremos cuando la cola este vacia
+		while (!aPintar.isEmpty()) {
+			//poll() saca un elemento run() lo ejecuta (Porque es una instruccion)
+		    aPintar.poll().run();
 		}
-		
-		pixelesParaPintar.clear();
-		coloresParaPintar.clear();
 	}
 	//este método limpia la pantalla
 	private void cleanClean(){
 		
 		for (JLabel pixel : pixelesPintados) {
-			pixel.setOpaque(false); // asi no se ve el pixel
-			pixel.setBackground(null); // asi se quita el color
+			pixel.setOpaque(false); // asi no se ve el pixel (si no estuviese esto aqui al quitarles el color se quedarian como pixeles visibles en gris)
+			pixel.setBackground(null); // asi se quita el color (si no estuviese esto aqui aun poniendo el Opaque a false se queda el pixel coloreado en Rojo visible)
+			//para que el pixel no sea visible tiene que NO ser opaco y NO tener color de fondo
 		}
 		pixelesPintados.clear();
 	}
@@ -224,10 +232,13 @@ public class Juego extends JFrame implements Observer{
 	private void definirMatriz( int c, int f) {
 		
 		//si ya existen las labels (ya se ha jugado una partida) Hay que borrar las labels de la partida anterior
-		if(pixel != null) 
-			for (int fila = 0; fila < this.filas; fila++) 
-				for(int columna = 0; columna < this.columnas; columna++)
+		if(pixel != null) {
+			for (int fila = 0; fila < this.filas; fila++) {
+				for(int columna = 0; columna < this.columnas; columna++){
 			        contentPane.remove(pixel[fila][columna]);
+				}
+			}
+		}
 		
 		 pixel= new JLabel[f][c];
 		 filas = f;
@@ -361,4 +372,3 @@ public class Juego extends JFrame implements Observer{
 
 	}
 }
-
