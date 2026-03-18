@@ -36,19 +36,19 @@ public class Flota extends Observable {
     private void inicializarAliens() {
     	listaAliens = new ArrayList<Alien>();
     	
-    	// Definimos un margen derecho de 6px en el que ningun alien puede aparecer
-    	int maxHPos = Modelo.getModelo().getWidth() - 6;
+    	// Definimos un margen derecho de 16px en el que ningun alien puede aparecer
+    	int maxHPos = Modelo.getModelo().getWidth() - 16;
     	
     	// Los aliens tienen que tener al menos un pixel de separacion entre ellos, por lo que vamos a 
     	// considerar solo las posiciones horizontalmente pares como posiciones validas para que aparezca un alien.
     	ArrayList<Integer> validHPos = new ArrayList<Integer>();
-    	for (int i = 0; i <= maxHPos; i += 2) {
-    		validHPos.add(i);
+    	for (int i = 0; i <= maxHPos - 2; i += 2) {
+    		validHPos.add(i + 2);
     	}
     	
-    	// Se encoge una cantidad de aliens aleatoria entre 4 y 8 (ambos incluidos)
+    	// Se encoge una cantidad de aliens aleatoria entre 4 y 6 (ambos incluidos)
     	Random rand = new Random();
-    	int alienAmount = rand.nextInt(4) + 4; 
+    	int alienAmount = rand.nextInt(4) + 2; 
     	
     	// De manera aleatoria se eligen posiciones de entre las posiciones validas. La cantidad será la misma que la cantidad
     	// de aliens que queremos crear
@@ -60,6 +60,10 @@ public class Flota extends Observable {
     		
     		i++;
     	}
+    	
+    	// Intencionalmente se colocan dos aliens en dos extremos de la flota
+    	listaAliens.add(new Alien(0, 0));
+    	listaAliens.add(new Alien(maxHPos, 0));
     	
     	// Se instancian los aliens en las posiciones aleatorias
     	for (int j : spawnHPos) {

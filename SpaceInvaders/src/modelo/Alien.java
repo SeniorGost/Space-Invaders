@@ -3,10 +3,13 @@ package modelo;
 public class Alien {
     private int posX;
     private int posY;
+    private boolean justMoved;
 
     public Alien(int x, int y) {
         this.posX = x;
         this.posY = y;
+        
+        this.justMoved = false;
     }
 
     /**
@@ -20,9 +23,8 @@ public class Alien {
     public boolean tick(int deltaX, int deltaY, int jugadorX, int jugadorY) throws JuegoPerdidoException {
     	
     	// Verifica si su posicion es la misma que la del jugador
-    	if (posX == jugadorX && posY == jugadorY) {
+    	if (posX == jugadorX && posY == jugadorY) 
     		throw new JuegoPerdidoException();
-    	}
     	
     	// Verificación de límite inferior (si el alien llega abajo, se pierde el juego)
     	if (posY == (Modelo.getModelo().getHeight()-1)) {    		
@@ -31,6 +33,12 @@ public class Alien {
     	
         this.posX += deltaX;
         this.posY += deltaY;
+        
+        justMoved = deltaX != 0;
+        
+        // Verifica de nuevo si su posicion es la misma que la del jugador
+        if (posX == jugadorX && posY == jugadorY) 
+        	throw new JuegoPerdidoException();
         
         return (posX - 1 < 0 || posX  + 1 > Modelo.getModelo().getWidth() - 1);
     }
@@ -41,7 +49,12 @@ public class Alien {
      */
     
     public boolean hit(int balaX, int balaY) {
-    	if (this.posX == balaX && this.posY == balaY) {return true;}
+    	// Se comprueba tambien las posiciones de alrededor de la bala para facilitar eliminar a los aliens
+    	if (this.posX == balaX && (this.posY == balaY || this.posY == balaY - 1)) 
+    		return true;
+    	if (justMoved)
+	    	if (this.posX == balaX && this.posY == balaY + 1) 
+	    		return true;
     	return false;
     }
 

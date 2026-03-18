@@ -90,7 +90,10 @@ public class Modelo extends Observable {
 			public void run() {
 				if (ventana == VENTANA_JUEGO) {
 					try {
-						Jugador.getJugador().tick();	
+						Jugador.getJugador().tick();
+						
+						setChanged();
+						notifyObservers(-1);
 
 					} catch (JuegoCambiadoException e) {
 						miTimer.cancel();
