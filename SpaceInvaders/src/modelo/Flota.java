@@ -41,9 +41,12 @@ public class Flota extends Observable {
     	
     	// Los aliens tienen que tener al menos un pixel de separacion entre ellos, por lo que vamos a 
     	// considerar solo las posiciones horizontalmente pares como posiciones validas para que aparezca un alien.
+    	
+    	int alienSpacing = 7;
+    	
     	ArrayList<Integer> validHPos = new ArrayList<Integer>();
-    	for (int i = 0; i <= maxHPos - 2; i += 2) {
-    		validHPos.add(i + 2);
+    	for (int i = alienSpacing * 2; i <= maxHPos - (alienSpacing * 2); i += alienSpacing) {
+    		validHPos.add(i);
     	}
     	
     	// Se encoge una cantidad de aliens aleatoria entre 4 y 6 (ambos incluidos)
@@ -62,12 +65,12 @@ public class Flota extends Observable {
     	}
     	
     	// Intencionalmente se colocan dos aliens en dos extremos de la flota
-    	listaAliens.add(new Alien(0, 0));
-    	listaAliens.add(new Alien(maxHPos, 0));
+    	listaAliens.add(new alienMultipixel(alienSpacing, alienSpacing));
+    	listaAliens.add(new alienMultipixel(maxHPos - alienSpacing, alienSpacing));
     	
     	// Se instancian los aliens en las posiciones aleatorias
     	for (int j : spawnHPos) {
-    		Alien nAlien = new Alien(j, 0);
+    		Alien nAlien = new alienMultipixel(j, alienSpacing);
     		listaAliens.add(nAlien);
     	}
     }
@@ -111,8 +114,6 @@ public class Flota extends Observable {
     	
     	if (willMove) willFall = mustFall && !willFall;
     	
-    	notifyView();
-    	
     }
     
     
@@ -142,11 +143,9 @@ public class Flota extends Observable {
     /**
 	 * Mediante el 'Patron Observer' notifica al vista de las posiciones de los Aliens
 	 */
-	private void notifyView() {
-		for (Alien a : listaAliens) {
-			setChanged();
-			notifyObservers(new int[] {a.getPosX(), a.getPosY()});
-		}
+	public void notifyView(int x, int y) {
+		setChanged();
+		notifyObservers(new int[] {x, y});
 	}
     
 }
