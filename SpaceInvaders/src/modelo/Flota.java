@@ -7,15 +7,13 @@ import java.util.Random;
 
 public class Flota extends Observable {
     private ArrayList<Alien> listaAliens;
-    private boolean movDir; // false = izquierda, true = derecha
-    private boolean willFall; // Los aliens descenderan una posicion cuando este atributo es 'true' 
-    private int tickCount;
+    
     private static Flota miFlota;
+    
+    private estadoFlota estadoActual;
 
     private Flota() {
         listaAliens = new ArrayList<>();
-        movDir = true;
-        willFall = false;
     }
 
     public static Flota getFlota() {
@@ -26,9 +24,8 @@ public class Flota extends Observable {
     }
 
     public void inicializar() {
-        tickCount = 0;
-        movDir = true; // Empiezan moviéndose a la derecha
-        willFall = false;
+        estadoActual = new estadoFlotaEsperar(true, false);
+        
         inicializarAliens();
     }
     
@@ -73,33 +70,14 @@ public class Flota extends Observable {
     }
     
     //movimiento cada 4 ticks
-    public void tick(int x, int y) throws JuegoGanadoException, JuegoPerdidoException {
-    	tickCount++;
+    public void tick(int x, int y) throws JuegoPerdidoException {
+    	estadoActual.tick(x, y);
     	
-    	boolean willMove = tickCount == 4;
-
-    	int deltaX = 0;
-    	int deltaY = 0;
+    	notifyView();
     	
-    	// Los aliens solo se mueven 1 de cada 4 ticks
-    	if (willMove) {
-    		tickCount = 0;
-    		
-    		if (willFall) {
-    			deltaY = 1;
-    			movDir = !movDir;
-    		} else {	
-    			// Derecha: movDir == true | Izquierda: movDir == false
-    			if (movDir) {
-    				deltaX = 1;
-    			} else {    				
-    				deltaX = -1;
-    			}
-    		}
-    		
-    	}
-    	
-    	// Se les propaga el tick a los aliens para moverlos
+    }
+    
+    public boolean move(int deltaX, int deltaY, int x, int y) throws JuegoPerdidoException {
     	boolean mustFall = false;
     	for (Alien a : listaAliens) {
     		// Si al menos una de las llamadas del metodo devuelve 'true', la proxima vez que los aliens
@@ -108,14 +86,8 @@ public class Flota extends Observable {
     		
     		if (a.tick(deltaX, deltaY, x, y)) mustFall = true;
     	}
-    	
-    	if (willMove) willFall = mustFall && !willFall;
-    	
-    	notifyView();
-    	
+    	return mustFall;
     }
-    
-    
     
    //si se alcanza un alien se elimina de la flota
     public boolean hit(int x, int y) throws JuegoGanadoException {
@@ -139,6 +111,11 @@ public class Flota extends Observable {
         return alienEncontrado;
     }
 
+    
+    public void setState(estadoFlota nuevoEstado) {
+    	estadoActual = nuevoEstado;
+    }
+    
     /**
 	 * Mediante el 'Patron Observer' notifica al vista de las posiciones de los Aliens
 	 */
