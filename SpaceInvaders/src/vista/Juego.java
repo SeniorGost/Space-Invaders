@@ -25,7 +25,7 @@ import modelo.Jugador;
 import modelo.Alien;
 import modelo.ArtilleriaJugador;
 import modelo.Modelo;
-import modelo.NaveGreen;
+import modelo.NaveMultipixel;
 
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -115,7 +115,7 @@ public class Juego extends JFrame implements Observer{
 		//Yo aqui entiendo que cuando le llega una instancia le llegara SOLO la de una bala o un jugador cada vez que se le envia, por aquello de que se envia una bala, se avanza en el bucle, se envia otra...;
 		//De momento se envia solo la posicion actual
 		
-		if (o instanceof NaveGreen)
+		if (o instanceof NaveMultipixel)
 		{
 			if (arg instanceof int[])
 			{

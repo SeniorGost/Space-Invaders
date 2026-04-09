@@ -1,22 +1,21 @@
 package modelo;
 
 public final class Jugador {
-    //  movDir false='izquierda', true='derecha'
-    
-    private boolean willShoot;
-    
     private static Jugador miJugador;
     
     private Nave nave;
 
     private Jugador() {
-
     }
 
+    /**
+     * Se debe de llamar al comienzo de cada partida. Genera una nave dependiendo del tipo especificado 
+     * en el parametro.
+     * @param tipo - [0]: Nave Green | [1]: Nave Blue | [2]: Nave Red
+     */
     public void inicializar(int tipo) {
     	
     	if (tipo == 0) {
-    		System.out.println("nave creada");
     		nave = new NaveGreen();
     	}
         
@@ -28,6 +27,10 @@ public final class Jugador {
         return miJugador;
     }
 
+    /**
+     * Tick es un brawler que puede disparar minas y hacer explotar su cabeza y tal...
+     * @throws JuegoCambiadoException Propaga excepción
+     */
     public void tick() throws JuegoCambiadoException {
         nave.tick();
     }
@@ -114,12 +117,4 @@ public final class Jugador {
     public Nave getNave() {
     	return nave;
     }
-    
-    public int getPosX() {
-    	return nave.getPosX();
-    }
-    public int getPosY() {
-    	return nave.getPosY();
-    }
-    
 }

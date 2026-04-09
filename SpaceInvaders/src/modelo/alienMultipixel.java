@@ -16,7 +16,8 @@ public class alienMultipixel extends Alien {
 		hitboxX = 2;
 		hitboxY = 2;
 		
-
+		// le foo fighter:
+		
 		listaPixeles.add(new alienPixel(-2 	+ x, -2	+ y));
 		listaPixeles.add(new alienPixel(2 	+ x, -2	+ y));
 		
@@ -60,6 +61,18 @@ public class alienMultipixel extends Alien {
 		return false;
 	}
 	
+    /**
+     * Si existe una intersección entre la hitbox del alien y la hurtbox del jugador, se comprueba si al menos uno de
+     * los pixeles del alien cohencide en posicion con uno de los pixeles de la nave.
+     * 
+     * @param pPosX - Los componentes x de las posiciones de los pixeles de la nave del jugador.
+     * @param pPosY - Los componentes y de las posiciones de los pixeles de la nave del jugador.
+     * @param offsetX - Componente x de la posición central de la nave del jugador.
+     * @param offsetY - Componente y de la posición central de la nave del jugador.
+     * @param hurtboxX - Margen horizontal de la hurtbox de la nave del jugador.
+     * @param hurtboxY - Margen vertical de la hurtbox de la nave del jugador.
+     * @return {@code true} el alien y la nave del jugador comparten posición, {@code false} en caso contrario.
+	*/
 	@Override
 	public boolean playerCollided(int[] pPosX, int[] pPosY, int offsetX, int offsetY, int hurtboxX, int hurtboxY) {
 		
@@ -74,7 +87,20 @@ public class alienMultipixel extends Alien {
 		return false;
 	}
 	
+	/**
+	 * Dados los margenes de la 'hurtbox' de un jugador y la posicion central de decho jugador, determina si existe
+     * una intersección entre la hurtbox del jugador y la hitbox del alien.
+     * 
+	 * @param pX - Componente x de la posición central de la nave del jugador.
+	 * @param pY - Componente y de la posición central de la nave del jugador.
+	 * @param hurtboxX - Margen horizontal de la hurtbox de la nave del jugador.
+	 * @param hurtboxY - Margen vertical de la hurtbox de la nave del jugador.
+	 * @return {@code true} si existe una intersección, {@code false} en caso contrario.
+	 */
 	private boolean hitboxCollides(int pX, int pY, int hurtboxX, int hurtboxY) {
+		// La verdad, no estoy seguro de que calculo geometrico se realiza exactamente aqui debido a que elabore
+		// este codigo antes incluso de habernos puesto a programar el programa principal. Unicamente por la posibilidad
+		// de que fuesemoms a utilizar hitboxes.
 		boolean rdo = false;
 		
 		int difY = posY - pY;

@@ -18,12 +18,22 @@ public class ArtilleriaJugador extends Observable {
 		listaBalas = new LinkedList<BalaJugador>();
 	}
 	
+	/**
+	 * Debes de llamar a este metodo al pricipio de cada partida, pero solo UNA VEZ
+	 */
 	public void iniciar() {
 		listaBalas = new LinkedList<BalaJugador>();
 		
 		Flota.getFlota().inicializar();
 	}
 	
+	/**
+	 * Genera una bala del tipo indicado en la posicion indicada.
+	 * 
+	 * @param posX - Componente x de la posicion en la que se desea que aparezca la nueva bala.
+	 * @param posY - Componente y de la posicion en la que se desea que aparezca la nueva bala.
+	 * @param type - Existen diferentes tipos de balas, este paramtro especifica cual es el deseado.
+	 */
 	public void shoot(int posX, int posY, int type) {		
 		if (posY > 0) {
 			BalaJugador nuevaBala = new BalaJugador(posX, posY - 1);
@@ -32,13 +42,15 @@ public class ArtilleriaJugador extends Observable {
 		}
 	}
 	
-	
 	/**
 	 * Inicia la lógica de las balas disparadas por el jugador. Puede generar una nueva bala del jugador.
 	 * Entre otros, se encarga de mover las balas y envia señales de su posición al vista.
 	 * 
 	 * @param pixNaveX - Componente x de las posiciones de los pixeles de la nave con los que el alien puede impactar.
 	 * @param pixNaveY - Componente y de las posiciones de los pixeles de la nave con los que el alien puede impactar.
+	 * @param naveX - Componente x de la posicion central de la nave.
+	 * @param naveY - Componente y de la posicion central de la nave.
+	 * @throws JuegoCambiadoException Propaga excepciones.
 	*/
 	public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoCambiadoException {		
 		// Se envia el tick a cada una de la balas del jugador

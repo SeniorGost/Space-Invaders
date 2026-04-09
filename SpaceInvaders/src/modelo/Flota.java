@@ -116,7 +116,6 @@ public class Flota extends Observable {
     				deltaX = -1;
     			}
     		}
-    		
     	}
     	
     	// Se les propaga el tick a los aliens para moverlos
@@ -134,7 +133,21 @@ public class Flota extends Observable {
     	
     }
     
+    /**
+     * Calcula los margenes de la 'hurtbox' de la nave del jugador y guarda esa información en atributos.
+     * <p> Este calculo solo deberia de hacerse una vez por partida. En el primer tick.
+     * 
+     * @param pixNaveX - Los componentes x de las posiciones de los pixeles de la nave.
+     * @param pixNaveY - Los componentes x de las posiciones de los pixeles de la nave.
+     * @param naveX - Componente x de la posición central de la nave.
+     * @param naveY - Componente y de la posición central de la nave.
+     */
     private void calculateHurtbox(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) {
+    	// En resumen, se hace un bucle en el que se calcula la diferencia horizontal y vertical de cada pixel respecto
+    	// al centro de la nave (consideramos que la diferencia solo puede ser positiva). La diferencia mas grande 
+    	// en la coordenada 'x' y en 'y' corresponderan con los margenes horizontales y verticales de la 'hurtbox' del 
+    	// jugador.
+    	
     	for (int i = 0; i < pixNaveX.length; i++) {
     		int valX = pixNaveX[i] - naveX;
     		if (valX < 0)

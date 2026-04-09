@@ -20,6 +20,15 @@ public class alienPixel extends Alien {
 	}
 
 	@Override
+	public boolean playerCollided(int[] pPosX, int[] pPosY, int offsetX, int offsetY, int hurtboxX, int hurtboxY) {
+		for (int i = 0; i < pPosX.length; i++) {
+			if (posX == pPosX[i] && posY == pPosY[i]) 
+				return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public boolean hit(int balaX, int balaY) {
     	// Se comprueba tambien las posiciones de alrededor de la bala para facilitar eliminar a los aliens
     	if (this.posX == balaX && (this.posY == balaY || this.posY == balaY - 1)) 
@@ -29,14 +38,4 @@ public class alienPixel extends Alien {
 	    		return true;
     	return false;
 	}
-
-	@Override
-	public boolean playerCollided(int[] pPosX, int[] pPosY, int offsetX, int offsetY, int hurtboxX, int hurtboxY) {
-		for (int i = 0; i < pPosX.length; i++) {
-			if (posX == pPosX[i] && posY == pPosY[i]) 
-				return true;
-		}
-		return false;
-	}
-
 }

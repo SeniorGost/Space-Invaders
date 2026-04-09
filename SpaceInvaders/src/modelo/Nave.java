@@ -4,14 +4,16 @@ import java.util.Observable;
 
 @SuppressWarnings("deprecation")
 public abstract class Nave extends Observable {
-
+	
+	// Donde esta la nave
     protected int posX;
     protected int posY;
     
-    protected boolean movLeft;
-    protected boolean movRight;
-    protected boolean movUp;
-    protected boolean movDown;
+    // Atributos relevantes para el movimiento
+    protected boolean movLeft;			// Se mueve hacia la izquierda en su siguiente tick cuando es true
+    protected boolean movRight;			// Se mueve hacia la derecha en su siguiente tick cuando es true
+    protected boolean movUp;			// Se mueve hacia la arriba en su siguiente tick cuando es true
+    protected boolean movDown;			// Se mueve hacia la abajo en su siguiente tick cuando es true
     
     // Constantes de juego
     protected static final int VELOCIDAD = 1;
@@ -20,17 +22,28 @@ public abstract class Nave extends Observable {
     protected static final int LIMITE_ABAJO = Modelo.getModelo().getHeight() - 1;
     protected static final int LIMITE_ARRIBA = 0;
     
-    public Nave() {
+    /**
+     * Las naves aparecen quietas en un punto determinado del espacio
+     * 
+     * @param pPosX - La posicion horizontal (coordenada x) en la que aparecerá la nave
+     * @param pPosY - La posicion vertical (coordenada y) en la que aparecerá la nave
+     */
+    public Nave(int pPosX, int pPosY) {
         movLeft = false;
         movRight = false;
         movUp = false;
         movDown = false;
         
     	// Posición inicial 
-    	posX = 50;
-        posY = 55;
+    	posX = pPosX;
+        posY = pPosY;
     }
     
+    /**
+     * Mueve la nave. No comprueba antes si su movimiento la dejara fuera del espacio.
+     * 
+     * @throws JuegoCambiadoException Propaga las excepciones.
+     */
     public void tick() throws JuegoCambiadoException {
     	boolean willMoveX = movRight || movLeft;
     	boolean willMoveY = movDown || movUp;    	
@@ -139,9 +152,16 @@ public abstract class Nave extends Observable {
      */
     public abstract void shoot();
 
+    /**
+     * @return La posicion horizontal (coordenada x) de la nave.
+     */
     public int getPosX() {
     	return posX;
     }
+    
+    /**
+     * @return La posicion vertical (coordenada y) de la nave.
+     */
     public int getPosY() {
     	return posY;
     }

@@ -30,35 +30,7 @@ public class Modelo extends Observable {
 		//ta vacio, lo chento :c
 	}
 	
-	// Breve disertación de switches en java:
-	/*
-	 * los switches tienen que tener breaks en java porque si no java lo interpreta como; si case A o si case B hacer x
-	 * 
-	 * ej: (hacer import java.util.Scanner; arriba para q funcione)
-	 * 
-	 * Scanner prueba = new Scanner(System.in);
-	 *
-	 * System.out.print("Mete Letra: ");  
-	 * 
-	 * char letra = prueba.nextLine();
-	 * 
-	 * switch(letra){
-	 * case A:
-	 * 		System.out.print("haz esto")
-	 * case B:
-	 * 		System.out.print("y esto")
-	 * case C:
-	 *      System.out.print("Si la letra es A,B,C")
-	 *      break;
-	 * case D:
-	 * 		System.out.print("y haz esto para D")
-	 *      break;
-	 * }
-	 * 
-	 * prueba.close();
-	 * 
-	 * */
-	
+	// (No voy a leer eso)
 	
 	/**
 	 * Siempre llamar este metodo de manera externa (idealmente desde 'Controller'). Cambia la ventana actual del juego
