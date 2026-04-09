@@ -30,18 +30,22 @@ public class ArtilleriaJugador extends Observable {
 	 * 
 	 * Puede ser llamado con parametros. En cuyo caso, se generará una nueva bala del jugador.
 	*/
-	public void tick(int posX, int posY) throws JuegoCambiadoException {
-		tick(posX, posY, false);
+	public void tick(int[] pixNaveX, int[] pixNaveY) throws JuegoCambiadoException {
+		tick(pixNaveX, pixNaveY, false);
 	}
 	
 	/**
 	 * Inicia la lógica de las balas disparadas por el jugador. Puede generar una nueva bala del jugador.
 	 * Entre otros, se encarga de mover las balas y envia señales de su posición al vista.
 	 * 
-	 * @param posX - La posición horizontal de la nave en el momento del disparo.
+	 * @param pixNaveX - Componente x de las posiciones de los pixeles de la nave con los que el alien puede impactar.
+	 * @param pixNaveY - Componente y de las posiciones de los pixeles de la nave con los que el alien puede impactar.
 	 * @param willShoot - El método generará una nueva bala cuando este parametro es {@code true}, no generará una bala cuando sea {@code false}.
 	*/
-	public void tick(int posX, int posY, boolean willShoot) throws JuegoCambiadoException {		
+	public void tick(int[] pixNaveX, int[] pixNaveY, boolean willShoot) throws JuegoCambiadoException {		
+		
+		int posX = Jugador.getJugador().getPosX();
+		int posY = Jugador.getJugador().getPosY();
 		
 		// Se envia el tick a cada una de la balas del jugador
 		if (!listaBalas.isEmpty()) {
@@ -61,7 +65,7 @@ public class ArtilleriaJugador extends Observable {
 			listaBalas.add(nuevaBala);
 		}
 		// Propaga el tick
-		Flota.getFlota().tick(posX, posY);
+		Flota.getFlota().tick(pixNaveX, pixNaveY);
 		
 		notifyView();
 	}

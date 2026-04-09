@@ -76,7 +76,39 @@ public class Flota extends Observable {
     }
     
     //movimiento cada 4 ticks
-    public void tick(int x, int y) throws JuegoGanadoException, JuegoPerdidoException {
+    public void tick(int[] pixNaveX, int[] pixNaveY) throws JuegoGanadoException, JuegoPerdidoException {
+    	
+    	int naveX = Jugador.getJugador().getPosX();
+    	int naveY = Jugador.getJugador().getPosY();
+    	
+    	int hurtboxX = 0;
+    	int hurtboxY = 0;
+    	
+    	for (int i = 0; i < pixNaveX.length; i++) {
+    		int valX = pixNaveX[i] - naveX;
+    		if (valX < 0)
+    			valX = -valX;
+    		
+    		if (hurtboxX < valX)
+    			hurtboxX = valX;
+    		
+    		int valY = pixNaveY[i] - naveY;
+    		if (valY < 0)
+    			valY = -valY;
+    		
+    		if (hurtboxY < valY)
+    			hurtboxY = valY;
+    	}
+    	
+    	for (Alien a : listaAliens) {
+        	// Verifica si su posicion es la misma que la del jugador
+    		boolean con = a.playerCollided(pixNaveX, pixNaveY, naveX, naveY, hurtboxX, hurtboxY);
+    		if (con) {
+    			throw new JuegoPerdidoException();
+    		}
+        	
+    	}
+    	
     	tickCount++;
     	
     	boolean willMove = tickCount == 4;
@@ -109,7 +141,8 @@ public class Flota extends Observable {
     		// se muevan sera en la direccion contraria. Ademas, los aliens descenderan una posicion en 
     		// su siguiente movimiento.
     		
-    		if (a.tick(deltaX, deltaY, x, y)) mustFall = true;
+    		if (a.tick(deltaX, deltaY))
+    			mustFall = true;
     	}
     	
     	if (willMove) willFall = mustFall && !willFall;

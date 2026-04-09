@@ -20,11 +20,13 @@ public abstract class Alien {
      * @return {@code true} si el alien ha alcanzado uno de los limites horizontales del grid, {@code false} en caso contrario.
      * @throws JuegoPerdidoException Si el alien alcanza el final o si colisiona con el jugador
      */
-    public abstract boolean tick(int deltaX, int deltaY, int jugadorX, int jugadorY) throws JuegoPerdidoException;
+    public abstract boolean tick(int deltaX, int deltaY) throws JuegoPerdidoException;
     
     /**
      * @return {@code true} Si su posicion coincide con la recibida, {@code false} en caso contrario.
      */
+    
+    public abstract boolean playerCollided(int[] pPosX, int[] pPosY, int offsetX, int offsetY, int hurtboxX, int hurtboxY);
     
     public abstract boolean hit(int balaX, int balaY);
 

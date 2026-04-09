@@ -25,6 +25,8 @@ import modelo.Jugador;
 import modelo.Alien;
 import modelo.ArtilleriaJugador;
 import modelo.Modelo;
+import modelo.NaveGreen;
+
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 
@@ -83,7 +85,6 @@ public class Juego extends JFrame implements Observer{
 		setBounds(0, 0, (int)width, (int)height);
 		
 		Modelo.getModelo().addObserver(this);
-		Jugador.getJugador().addObserver(this);
 		Flota.getFlota().addObserver(this);
 		ArtilleriaJugador.getArtilleria().addObserver(this);
 		
@@ -114,7 +115,7 @@ public class Juego extends JFrame implements Observer{
 		//Yo aqui entiendo que cuando le llega una instancia le llegara SOLO la de una bala o un jugador cada vez que se le envia, por aquello de que se envia una bala, se avanza en el bucle, se envia otra...;
 		//De momento se envia solo la posicion actual
 		
-		if (o instanceof Jugador)
+		if (o instanceof NaveGreen)
 		{
 			if (arg instanceof int[])
 			{
@@ -158,6 +159,8 @@ public class Juego extends JFrame implements Observer{
 				//Si llegamos a este else sabemos que nos esta llegando instanceof int[], porque no puede ser de otra forma
 				int[] datos=(int[])arg;
 				if(datos[0]==1){
+					Jugador.getJugador().getNave().addObserver(this);
+
 					//esto le dice que si se pasa a la pantalla 1, que primero defina la matriz con las dimensiones que me pasa modelo
 					definirMatriz(datos[1],datos[2]);
 				}

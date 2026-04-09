@@ -67,7 +67,6 @@ public class Modelo extends Observable {
 	public void cambiarVentana() {		
 		switch (ventana) {
 		case VENTANA_MENU:
-			cambiarVentana(VENTANA_JUEGO);
 			empezarJuego();
 			break;
 			
@@ -80,7 +79,9 @@ public class Modelo extends Observable {
 
 	private void empezarJuego() {
 
-		Jugador.getJugador().inicializar();
+		Jugador.getJugador().inicializar(0);
+		
+		cambiarVentana(VENTANA_JUEGO);
 		
 		//esto esta aqui porque si no, cuando se vuelva a lanzar no va a funcionar
 		miTimer = new Timer();

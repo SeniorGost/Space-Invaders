@@ -1,43 +1,73 @@
 package modelo;
 
-public final class Jugador {
-    //  movDir false='izquierda', true='derecha'
-    
-    private boolean willShoot;
-    
-    private static Jugador miJugador;
-    
-    private Nave nave;
+import java.util.Observable;
 
-    private Jugador() {
+@SuppressWarnings("deprecation")
+public abstract class Nave extends Observable {
 
-    }
-
-    public void inicializar(int tipo) {
-    	
-    	if (tipo == 0) {
-    		System.out.println("nave creada");
-    		nave = new NaveGreen();
-    	}
+    protected int posX;
+    protected int posY;
+    
+    protected boolean movLeft;
+    protected boolean movRight;
+    protected boolean movUp;
+    protected boolean movDown;
+    
+    // Constantes de juego
+    protected static final int VELOCIDAD = 1;
+    protected static final int LIMITE_IZQ = 0;
+    protected static final int LIMITE_DER = Modelo.getModelo().getWidth() - 1;
+    protected static final int LIMITE_ABAJO = Modelo.getModelo().getHeight() - 1;
+    protected static final int LIMITE_ARRIBA = 0;
+    
+    public Nave() {
+        movLeft = false;
+        movRight = false;
+        movUp = false;
+        movDown = false;
         
-        ArtilleriaJugador.getArtilleria().iniciar();
+    	// Posición inicial 
+    	posX = 50;
+        posY = 55;
     }
-
-    public static Jugador getJugador() {
-        if (miJugador == null) miJugador = new Jugador();
-        return miJugador;
-    }
-
+    
     public void tick() throws JuegoCambiadoException {
-        nave.tick();
+    	boolean willMoveX = movRight || movLeft;
+    	boolean willMoveY = movDown || movUp;    	
+    	
+    	boolean movDirX = movRight && !movLeft;
+    	boolean movDirY = movDown && !movUp;
+        
+       // logica de Movimiento
+        if (willMoveX) {
+            if (movDirX) {	// Derecha
+                posX += VELOCIDAD;
+            } else { 		// Izquierda
+                posX -= VELOCIDAD;
+            }
+            willMoveX = false;
+        }
+        if(willMoveY) {
+            if (movDirY) {	// Abajo
+                posY += VELOCIDAD;
+            } else { 		// Arriba
+                posY -= VELOCIDAD;
+            }            
+            willMoveY = false;
+        }
     }
+    
+    protected abstract boolean canMoveLeft();
+    protected abstract boolean canMoveRight();
+    protected abstract boolean canMoveUp();
+    protected abstract boolean canMoveDown();
 
     /**
      * Indica que la nave del jugador debe empezar a moverse a la izquierda.
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveLeft() {
-        nave.moveLeft(true);
+        moveLeft(true);
     }
     
     /**
@@ -45,7 +75,7 @@ public final class Jugador {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveRight() {
-    	nave.moveRight(true);
+    	moveRight(true);
     }
     
     /**
@@ -53,7 +83,7 @@ public final class Jugador {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveUp() {
-    	nave.moveUp(true);
+    	moveUp(true);
     }
     
     /**
@@ -61,7 +91,7 @@ public final class Jugador {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveDown() {
-    	nave.moveDown(true);;
+    	moveDown(true);;
     }
     
     /**
@@ -71,7 +101,7 @@ public final class Jugador {
      * {@code false} detiene el movimiento.
      */
     public void moveLeft(boolean doMove) {
-    	nave.moveLeft(doMove);
+    	movLeft = doMove && canMoveLeft();
     }
     
     /**
@@ -81,7 +111,7 @@ public final class Jugador {
      * {@code false} detiene el movimiento.
      */
     public void moveRight(boolean doMove) {
-    	nave.moveRight(doMove);
+    	movRight = doMove && canMoveRight();
     }
     
     /**
@@ -91,7 +121,7 @@ public final class Jugador {
      * {@code false} detiene el movimiento.
      */
     public void moveUp(boolean doMove) {
-    	nave.moveUp(doMove);;
+    	movUp = doMove && canMoveUp();
     }
     
     /**
@@ -101,25 +131,18 @@ public final class Jugador {
      * {@code false} detiene el movimiento.
      */
     public void moveDown(boolean doMove) {
-    	nave.moveDown(doMove);;
+    	movDown = doMove && canMoveDown();
     }
     
     /**
      * Indica que debe disparar un bala (singular).
      */
-    public void shoot() {
-        nave.shoot();
-    }
+    public abstract void shoot();
 
-    public Nave getNave() {
-    	return nave;
-    }
-    
     public int getPosX() {
-    	return nave.getPosX();
+    	return posX;
     }
     public int getPosY() {
-    	return nave.getPosY();
+    	return posY;
     }
-    
 }

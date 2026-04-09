@@ -7,11 +7,7 @@ public class alienPixel extends Alien {
 	}
 
 	@Override
-	public boolean tick(int deltaX, int deltaY, int jugadorX, int jugadorY) throws JuegoPerdidoException {
-    	// Verifica si su posicion es la misma que la del jugador
-    	if (posX == jugadorX && posY == jugadorY) 
-    		throw new JuegoPerdidoException();
-    	
+	public boolean tick(int deltaX, int deltaY) throws JuegoPerdidoException {    	
     	// Verificación de límite inferior (si el alien llega abajo, se pierde el juego)
     	if (posY == (Modelo.getModelo().getHeight()-1)) {    		
     		throw new JuegoPerdidoException();
@@ -21,10 +17,6 @@ public class alienPixel extends Alien {
         this.posY += deltaY;
         
         justMoved = deltaX != 0;
-        
-        // Verifica de nuevo si su posicion es la misma que la del jugador
-        if (posX == jugadorX && posY == jugadorY) 
-        	throw new JuegoPerdidoException();
         
         Flota.getFlota().notifyView(posX, posY);
         
@@ -40,6 +32,15 @@ public class alienPixel extends Alien {
 	    	if (this.posX == balaX && this.posY == balaY + 1) 
 	    		return true;
     	return false;
+	}
+
+	@Override
+	public boolean playerCollided(int[] pPosX, int[] pPosY, int offsetX, int offsetY, int hurtboxX, int hurtboxY) {
+		for (int i = 0; i < pPosX.length; i++) {
+			if (posX == pPosX[i] && posY == pPosY[i]) 
+				return true;
+		}
+		return false;
 	}
 
 }
