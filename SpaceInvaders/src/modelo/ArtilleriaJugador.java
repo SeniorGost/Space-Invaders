@@ -24,15 +24,14 @@ public class ArtilleriaJugador extends Observable {
 		Flota.getFlota().inicializar();
 	}
 	
-	/**
-	 * Inicia la lógica de las balas disparadas por el jugador.
-	 * Entre otros, se encarga de mover las balas y envia señales de su posición al vista.
-	 * 
-	 * Puede ser llamado con parametros. En cuyo caso, se generará una nueva bala del jugador.
-	*/
-	public void tick(int[] pixNaveX, int[] pixNaveY) throws JuegoCambiadoException {
-		tick(pixNaveX, pixNaveY, false);
+	public void shoot(int posX, int posY, int type) {		
+		if (posY > 0) {
+			BalaJugador nuevaBala = new BalaJugador(posX, posY - 1);
+			// Cuando se implementen las entidades multipixel, cambiar el segundo parametro de la constructora.
+			listaBalas.add(nuevaBala);
+		}
 	}
+	
 	
 	/**
 	 * Inicia la lógica de las balas disparadas por el jugador. Puede generar una nueva bala del jugador.
@@ -40,13 +39,8 @@ public class ArtilleriaJugador extends Observable {
 	 * 
 	 * @param pixNaveX - Componente x de las posiciones de los pixeles de la nave con los que el alien puede impactar.
 	 * @param pixNaveY - Componente y de las posiciones de los pixeles de la nave con los que el alien puede impactar.
-	 * @param willShoot - El método generará una nueva bala cuando este parametro es {@code true}, no generará una bala cuando sea {@code false}.
 	*/
-	public void tick(int[] pixNaveX, int[] pixNaveY, boolean willShoot) throws JuegoCambiadoException {		
-		
-		int posX = Jugador.getJugador().getPosX();
-		int posY = Jugador.getJugador().getPosY();
-		
+	public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoCambiadoException {		
 		// Se envia el tick a cada una de la balas del jugador
 		if (!listaBalas.isEmpty()) {
 			Iterator<BalaJugador> it = listaBalas.iterator();
@@ -59,13 +53,8 @@ public class ArtilleriaJugador extends Observable {
 			}
 		}
 		
-		if (willShoot && posY > 0) {
-			BalaJugador nuevaBala = new BalaJugador(posX, posY - 1);
-			// Cuando se implementen las entidades multipixel, cambiar el segundo parametro de la constructora.
-			listaBalas.add(nuevaBala);
-		}
 		// Propaga el tick
-		Flota.getFlota().tick(pixNaveX, pixNaveY);
+		Flota.getFlota().tick(pixNaveX, pixNaveY, naveX, naveY);
 		
 		notifyView();
 	}

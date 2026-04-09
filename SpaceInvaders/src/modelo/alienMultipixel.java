@@ -16,13 +16,26 @@ public class alienMultipixel extends Alien {
 		hitboxX = 2;
 		hitboxY = 2;
 		
-		for (int i = -2; i <= 2; i++) 
-			for (int j = -2; j <= 2; j++)
-				if (i == j || i == -j)
-					listaPixeles.add(new alienPixel(x + i, y + j));
+
+		listaPixeles.add(new alienPixel(-2 	+ x, -2	+ y));
+		listaPixeles.add(new alienPixel(2 	+ x, -2	+ y));
 		
+		listaPixeles.add(new alienPixel(-1 	+ x, -1	+ y));
+		listaPixeles.add(new alienPixel( 	  x, -1	+ y));
+		listaPixeles.add(new alienPixel(1 	+ x, -1	+ y));
 		
-		// TODO Auto-generated constructor stub
+		listaPixeles.add(new alienPixel(-2 	+ x,	  y));
+		listaPixeles.add(new alienPixel( 	  x,	  y));
+		listaPixeles.add(new alienPixel(2 	+ x,	  y));
+		
+		listaPixeles.add(new alienPixel(-2 	+ x, 1	+ y));
+		listaPixeles.add(new alienPixel(-1 	+ x, 1	+ y));
+		listaPixeles.add(new alienPixel( 	  x, 1	+ y));
+		listaPixeles.add(new alienPixel(1 	+ x, 1	+ y));
+		listaPixeles.add(new alienPixel(2 	+ x, 1	+ y));
+		
+		listaPixeles.add(new alienPixel(-2 	+ x, 2	+ y));
+		listaPixeles.add(new alienPixel(2 	+ x, 2	+ y));
 	}
 	
 	@Override
@@ -32,6 +45,8 @@ public class alienMultipixel extends Alien {
 		for (Alien a : listaPixeles) {
 			reachedWall = a.tick(deltaX, deltaY) || reachedWall;
 		}
+		
+		super.tick(deltaX, deltaY);
 		
 		return reachedWall;
 	}
@@ -49,7 +64,7 @@ public class alienMultipixel extends Alien {
 	public boolean playerCollided(int[] pPosX, int[] pPosY, int offsetX, int offsetY, int hurtboxX, int hurtboxY) {
 		
 		if (hitboxCollides(offsetX, offsetY, hurtboxX, hurtboxY)) {
-			for( Alien a : listaPixeles) {
+			for(Alien a : listaPixeles) {
 				boolean isCollision = a.playerCollided(pPosX, pPosY, offsetX, offsetY, hurtboxX, hurtboxY);
 				
 				if (isCollision)

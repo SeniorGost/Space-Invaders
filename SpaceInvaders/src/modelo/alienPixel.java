@@ -9,18 +9,14 @@ public class alienPixel extends Alien {
 	@Override
 	public boolean tick(int deltaX, int deltaY) throws JuegoPerdidoException {    	
     	// Verificación de límite inferior (si el alien llega abajo, se pierde el juego)
-    	if (posY == (Modelo.getModelo().getHeight()-1)) {    		
+    	if (posY == (Modelo.getModelo().getHeight()-1))
     		throw new JuegoPerdidoException();
-    	}
+        
+    	boolean rdo = super.tick(deltaX, deltaY);
     	
-        this.posX += deltaX;
-        this.posY += deltaY;
-        
-        justMoved = deltaX != 0;
-        
         Flota.getFlota().notifyView(posX, posY);
         
-        return (posX - 1 < 0 || posX  + 1 > Modelo.getModelo().getWidth() - 1);
+        return rdo;
 	}
 
 	@Override

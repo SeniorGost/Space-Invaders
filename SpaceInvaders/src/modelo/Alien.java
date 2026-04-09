@@ -20,7 +20,14 @@ public abstract class Alien {
      * @return {@code true} si el alien ha alcanzado uno de los limites horizontales del grid, {@code false} en caso contrario.
      * @throws JuegoPerdidoException Si el alien alcanza el final o si colisiona con el jugador
      */
-    public abstract boolean tick(int deltaX, int deltaY) throws JuegoPerdidoException;
+    public boolean tick(int deltaX, int deltaY) throws JuegoPerdidoException {
+        this.posX += deltaX;
+        this.posY += deltaY;
+        
+        justMoved = deltaX != 0;
+        
+        return (posX - 1 < 0 || posX  + 1 > Modelo.getModelo().getWidth() - 1);
+    }
     
     /**
      * @return {@code true} Si su posicion coincide con la recibida, {@code false} en caso contrario.

@@ -14,13 +14,20 @@ public class NaveGreen extends Nave {
 		
 		pixeles = new ArrayList<Nave>();
 		
-		pixeles.add(new NaveGreenPixel(0 	+ posX, 0	+ posY));
+		pixeles.add(new NaveGreenPixel(0 	+ posX, -2	+ posY));
 		
-		pixeles.add(new NaveGreenPixel(-1 	+ posX, 0	+ posY));
-		pixeles.add(new NaveGreenPixel(1 	+ posX, 0	+ posY));
-		
+		pixeles.add(new NaveGreenPixel(-1 	+ posX, -1	+ posY));
 		pixeles.add(new NaveGreenPixel(0 	+ posX, -1	+ posY));
-		pixeles.add(new NaveGreenPixel(0 	+ posX, 1	+ posY));
+		pixeles.add(new NaveGreenPixel(1 	+ posX, -1	+ posY));
+		
+		pixeles.add(new NaveGreenPixel(-2 	+ posX, 0	+ posY));
+		pixeles.add(new NaveGreenPixel(-1 	+ posX, 0	+ posY));
+		pixeles.add(new NaveGreenPixel(0 	+ posX, 0	+ posY));
+		pixeles.add(new NaveGreenPixel(1 	+ posX, 0	+ posY));
+		pixeles.add(new NaveGreenPixel(2 	+ posX, 0	+ posY));
+		
+		pixeles.add(new NaveGreenPixel(-1 	+ posX, 1	+ posY));		
+		pixeles.add(new NaveGreenPixel(1 	+ posX, 1	+ posY));		
 	}
 	
 	@Override
@@ -56,13 +63,12 @@ public class NaveGreen extends Nave {
 		
         //logica de Disparo
         if (willShoot) {
-        	ArtilleriaJugador.getArtilleria().tick(pixX, pixY, this.willShoot);
+        	ArtilleriaJugador.getArtilleria().shoot(posX, posY - 1, 0);
             willShoot = false;
-        } else {
-        	ArtilleriaJugador.getArtilleria().tick(pixX, pixY);
         }
-        
         super.tick();
+        
+        ArtilleriaJugador.getArtilleria().tick(pixX, pixY, posX, posY);
 	}
 
 	@Override

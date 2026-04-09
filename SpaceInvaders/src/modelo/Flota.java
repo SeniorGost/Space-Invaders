@@ -12,6 +12,9 @@ public class Flota extends Observable {
     private int tickCount;
     private static Flota miFlota;
 
+    int hurtboxX;
+    int hurtboxY;
+
     private Flota() {
         listaAliens = new ArrayList<>();
         movDir = true;
@@ -29,6 +32,9 @@ public class Flota extends Observable {
         tickCount = 0;
         movDir = true; // Empiezan moviéndose a la derecha
         willFall = false;
+        
+        hurtboxX = -1;
+        hurtboxY = -1;
         inicializarAliens();
     }
     
@@ -76,29 +82,9 @@ public class Flota extends Observable {
     }
     
     //movimiento cada 4 ticks
-    public void tick(int[] pixNaveX, int[] pixNaveY) throws JuegoGanadoException, JuegoPerdidoException {
-    	
-    	int naveX = Jugador.getJugador().getPosX();
-    	int naveY = Jugador.getJugador().getPosY();
-    	
-    	int hurtboxX = 0;
-    	int hurtboxY = 0;
-    	
-    	for (int i = 0; i < pixNaveX.length; i++) {
-    		int valX = pixNaveX[i] - naveX;
-    		if (valX < 0)
-    			valX = -valX;
-    		
-    		if (hurtboxX < valX)
-    			hurtboxX = valX;
-    		
-    		int valY = pixNaveY[i] - naveY;
-    		if (valY < 0)
-    			valY = -valY;
-    		
-    		if (hurtboxY < valY)
-    			hurtboxY = valY;
-    	}
+    public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoGanadoException, JuegoPerdidoException {
+    	if (hurtboxX == -1)
+    		calculateHurtbox(pixNaveX, pixNaveY, naveX, naveY);
     	
     	for (Alien a : listaAliens) {
         	// Verifica si su posicion es la misma que la del jugador
@@ -106,7 +92,6 @@ public class Flota extends Observable {
     		if (con) {
     			throw new JuegoPerdidoException();
     		}
-        	
     	}
     	
     	tickCount++;
@@ -149,7 +134,23 @@ public class Flota extends Observable {
     	
     }
     
-    
+    private void calculateHurtbox(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) {
+    	for (int i = 0; i < pixNaveX.length; i++) {
+    		int valX = pixNaveX[i] - naveX;
+    		if (valX < 0)
+    			valX = -valX;
+    		
+    		if (hurtboxX < valX)
+    			hurtboxX = valX;
+    		
+    		int valY = pixNaveY[i] - naveY;
+    		if (valY < 0)
+    			valY = -valY;
+    		
+    		if (hurtboxY < valY)
+    			hurtboxY = valY;
+    	}
+    }
     
    //si se alcanza un alien se elimina de la flota
     public boolean hit(int x, int y) throws JuegoGanadoException {
