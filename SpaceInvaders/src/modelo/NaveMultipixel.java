@@ -48,19 +48,19 @@ public abstract class NaveMultipixel extends Nave {
 		// Esta es una manera muy conveniente de hacer que se detenga cuando alguno de los pixeles de la nave
 		// llega a un borde de la pantalla
 		
-		moveLeft(movLeft);
-		moveRight(movRight);
-		moveUp(movUp);
-		moveDown(movDown);
+		moveLeft(isMovLeft());
+		moveRight(isMovRight());
+		moveUp(isMovUp());
+		moveDown(isMovDown());
 		
 		for (Nave n : pixeles) {
 			
 			// Actualiza el movimiento de todos los pixeles.
 			
-			n.moveLeft(movLeft);
-			n.moveRight(movRight);
-			n.moveUp(movUp);
-			n.moveDown(movDown);
+			n.moveLeft(isMovLeft());
+			n.moveRight(isMovRight());
+			n.moveUp(isMovUp());
+			n.moveDown(isMovDown());
 	    	
 			// Propaga el tick a los pixeles
 			
@@ -73,7 +73,7 @@ public abstract class NaveMultipixel extends Nave {
 		}
         //logica de Disparo
         if (willShoot) {
-        	ArtilleriaJugador.getArtilleria().shoot(posX, posY + bulletOffset, 0);
+        	ArtilleriaJugador.getArtilleria().shoot(getPosX(), getPosY() + bulletOffset, 0);
             willShoot = false;
         }
         
@@ -97,7 +97,7 @@ public abstract class NaveMultipixel extends Nave {
         
         // Propaga el tick
         
-        ArtilleriaJugador.getArtilleria().tick(pixX, pixY, posX, posY);
+        ArtilleriaJugador.getArtilleria().tick(pixX, pixY, getPosX(), getPosY());
 	}
 	/**
 	 * Comprueba que el movimiento sea posible para todos y cada uno de los pixeles que conforman la nave.

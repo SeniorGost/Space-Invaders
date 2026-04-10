@@ -14,6 +14,9 @@ public class NaveGreen extends NaveMultipixel {
 		bulletOffset = -2;
 		bulletType = 0;
 		
+		int posX = getPosX();
+		int posY = getPosY();
+		
 		// El 'pixel art' de la nave se hace asi. Esto tambien define su 'hitbox'.
 		pixeles.add(new NavePixel(0 	+ posX, -2	+ posY));
 		

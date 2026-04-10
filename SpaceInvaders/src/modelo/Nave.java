@@ -6,14 +6,14 @@ import java.util.Observable;
 public abstract class Nave extends Observable {
 	
 	// Donde esta la nave
-    protected int posX;
-    protected int posY;
+    private int posX;
+    private int posY;
     
     // Atributos relevantes para el movimiento
-    protected boolean movLeft;			// Se mueve hacia la izquierda en su siguiente tick cuando es true
-    protected boolean movRight;			// Se mueve hacia la derecha en su siguiente tick cuando es true
-    protected boolean movUp;			// Se mueve hacia la arriba en su siguiente tick cuando es true
-    protected boolean movDown;			// Se mueve hacia la abajo en su siguiente tick cuando es true
+    private boolean movLeft;			// Se mueve hacia la izquierda en su siguiente tick cuando es true
+    private boolean movRight;			// Se mueve hacia la derecha en su siguiente tick cuando es true
+    private boolean movUp;			// Se mueve hacia la arriba en su siguiente tick cuando es true
+    private boolean movDown;			// Se mueve hacia la abajo en su siguiente tick cuando es true
     
     // Constantes de juego
     protected static final int VELOCIDAD = 1;
@@ -165,4 +165,20 @@ public abstract class Nave extends Observable {
     public int getPosY() {
     	return posY;
     }
+
+	protected boolean isMovLeft() {
+		return movLeft;
+	}
+
+	protected boolean isMovRight() {
+		return movRight;
+	}
+
+	protected boolean isMovUp() {
+		return movUp;
+	}
+
+	protected boolean isMovDown() {
+		return movDown;
+	}
 }

@@ -12,8 +12,7 @@ public class NavePixel extends Nave {
 	 */
 	@Override
 	protected boolean canMoveLeft() {
-		System.out.println("check");
-		return LIMITE_IZQ < posX;
+		return LIMITE_IZQ < getPosX();
 	}
 
 	/**
@@ -22,7 +21,7 @@ public class NavePixel extends Nave {
 	 */
 	@Override
 	protected boolean canMoveRight() {
-		return LIMITE_DER > posX;
+		return LIMITE_DER > getPosX();
 	}
 
 	/**
@@ -31,7 +30,7 @@ public class NavePixel extends Nave {
 	 */
 	@Override
 	protected boolean canMoveUp() {
-		return LIMITE_ARRIBA < posY;
+		return LIMITE_ARRIBA < getPosY();
 	}
 
 	/**
@@ -40,7 +39,7 @@ public class NavePixel extends Nave {
 	 */
 	@Override
 	protected boolean canMoveDown() {
-		return LIMITE_ABAJO > posY;
+		return LIMITE_ABAJO > getPosY();
 	}
 	
 	@Override
