@@ -61,18 +61,6 @@ public class alienMultipixel extends Alien {
 		return false;
 	}
 	
-    /**
-     * Si existe una intersección entre la hitbox del alien y la hurtbox del jugador, se comprueba si al menos uno de
-     * los pixeles del alien cohencide en posicion con uno de los pixeles de la nave.
-     * 
-     * @param pPosX - Los componentes x de las posiciones de los pixeles de la nave del jugador.
-     * @param pPosY - Los componentes y de las posiciones de los pixeles de la nave del jugador.
-     * @param offsetX - Componente x de la posición central de la nave del jugador.
-     * @param offsetY - Componente y de la posición central de la nave del jugador.
-     * @param hurtboxX - Margen horizontal de la hurtbox de la nave del jugador.
-     * @param hurtboxY - Margen vertical de la hurtbox de la nave del jugador.
-     * @return {@code true} el alien y la nave del jugador comparten posición, {@code false} en caso contrario.
-	*/
 	@Override
 	public boolean playerCollided(int[] pPosX, int[] pPosY, int offsetX, int offsetY, int hurtboxX, int hurtboxY) {
 		
