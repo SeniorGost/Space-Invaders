@@ -2,23 +2,22 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Random;
 
 public class Flota extends Observable {
     private ArrayList<Alien> listaAliens;
-    private boolean movDir; // false = izquierda, true = derecha
-    private boolean willFall; // Los aliens descenderan una posicion cuando este atributo es 'true' 
-    private int tickCount;
+    
     private static Flota miFlota;
+    
+    private estadoFlota estadoActual;
 
     int hurtboxX;
     int hurtboxY;
 
     private Flota() {
         listaAliens = new ArrayList<>();
-        movDir = true;
-        willFall = false;
     }
 
     public static Flota getFlota() {
@@ -29,13 +28,10 @@ public class Flota extends Observable {
     }
 
     public void inicializar() {
-        tickCount = 0;
-        movDir = true; // Empiezan moviéndose a la derecha
-        willFall = false;
-        
-        hurtboxX = -1;
-        hurtboxY = -1;
         inicializarAliens();
+		estadoActual = new estadoFlotaEsperar(true, false);
+		hurtboxX = -1;
+		hurtboxY = -1;
     }
     
     //Matriz de aliens
@@ -86,39 +82,27 @@ public class Flota extends Observable {
     	if (hurtboxX == -1)
     		calculateHurtbox(pixNaveX, pixNaveY, naveX, naveY);
     	
+    	estadoActual.tick(pixNaveX, pixNaveY, naveX, naveY);
+    	
     	for (Alien a : listaAliens) {
         	// Verifica si su posicion es la misma que la del jugador
     		boolean con = a.playerCollided(pixNaveX, pixNaveY, naveX, naveY, hurtboxX, hurtboxY);
     		if (con) {
     			throw new JuegoPerdidoException();
     		}
-    	}
-    	
-    	tickCount++;
-    	
-    	boolean willMove = tickCount == 4;
-
-    	int deltaX = 0;
-    	int deltaY = 0;
-    	
-    	// Los aliens solo se mueven 1 de cada 4 ticks
-    	if (willMove) {
-    		tickCount = 0;
     		
-    		if (willFall) {
-    			deltaY = 1;
-    			movDir = !movDir;
-    		} else {	
-    			// Derecha: movDir == true | Izquierda: movDir == false
-    			if (movDir) {
-    				deltaX = 1;
-    			} else {    				
-    				deltaX = -1;
-    			}
+    		Iterator<Integer> itDisplayX = a.getDisplayX().iterator();
+    		Iterator<Integer> itDisplayY = a.getDisplayY().iterator();
+    		
+    		while (itDisplayX.hasNext() && itDisplayY.hasNext()) {
+    			int posX = itDisplayX.next();
+    			int posY = itDisplayY.next();
+    			Flota.getFlota().notifyView(posX, posY);    			
     		}
     	}
-    	
-    	// Se les propaga el tick a los aliens para moverlos
+    }
+    
+    public boolean move(int deltaX, int deltaY) throws JuegoPerdidoException {
     	boolean mustFall = false;
     	for (Alien a : listaAliens) {
     		// Si al menos una de las llamadas del metodo devuelve 'true', la proxima vez que los aliens
@@ -128,9 +112,7 @@ public class Flota extends Observable {
     		if (a.tick(deltaX, deltaY))
     			mustFall = true;
     	}
-    	
-    	if (willMove) willFall = mustFall && !willFall;
-    	
+    	return mustFall;
     }
     
     /**
@@ -187,6 +169,11 @@ public class Flota extends Observable {
         return alienEncontrado;
     }
 
+    
+    public void setState(estadoFlota nuevoEstado) {
+    	estadoActual = nuevoEstado;
+    }
+    
     /**
 	 * Mediante el 'Patron Observer' notifica al vista de las posiciones de los Aliens
 	 */

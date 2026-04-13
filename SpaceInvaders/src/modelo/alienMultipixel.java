@@ -1,6 +1,7 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class alienMultipixel extends Alien {
 	
@@ -103,6 +104,25 @@ public class alienMultipixel extends Alien {
 			rdo = difX <= marginX;
 		}
 		
+		return rdo;
+	}
+	
+	@Override
+	public LinkedList<Integer> getDisplayX() {
+		LinkedList<Integer> rdo = new LinkedList<Integer>();
+		
+		for (Alien a: listaPixeles) {
+			rdo.add(a.getPosX());
+		}
+		return rdo;
+	}
+	@Override
+	public LinkedList<Integer> getDisplayY() {
+		LinkedList<Integer> rdo = new LinkedList<Integer>();
+		
+		for (Alien a: listaPixeles) {
+			rdo.add(a.getPosY());
+		}
 		return rdo;
 	}
 	

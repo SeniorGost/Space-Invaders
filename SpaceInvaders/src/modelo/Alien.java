@@ -1,5 +1,8 @@
 package modelo;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public abstract class Alien {
     protected int posX;
     protected int posY;
@@ -62,5 +65,7 @@ public abstract class Alien {
 	public int getPosY() {
 		return posY;
 	}
-
+	
+	public abstract LinkedList<Integer> getDisplayX();
+	public abstract LinkedList<Integer> getDisplayY();
 }

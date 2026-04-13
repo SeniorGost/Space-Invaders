@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.LinkedList;
+
 public class alienPixel extends Alien {
 
 	public alienPixel(int x, int y) {
@@ -13,8 +15,6 @@ public class alienPixel extends Alien {
     		throw new JuegoPerdidoException();
         
     	boolean rdo = super.tick(deltaX, deltaY);
-    	
-        Flota.getFlota().notifyView(posX, posY);
         
         return rdo;
 	}
@@ -37,5 +37,23 @@ public class alienPixel extends Alien {
 	    	if (this.posX == balaX && this.posY == balaY + 1) 
 	    		return true;
     	return false;
+	}
+	
+	@Override
+	public LinkedList<Integer> getDisplayX() {
+		LinkedList<Integer> rdo = new LinkedList<Integer>();
+		
+		rdo.add(getPosX());
+		
+		return rdo;
+	}
+	
+	@Override
+	public LinkedList<Integer> getDisplayY() {
+		LinkedList<Integer> rdo = new LinkedList<Integer>();
+		
+		rdo.add(getPosY());
+		
+		return rdo;
 	}
 }
