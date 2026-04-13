@@ -13,11 +13,13 @@ public class BalaFactory {
 	}
 	
 	public BalaJugador generate(String type, int posX, int posY) {
-		switch (type) {
-		case "Rombo": 
-			return new BalaRombo(posX, posY);
-		default:
-			return new BalaJugadorPixel(posX, posY);
-		}
+	    switch (type) {
+	        case "Rombo": 
+	            return new BalaRombo(posX, posY);
+	        case "Flecha": 
+	            return new BalaFlecha(posX, posY); 
+	        default:
+	            return new BalaJugadorPixel(posX, posY);
+	    }
 	}
 }
