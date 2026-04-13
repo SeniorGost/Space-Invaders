@@ -1,6 +1,8 @@
-package modelo;
+package modelo.balaJugador;
 
 import java.util.LinkedList;
+
+import modelo.excepciones.JuegoGanadoException;
 
 public abstract class BalaJugador {
 	private int posX;

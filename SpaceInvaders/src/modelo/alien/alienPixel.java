@@ -1,6 +1,9 @@
-package modelo;
+package modelo.alien;
 
 import java.util.LinkedList;
+
+import modelo.Modelo;
+import modelo.excepciones.JuegoPerdidoException;
 
 public class alienPixel extends Alien {
 

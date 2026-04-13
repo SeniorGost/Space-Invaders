@@ -1,6 +1,9 @@
-package modelo;
+package modelo.naves;
 
 import java.util.Observable;
+
+import modelo.Modelo;
+import modelo.excepciones.JuegoCambiadoException;
 
 @SuppressWarnings("deprecation")
 public abstract class Nave extends Observable {

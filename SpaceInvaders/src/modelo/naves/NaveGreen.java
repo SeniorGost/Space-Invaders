@@ -1,4 +1,4 @@
-package modelo;
+package modelo.naves;
 
 /**
  * Entre sus primos cromaticos, el verde es el más diplomatico.

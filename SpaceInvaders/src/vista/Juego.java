@@ -18,14 +18,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import modelo.BalaJugador;
 import modelo.Flota;
 // MODELO SE IMPORTA PARA LA LINEA 26 Y PARA EL OBSERVABLE, EL RESTO SOLO PARA EL OBSERVABLE
 import modelo.Jugador;
-import modelo.Alien;
 import modelo.ArtilleriaJugador;
 import modelo.Modelo;
-import modelo.NaveMultipixel;
+import modelo.alien.Alien;
+import modelo.balaJugador.BalaJugador;
+import modelo.naves.NaveMultipixel;
 
 import java.awt.GridLayout;
 import javax.swing.JLabel;

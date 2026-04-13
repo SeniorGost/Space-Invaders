@@ -1,6 +1,9 @@
-package modelo;
+package modelo.balaJugador;
 
 import java.util.LinkedList;
+
+import modelo.Flota;
+import modelo.excepciones.JuegoGanadoException;
 
 public class BalaJugadorPixel extends BalaJugador {
 

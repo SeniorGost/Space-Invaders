@@ -1,5 +1,9 @@
 package modelo;
 
+import modelo.excepciones.JuegoCambiadoException;
+import modelo.naves.Nave;
+import modelo.naves.NaveBlue;
+
 public final class Jugador {
     private static Jugador miJugador;
     

@@ -1,5 +1,7 @@
 package modelo;
 
+import modelo.excepciones.JuegoPerdidoException;
+
 public class estadoFlotaHorizontal extends estadoFlota {
 
 	private boolean direction;

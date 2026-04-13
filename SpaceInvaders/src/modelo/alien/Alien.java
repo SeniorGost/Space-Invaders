@@ -1,7 +1,10 @@
-package modelo;
+package modelo.alien;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import modelo.Modelo;
+import modelo.excepciones.JuegoPerdidoException;
 
 public abstract class Alien {
     protected int posX;

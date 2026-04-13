@@ -5,6 +5,10 @@ import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import modelo.excepciones.JuegoCambiadoException;
+import modelo.excepciones.JuegoGanadoException;
+import modelo.excepciones.JuegoPerdidoException;
+
 @SuppressWarnings("deprecation")
 public class Modelo extends Observable {
 	private int ventana;

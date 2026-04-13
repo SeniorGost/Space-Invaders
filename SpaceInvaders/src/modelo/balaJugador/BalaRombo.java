@@ -1,4 +1,4 @@
-package modelo;
+package modelo.balaJugador;
 
 public class BalaRombo extends BalaJugadorMultipixel {
 	public BalaRombo(int posX, int pPosY) {

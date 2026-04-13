@@ -6,6 +6,11 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Random;
 
+import modelo.alien.Alien;
+import modelo.alien.alienMultipixel;
+import modelo.excepciones.JuegoGanadoException;
+import modelo.excepciones.JuegoPerdidoException;
+
 public class Flota extends Observable {
     private ArrayList<Alien> listaAliens;
     

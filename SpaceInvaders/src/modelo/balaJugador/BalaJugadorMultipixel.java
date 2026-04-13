@@ -1,8 +1,11 @@
-package modelo;
+package modelo.balaJugador;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import modelo.Flota;
+import modelo.excepciones.JuegoGanadoException;
 
 public abstract class BalaJugadorMultipixel extends BalaJugador {
 

@@ -1,4 +1,4 @@
-package modelo;
+package modelo.naves;
 
 public class NaveBlue extends NaveMultipixel {
 

@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Observable;
+
+import modelo.balaJugador.BalaJugador;
+import modelo.balaJugador.BalaRombo;
+import modelo.excepciones.JuegoCambiadoException;
 @SuppressWarnings("deprecation")
 public class ArtilleriaJugador extends Observable {
 	private LinkedList<BalaJugador> listaBalas;

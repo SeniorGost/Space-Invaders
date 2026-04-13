@@ -1,6 +1,9 @@
-package modelo;
+package modelo.naves;
 
 import java.util.ArrayList;
+
+import modelo.ArtilleriaJugador;
+import modelo.excepciones.JuegoCambiadoException;
 
 /**
  * Implementa el patron de diseño {@code Composite}.
