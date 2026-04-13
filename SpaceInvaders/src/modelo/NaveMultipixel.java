@@ -17,18 +17,20 @@ public abstract class NaveMultipixel extends Nave {
 	private boolean willShoot;			// La nave dispara si en su tick este parametro es true.
 	
 	// [!] Estos atributos deben de ser definidos en la inicializacion de las naves que hereden de esta clase.
-	protected int bulletOffset;			// Determina cuantos pixeles por encima de la posicion central deben de
+	private int bulletOffset;			// Determina cuantos pixeles por encima de la posicion central deben de
 										// generarse las balas que dispare la nave.
-	protected int bulletType;			// Determina el tipo de bala que dispara la nave.
+	private int[] bulletTypes;			// Determina el tipo de bala que dispara la nave.
 
 	/**
 	 * Define ArrayList y eso...
 	 * <p> Llama a super con una posicion fija.
 	 */
-	public NaveMultipixel() {
+	public NaveMultipixel(int pBulletOffset, int[] pBulletTypes) {
 		// Por defecto, la nave del jugador aparece en esta posicion
 		super(50, 55);
 		
+		bulletOffset = pBulletOffset;
+		bulletTypes = pBulletTypes;
 		willShoot = false;
 		
 		pixeles = new ArrayList<Nave>();
@@ -73,7 +75,7 @@ public abstract class NaveMultipixel extends Nave {
 		}
         //logica de Disparo
         if (willShoot) {
-        	ArtilleriaJugador.getArtilleria().shoot(getPosX(), getPosY() + bulletOffset, 0);
+        	ArtilleriaJugador.getArtilleria().shoot(getPosX(), getPosY() + bulletOffset);
             willShoot = false;
         }
         

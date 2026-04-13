@@ -53,7 +53,7 @@ public abstract class Alien {
 	 * @return {@code true} si la posicion de la bala coincide con al menos una posicion de un pixel del alien.
 	 * {@code false} en caso contrario.
 	 */
-    public abstract boolean hit(int balaX, int balaY);
+    public abstract boolean hit(int[] pixelesX, int[] pixelesY, int pPosX, int pPosY, int hurtboxX, int hurtboxY);
 
     public void disparar() {
         // De momento vacío 

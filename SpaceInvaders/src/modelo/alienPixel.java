@@ -29,14 +29,21 @@ public class alienPixel extends Alien {
 	}
 	
 	@Override
-	public boolean hit(int balaX, int balaY) {
+	public boolean hit(int[] pixelesX, int[] pixelesY, int pPosX, int pPosY, int hurtboxX, int hurtboxY) {
     	// Se comprueba tambien las posiciones de alrededor de la bala para facilitar eliminar a los aliens
-    	if (this.posX == balaX && (this.posY == balaY || this.posY == balaY - 1)) 
-    		return true;
-    	if (justMoved)
-	    	if (this.posX == balaX && this.posY == balaY + 1) 
-	    		return true;
-    	return false;
+		
+		for (int i = 0; i < pixelesX.length; i++) {			
+
+			int balaX = pixelesX[i];
+			int balaY = pixelesY[i];
+			
+			if (this.posX == balaX && (this.posY == balaY || this.posY == balaY - 1)) 
+				return true;
+			if (justMoved)
+				if (this.posX == balaX && this.posY == balaY + 1) 
+					return true;
+		}
+		return false;
 	}
 	
 	@Override

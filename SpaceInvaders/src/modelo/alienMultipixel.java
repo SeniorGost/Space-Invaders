@@ -54,11 +54,14 @@ public class alienMultipixel extends Alien {
 	}
 	
 	@Override
-	public boolean hit(int balaX, int balaY) {
-		for (Alien a : listaPixeles) {
-			if(a.hit(balaX, balaY)) 
-				return true;
+	public boolean hit(int[] pixelesX, int[] pixelesY, int pPosX, int pPosY, int hurtboxX, int hurtboxY) {
+		if (hitboxCollides(pPosX, pPosY, hurtboxX, hurtboxY)) {			
+			for (Alien a : listaPixeles) {
+				if(a.hit(pixelesX, pixelesY, pPosX, pPosY, hurtboxX, hurtboxY)) 
+					return true;
+			}
 		}
+		
 		return false;
 	}
 	

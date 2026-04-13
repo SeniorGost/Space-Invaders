@@ -1,6 +1,8 @@
 package modelo;
 
-public class BalaJugador {
+import java.util.LinkedList;
+
+public abstract class BalaJugador {
 	private int posX;
 	private int posY;
 	
@@ -17,14 +19,23 @@ public class BalaJugador {
 	 */
 	
 	public boolean tick() throws JuegoGanadoException {
-		boolean rdo = false;
-		if(posY > 0) 
-			rdo = Flota.getFlota().hit(posX, posY--);
-		else 
-			rdo = true;
-		
-		return rdo;
+		return move();
 	}
+	
+	/**
+	 * Disminuye su posicion vertical una unidad (sube una casilla).
+	 * @return {@code true} si ha alcanzado el limite superior del grid ('y' a lo sumo 0).
+	 * {@code false} en caso contrario.
+	 */
+	protected boolean move() {
+		if (--posY > 0)
+			return false;
+		return true;
+		
+	}
+	
+	public abstract LinkedList<Integer> getDisplayX();
+	public abstract LinkedList<Integer> getDisplayY();
 	
 	public int getPosX() {
 		return posX;

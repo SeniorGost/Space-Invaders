@@ -148,14 +148,14 @@ public class Flota extends Observable {
     }
     
    //si se alcanza un alien se elimina de la flota
-    public boolean hit(int x, int y) throws JuegoGanadoException {
+    public boolean hit(int[] pixelesX, int[] pixelesY, int pPosX, int pPosY, int hurtboxX, int hurtboxY) throws JuegoGanadoException {
     	boolean alienEncontrado = false;
     	
         Iterator<Alien> it = listaAliens.iterator();
         while (it.hasNext() && !alienEncontrado) {
             Alien a = it.next();
             // El tick del alien devuelve true si hay colisión
-                if (a.hit(x, y)) {
+                if (a.hit(pixelesX, pixelesY, pPosX, pPosY, hurtboxX, hurtboxY)) {
                     it.remove(); 
                     alienEncontrado = true;
                 }

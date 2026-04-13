@@ -34,9 +34,9 @@ public class ArtilleriaJugador extends Observable {
 	 * @param posY - Componente y de la posicion en la que se desea que aparezca la nueva bala.
 	 * @param type - Existen diferentes tipos de balas, este paramtro especifica cual es el deseado.
 	 */
-	public void shoot(int posX, int posY, int type) {		
+	public void shoot(int posX, int posY) {		
 		if (posY > 0) {
-			BalaJugador nuevaBala = new BalaJugador(posX, posY - 1);
+			BalaJugador nuevaBala = new BalaRombo(posX, posY);
 			// Cuando se implementen las entidades multipixel, cambiar el segundo parametro de la constructora.
 			listaBalas.add(nuevaBala);
 		}
@@ -60,6 +60,15 @@ public class ArtilleriaJugador extends Observable {
 			while (it.hasNext()) {
 				BalaJugador curBala = it.next();
 				
+				LinkedList<Integer> pX = curBala.getDisplayX();
+				LinkedList<Integer> pY = curBala.getDisplayY();
+				
+				Iterator<Integer> iteratorPixelesX = pX.iterator();
+				Iterator<Integer> iteratorPixelesY = pY.iterator();
+				
+				while (iteratorPixelesX.hasNext() && iteratorPixelesY.hasNext()) {
+					notifyView(iteratorPixelesX.next(), iteratorPixelesY.next());
+				}
 				// Una bala es eliminada si devuelve 'true' en su metodo tick
 				if(curBala.tick()) it.remove();
 			}
@@ -67,17 +76,21 @@ public class ArtilleriaJugador extends Observable {
 		
 		// Propaga el tick
 		Flota.getFlota().tick(pixNaveX, pixNaveY, naveX, naveY);
-		
-		notifyView();
 	}
 	
 	/**
-	 * Mediante el 'Patron Observer' notifica al vista de las posiciones de las balas
+	 * Mediante el 'Patron Observer' notifica al vista de las posiciones dadas.
+	 * 
+	 * @param posX - Posicion horizontal de la bala.
+	 * @param posY - Posicion vertical de la bala.
 	 */
-	private void notifyView() {
-		for (BalaJugador b : listaBalas) {
-			setChanged();
-			notifyObservers(new int[] {b.getPosX(), b.getPosY()});
-		}
+	private void notifyView(int posX, int posY) {
+		if (posX < 0 || posX > Modelo.getModelo().getWidth() - 1)
+			return;
+		if (posY < 0 || posY > Modelo.getModelo().getHeight() - 1)
+			return;
+		
+		setChanged();
+		notifyObservers(new int[] {posX, posY});
 	}
 }

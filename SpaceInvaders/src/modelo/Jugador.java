@@ -16,7 +16,7 @@ public final class Jugador {
     public void inicializar(int tipo) {
     	
     	if (tipo == 0) {
-    		nave = new NaveGreen();
+    		nave = new NaveBlue();
     	}
         
         ArtilleriaJugador.getArtilleria().iniciar();
