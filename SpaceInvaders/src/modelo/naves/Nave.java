@@ -13,10 +13,10 @@ public abstract class Nave extends Observable {
     private int posY;
     
     // Atributos relevantes para el movimiento
-    private boolean movLeft;			// Se mueve hacia la izquierda en su siguiente tick cuando es true
-    private boolean movRight;			// Se mueve hacia la derecha en su siguiente tick cuando es true
+    private boolean movLeft;		// Se mueve hacia la izquierda en su siguiente tick cuando es true
+    private boolean movRight;		// Se mueve hacia la derecha en su siguiente tick cuando es true
     private boolean movUp;			// Se mueve hacia la arriba en su siguiente tick cuando es true
-    private boolean movDown;			// Se mueve hacia la abajo en su siguiente tick cuando es true
+    private boolean movDown;		// Se mueve hacia la abajo en su siguiente tick cuando es true
     
     // Constantes de juego
     protected static final int VELOCIDAD = 1;
@@ -24,6 +24,11 @@ public abstract class Nave extends Observable {
     protected static final int LIMITE_DER = Modelo.getModelo().getWidth() - 1;
     protected static final int LIMITE_ABAJO = Modelo.getModelo().getHeight() - 1;
     protected static final int LIMITE_ARRIBA = 0;
+    
+	public static final int NAVE_GREEN = 0;
+	public static final int NAVE_BLUE = 1;
+	public static final int NAVE_RED = 2;
+    
     
     /**
      * Las naves aparecen quietas en un punto determinado del espacio
