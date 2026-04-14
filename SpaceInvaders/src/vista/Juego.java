@@ -24,7 +24,11 @@ import modelo.Jugador;
 import modelo.ArtilleriaJugador;
 import modelo.Modelo;
 import modelo.alien.Alien;
+import modelo.balaJugador.BalaGenerator;
 import modelo.balaJugador.BalaJugador;
+import modelo.naves.NaveBlue;
+import modelo.naves.NaveGreen;
+import modelo.naves.NaveRed;
 import modelo.naves.NaveMultipixel;
 
 import java.awt.GridLayout;
@@ -119,9 +123,16 @@ public class Juego extends JFrame implements Observer{
 		{
 			if (arg instanceof int[])
 			{
+				int tipoNave = 0;
+				if (o instanceof NaveBlue) {
+					tipoNave = 1;
+				}
+				if (o instanceof NaveRed) {
+					tipoNave = 2;
+				}
 				int[] datos=(int[])arg;
 				//System.out.println("J: " + datos[0] + " " + datos[1]);
-				moverJugador(datos);
+				moverJugador(datos,tipoNave);
 			}
 		}
 		
@@ -158,27 +169,45 @@ public class Juego extends JFrame implements Observer{
 			} else {
 				//Si llegamos a este else sabemos que nos esta llegando instanceof int[], porque no puede ser de otra forma
 				int[] datos=(int[])arg;
-				if(datos[0]==1){
+				if(datos[0]==2){
+					//COMO LA NAVE NO EXISTE ANTES DE EMPEZAR EL JUEGO, AQUI ES CUANDO SE LE METE EL OBSERVER
+					//Y ENVIA LA NAVE EL DATO PARA HACER INSTANCE OF
 					Jugador.getJugador().getNave().addObserver(this);
-
 					//esto le dice que si se pasa a la pantalla 1, que primero defina la matriz con las dimensiones que me pasa modelo
 					definirMatriz(datos[1],datos[2]);
 				}
-				cambiarPantalla(datos[0]);			
+				//Esto es pq si no al empezar la partida escribes directamente encima de la matriz otra vez y se notan un segundo los restos de la otra
+				else if(datos[0]==3 || datos[0]==4){
+					cleanClean();System.out.println("SE ME PAROHHHH");
+					mataPilas();
+				}
+				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
+				cambiarPantalla(datos[0]);	
 			} 
 		}
 		
 	}
 	
 
-	private void moverJugador (int posicion[] ){
+	private void moverJugador (int posicion[], int color ){
     //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
 	    int fN = posicion[1];
 	    int cN = posicion[0];
 	    
 	    //el jugador es ROJO
 	    //AQUI lo que estoy haciendo es meter la instruccion en la pila de instrucciones (El ()-> es para que en lugar de ejecutarse la accion inmediatamente, se guarde la accion, creo, a ver a si lo ponian en StackOverflow y yo confio en esa gente)
-	    aPintar.add(() -> pixel[fN][cN].setBackground(Color.RED)); // le da el color  
+	    switch (color) {
+		case 0:
+		    aPintar.add(() -> pixel[fN][cN].setBackground(Color.GREEN)); // le da el color 
+			break;
+		case 1:
+		    aPintar.add(() -> pixel[fN][cN].setBackground(Color.BLUE)); // le da el color 
+			break;
+		case 2:	
+		default:
+		    aPintar.add(() -> pixel[fN][cN].setBackground(Color.RED)); // le da el color 
+			break;
+		}	    
 	    aPintar.add(() -> pixel[fN][cN].setOpaque(true)); // para que se vea el pixel
 	    aPintar.add(() -> pixelesPintados.add(pixel[fN][cN])); // añadirá el pixel a la lista de pixeles pintados para que sepamos que se ha pintado
 	}
@@ -207,7 +236,7 @@ public class Juego extends JFrame implements Observer{
 	
 	//Este es el tema, cada vez que se notifica a los observers, se notifica a todas las pantallas a la vez entonces se tiene que poner una sentencia como esta, donde se distinga el numero de pantalla en que estamos
 	private void cambiarPantalla (int pValor) {
-		if (pValor!=1)
+		if (pValor!=2)
 			this.setVisible(false);
 		else
 			this.setVisible(true);
@@ -230,6 +259,10 @@ public class Juego extends JFrame implements Observer{
 			//para que el pixel no sea visible tiene que NO ser opaco y NO tener color de fondo
 		}
 		pixelesPintados.clear();
+	}
+	//esto es para que no se queden los pixeles que no se mostraron en la ejecucion anterior pero quedaron preparados
+	private void mataPilas() {
+		aPintar  = new LinkedList();
 	}
 	
 	private void definirMatriz( int c, int f) {
@@ -273,10 +306,12 @@ public class Juego extends JFrame implements Observer{
 		boolean isLeftPressed = false;
 		boolean isDownPressed = false;
 		boolean isUpPressed = false;
+		boolean isChangingAmmo = false;
+		
 		
 		@Override
 		public void keyTyped(KeyEvent e) {}
-
+		
 		@Override
 		public void keyPressed(KeyEvent e) {
 			
@@ -322,8 +357,17 @@ public class Juego extends JFrame implements Observer{
 					isShootPressed = true;
 					Jugador.getJugador().shoot();
 				}
-				break;					
-			}
+				break;
+			
+			case KeyEvent.VK_R:
+				if (!isChangingAmmo) {
+					System.out.println("Recharge\n");
+					
+					isChangingAmmo = true;
+					BalaGenerator.getBalasGenerator().cambiarBala();
+				}
+				break;
+			}					
 		}
 			
 		
@@ -368,10 +412,11 @@ public class Juego extends JFrame implements Observer{
 			case KeyEvent.VK_ENTER:
 				if (isShootPressed) isShootPressed = false;
 				break;					
-			}
+			case KeyEvent.VK_R:
+				if (isChangingAmmo) isChangingAmmo = false;
+				break;					
 			
 		}
-
-
+	  }	
 	}
 }
