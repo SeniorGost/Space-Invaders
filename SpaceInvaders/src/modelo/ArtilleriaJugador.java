@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Observable;
+
+import modelo.balaJugador.BalaJugador;
+import modelo.balaJugador.BalaRombo;
+import modelo.excepciones.JuegoCambiadoException;
 @SuppressWarnings("deprecation")
 public class ArtilleriaJugador extends Observable {
 	private LinkedList<BalaJugador> listaBalas;
@@ -18,6 +22,9 @@ public class ArtilleriaJugador extends Observable {
 		listaBalas = new LinkedList<BalaJugador>();
 	}
 	
+	/**
+	 * Debes de llamar a este metodo al pricipio de cada partida, pero solo UNA VEZ
+	 */
 	public void iniciar() {
 		listaBalas = new LinkedList<BalaJugador>();
 		
@@ -25,24 +32,31 @@ public class ArtilleriaJugador extends Observable {
 	}
 	
 	/**
-	 * Inicia la lógica de las balas disparadas por el jugador.
-	 * Entre otros, se encarga de mover las balas y envia señales de su posición al vista.
+	 * Genera una bala del tipo indicado en la posicion indicada.
 	 * 
-	 * Puede ser llamado con parametros. En cuyo caso, se generará una nueva bala del jugador.
-	*/
-	public void tick(int posX, int posY) throws JuegoCambiadoException {
-		tick(posX, posY, false);
+	 * @param posX - Componente x de la posicion en la que se desea que aparezca la nueva bala.
+	 * @param posY - Componente y de la posicion en la que se desea que aparezca la nueva bala.
+	 * @param type - Existen diferentes tipos de balas, este paramtro especifica cual es el deseado.
+	 */
+	public void shoot(int posX, int posY) {		
+		if (posY > 0) {
+			BalaJugador nuevaBala = new BalaRombo(posX, posY);
+			// Cuando se implementen las entidades multipixel, cambiar el segundo parametro de la constructora.
+			listaBalas.add(nuevaBala);
+		}
 	}
 	
 	/**
 	 * Inicia la lógica de las balas disparadas por el jugador. Puede generar una nueva bala del jugador.
 	 * Entre otros, se encarga de mover las balas y envia señales de su posición al vista.
 	 * 
-	 * @param posX - La posición horizontal de la nave en el momento del disparo.
-	 * @param willShoot - El método generará una nueva bala cuando este parametro es {@code true}, no generará una bala cuando sea {@code false}.
+	 * @param pixNaveX - Componente x de las posiciones de los pixeles de la nave con los que el alien puede impactar.
+	 * @param pixNaveY - Componente y de las posiciones de los pixeles de la nave con los que el alien puede impactar.
+	 * @param naveX - Componente x de la posicion central de la nave.
+	 * @param naveY - Componente y de la posicion central de la nave.
+	 * @throws JuegoCambiadoException Propaga excepciones.
 	*/
-	public void tick(int posX, int posY, boolean willShoot) throws JuegoCambiadoException {		
-		
+	public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoCambiadoException {		
 		// Se envia el tick a cada una de la balas del jugador
 		if (!listaBalas.isEmpty()) {
 			Iterator<BalaJugador> it = listaBalas.iterator();
@@ -50,29 +64,37 @@ public class ArtilleriaJugador extends Observable {
 			while (it.hasNext()) {
 				BalaJugador curBala = it.next();
 				
+				LinkedList<Integer> pX = curBala.getDisplayX();
+				LinkedList<Integer> pY = curBala.getDisplayY();
+				
+				Iterator<Integer> iteratorPixelesX = pX.iterator();
+				Iterator<Integer> iteratorPixelesY = pY.iterator();
+				
+				while (iteratorPixelesX.hasNext() && iteratorPixelesY.hasNext()) {
+					notifyView(iteratorPixelesX.next(), iteratorPixelesY.next());
+				}
 				// Una bala es eliminada si devuelve 'true' en su metodo tick
 				if(curBala.tick()) it.remove();
 			}
 		}
 		
-		if (willShoot && posY > 0) {
-			BalaJugador nuevaBala = new BalaJugador(posX, posY - 1);
-			// Cuando se implementen las entidades multipixel, cambiar el segundo parametro de la constructora.
-			listaBalas.add(nuevaBala);
-		}
 		// Propaga el tick
-		Flota.getFlota().tick(posX, posY);
-		
-		notifyView();
+		Flota.getFlota().tick(pixNaveX, pixNaveY, naveX, naveY);
 	}
 	
 	/**
-	 * Mediante el 'Patron Observer' notifica al vista de las posiciones de las balas
+	 * Mediante el 'Patron Observer' notifica al vista de las posiciones dadas.
+	 * 
+	 * @param posX - Posicion horizontal de la bala.
+	 * @param posY - Posicion vertical de la bala.
 	 */
-	private void notifyView() {
-		for (BalaJugador b : listaBalas) {
-			setChanged();
-			notifyObservers(new int[] {b.getPosX(), b.getPosY()});
-		}
+	private void notifyView(int posX, int posY) {
+		if (posX < 0 || posX > Modelo.getModelo().getWidth() - 1)
+			return;
+		if (posY < 0 || posY > Modelo.getModelo().getHeight() - 1)
+			return;
+		
+		setChanged();
+		notifyObservers(new int[] {posX, posY});
 	}
 }

@@ -1,4 +1,4 @@
-package modelo;
+package modelo.balaJugador;
 
 public class BalaEnemigo {
 	private int posX;

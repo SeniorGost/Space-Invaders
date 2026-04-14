@@ -1,50 +1,43 @@
 package modelo;
 
-import java.util.Observable;
+import modelo.excepciones.JuegoCambiadoException;
+import modelo.naves.Nave;
+import modelo.naves.NaveBlue;
+import modelo.naves.NaveGreen;
+import modelo.naves.NaveRed;
 
-@SuppressWarnings("deprecation")
-public final class Jugador extends Observable {
-    private int posX;
-    private int posY;
-    
-    //  movDir false='izquierda', true='derecha'
-    private boolean movLeft;
-    private boolean movRight;
-    private boolean movUp;
-    private boolean movDown;
-    
-    
-    private boolean willShoot;
-    
+
+public final class Jugador {
     private static Jugador miJugador;
     
-    // Constantes de juego
-    private static final int VELOCIDAD = 1;
-    private static final int LIMITE_IZQ = 0;
-    private static final int LIMITE_DER = Modelo.getModelo().getWidth() - 1;
-    private static final int LIMITE_ABAJO = Modelo.getModelo().getHeight() - 1;
-    private static final int LIMITE_ARRIBA = 0;
+    private Nave nave;
 
     private Jugador() {
-        movLeft = false;
-        movRight = false;
-        movUp = false;
-        movDown = false;
-        willShoot = false;
     }
 
-    public void inicializar() {
-    	// Posición inicial 
-    	posX = 50;
-        posY = 55;
-        
-        movLeft = false;
-        movRight = false;
-        movUp = false;
-        movDown = false;
-        willShoot = false;
-        
-        ArtilleriaJugador.getArtilleria().iniciar();
+    /**
+     * Se debe de llamar al comienzo de cada partida. Genera una nave dependiendo del tipo especificado 
+     * en el parametro.
+     * @param tipo - [0]: Nave Green | [1]: Nave Blue | [2]: Nave Red
+     */
+    public void inicializar(int tipo) 
+    {
+
+        switch (tipo) 
+        {
+        case Nave.NAVE_GREEN:
+            nave = new NaveGreen();
+            break;
+        case Nave.NAVE_BLUE:
+            nave = new NaveBlue();
+            break;
+        case Nave.NAVE_RED:
+        default:
+            nave = new NaveRed();
+        }
+
+
+        ArtilleriaJugador.getArtilleria().iniciar(tipo);
     }
 
     public static Jugador getJugador() {
@@ -52,43 +45,12 @@ public final class Jugador extends Observable {
         return miJugador;
     }
 
+    /**
+     * Tick es un brawler que puede disparar minas y hacer explotar su cabeza y tal...
+     * @throws JuegoCambiadoException Propaga excepción
+     */
     public void tick() throws JuegoCambiadoException {
-    	
-    	boolean willMoveX = movRight || movLeft;
-    	boolean willMoveY = movDown || movUp;    	
-    	
-    	boolean movDirX = movRight && !movLeft;
-    	boolean movDirY = movDown && !movUp;
-        
-       // logica de Movimiento
-        if (willMoveX) {
-            if (movDirX) {	// Derecha
-                if (posX + VELOCIDAD <= LIMITE_DER) posX += VELOCIDAD;
-            } else { 		// Izquierda
-                if (posX - VELOCIDAD >= LIMITE_IZQ) posX -= VELOCIDAD;
-            }
-            willMoveX = false;
-        }
-        if(willMoveY) {
-            if (movDirY) {	// Abajo
-                if (posY + VELOCIDAD <= LIMITE_ABAJO) posY += VELOCIDAD;
-            } else { 		// Arriba
-                if (posY - VELOCIDAD >= LIMITE_ARRIBA) posY -= VELOCIDAD;
-            }            
-            willMoveY = false;
-        }
-        
-        setChanged();
-        notifyObservers(new int[] {posX, posY});
-        
-        //logica de Disparo
-        if (willShoot) {
-        	ArtilleriaJugador.getArtilleria().tick(this.posX, this.posY, this.willShoot);
-            willShoot = false;
-        } else {
-        	ArtilleriaJugador.getArtilleria().tick(this.posX, this.posY);
-        }
-        
+        nave.tick();
     }
 
     /**
@@ -96,7 +58,7 @@ public final class Jugador extends Observable {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveLeft() {
-        moveLeft(true);
+        nave.moveLeft(true);
     }
     
     /**
@@ -104,7 +66,7 @@ public final class Jugador extends Observable {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveRight() {
-    	moveRight(true);
+    	nave.moveRight(true);
     }
     
     /**
@@ -112,7 +74,7 @@ public final class Jugador extends Observable {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveUp() {
-    	moveUp(true);
+    	nave.moveUp(true);
     }
     
     /**
@@ -120,7 +82,7 @@ public final class Jugador extends Observable {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveDown() {
-    	moveDown(true);;
+    	nave.moveDown(true);;
     }
     
     /**
@@ -130,7 +92,7 @@ public final class Jugador extends Observable {
      * {@code false} detiene el movimiento.
      */
     public void moveLeft(boolean doMove) {
-    	movLeft = doMove;
+    	nave.moveLeft(doMove);
     }
     
     /**
@@ -140,7 +102,7 @@ public final class Jugador extends Observable {
      * {@code false} detiene el movimiento.
      */
     public void moveRight(boolean doMove) {
-    	movRight = doMove;
+    	nave.moveRight(doMove);
     }
     
     /**
@@ -150,7 +112,7 @@ public final class Jugador extends Observable {
      * {@code false} detiene el movimiento.
      */
     public void moveUp(boolean doMove) {
-    	movUp = doMove;
+    	nave.moveUp(doMove);;
     }
     
     /**
@@ -160,14 +122,18 @@ public final class Jugador extends Observable {
      * {@code false} detiene el movimiento.
      */
     public void moveDown(boolean doMove) {
-    	movDown = doMove;
+    	nave.moveDown(doMove);;
     }
     
     /**
      * Indica que debe disparar un bala (singular).
      */
     public void shoot() {
-        this.willShoot = true;
+        nave.shoot();
     }
 
+    //Devuelve la nave guardada en jugador (WOW NUNCA LO PODRIA HABER ADIVINADO)
+    public Nave getNave() {
+    	return nave;
+    }
 }

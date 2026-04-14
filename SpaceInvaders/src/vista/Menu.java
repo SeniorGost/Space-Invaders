@@ -129,7 +129,7 @@ public class Menu extends JFrame implements Observer{
 		{
 			if (arg instanceof int[])
 			{
-				// 0 Menu, 1 Juego, 2 Ganar, 3 Perder
+				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
 				int[] datos=(int[])arg;
 				cambiarPantalla(datos[0]);
 				

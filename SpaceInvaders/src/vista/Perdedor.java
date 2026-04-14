@@ -117,7 +117,7 @@ public class Perdedor extends JFrame implements Observer {
 		{
 			if (arg instanceof int[])
 			{
-				// 0 Menu, 1 Juego, 2 Ganar, 3 Perder
+				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
 				int[] datos=(int[])arg;
 				cambiarPantalla(datos[0]);
 				
@@ -128,8 +128,7 @@ public class Perdedor extends JFrame implements Observer {
 	
 	//Este es el tema, cada vez que se notifica a los observers, se notifica a todas las pantallas a la vez entonces se tiene que poner una sentencia como esta, donde se distinga el numero de pantalla en que estamos
 	private void cambiarPantalla (int pValor){
-		
-		if (pValor!=3)
+		if (pValor!=4)
 		{
 			this.setVisible(false);
 		}
@@ -150,5 +149,4 @@ public class Perdedor extends JFrame implements Observer {
 		}
 	}
 }
-
 

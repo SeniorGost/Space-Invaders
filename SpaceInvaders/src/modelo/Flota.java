@@ -2,20 +2,27 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Random;
 
+import modelo.alien.Alien;
+import modelo.alien.alienMultipixel;
+import modelo.excepciones.JuegoGanadoException;
+import modelo.excepciones.JuegoPerdidoException;
+
 public class Flota extends Observable {
     private ArrayList<Alien> listaAliens;
-    private boolean movDir; // false = izquierda, true = derecha
-    private boolean willFall; // Los aliens descenderan una posicion cuando este atributo es 'true' 
-    private int tickCount;
+    
     private static Flota miFlota;
+    
+    private estadoFlota estadoActual;
+
+    int hurtboxX;
+    int hurtboxY;
 
     private Flota() {
         listaAliens = new ArrayList<>();
-        movDir = true;
-        willFall = false;
     }
 
     public static Flota getFlota() {
@@ -26,10 +33,10 @@ public class Flota extends Observable {
     }
 
     public void inicializar() {
-        tickCount = 0;
-        movDir = true; // Empiezan moviéndose a la derecha
-        willFall = false;
         inicializarAliens();
+		estadoActual = new estadoFlotaEsperar(true, false);
+		hurtboxX = -1;
+		hurtboxY = -1;
     }
     
     //Matriz de aliens
@@ -41,9 +48,12 @@ public class Flota extends Observable {
     	
     	// Los aliens tienen que tener al menos un pixel de separacion entre ellos, por lo que vamos a 
     	// considerar solo las posiciones horizontalmente pares como posiciones validas para que aparezca un alien.
+    	
+    	int alienSpacing = 7;
+    	
     	ArrayList<Integer> validHPos = new ArrayList<Integer>();
-    	for (int i = 0; i <= maxHPos - 2; i += 2) {
-    		validHPos.add(i + 2);
+    	for (int i = alienSpacing * 2; i <= maxHPos - (alienSpacing * 2); i += alienSpacing) {
+    		validHPos.add(i);
     	}
     	
     	// Se encoge una cantidad de aliens aleatoria entre 4 y 6 (ambos incluidos)
@@ -62,70 +72,95 @@ public class Flota extends Observable {
     	}
     	
     	// Intencionalmente se colocan dos aliens en dos extremos de la flota
-    	listaAliens.add(new Alien(0, 0));
-    	listaAliens.add(new Alien(maxHPos, 0));
+    	listaAliens.add(new alienMultipixel(alienSpacing, alienSpacing));
+    	listaAliens.add(new alienMultipixel(maxHPos - alienSpacing, alienSpacing));
     	
     	// Se instancian los aliens en las posiciones aleatorias
     	for (int j : spawnHPos) {
-    		Alien nAlien = new Alien(j, 0);
+    		Alien nAlien = new alienMultipixel(j, alienSpacing);
     		listaAliens.add(nAlien);
     	}
     }
     
     //movimiento cada 4 ticks
-    public void tick(int x, int y) throws JuegoGanadoException, JuegoPerdidoException {
-    	tickCount++;
+    public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoGanadoException, JuegoPerdidoException {
+    	if (hurtboxX == -1)
+    		calculateHurtbox(pixNaveX, pixNaveY, naveX, naveY);
     	
-    	boolean willMove = tickCount == 4;
-
-    	int deltaX = 0;
-    	int deltaY = 0;
+    	estadoActual.tick(pixNaveX, pixNaveY, naveX, naveY);
     	
-    	// Los aliens solo se mueven 1 de cada 4 ticks
-    	if (willMove) {
-    		tickCount = 0;
-    		
-    		if (willFall) {
-    			deltaY = 1;
-    			movDir = !movDir;
-    		} else {	
-    			// Derecha: movDir == true | Izquierda: movDir == false
-    			if (movDir) {
-    				deltaX = 1;
-    			} else {    				
-    				deltaX = -1;
-    			}
+    	for (Alien a : listaAliens) {
+        	// Verifica si su posicion es la misma que la del jugador
+    		boolean con = a.playerCollided(pixNaveX, pixNaveY, naveX, naveY, hurtboxX, hurtboxY);
+    		if (con) {
+    			throw new JuegoPerdidoException();
     		}
     		
+    		Iterator<Integer> itDisplayX = a.getDisplayX().iterator();
+    		Iterator<Integer> itDisplayY = a.getDisplayY().iterator();
+    		
+    		while (itDisplayX.hasNext() && itDisplayY.hasNext()) {
+    			int posX = itDisplayX.next();
+    			int posY = itDisplayY.next();
+    			Flota.getFlota().notifyView(posX, posY);    			
+    		}
     	}
-    	
-    	// Se les propaga el tick a los aliens para moverlos
+    }
+    
+    public boolean move(int deltaX, int deltaY) throws JuegoPerdidoException {
     	boolean mustFall = false;
     	for (Alien a : listaAliens) {
     		// Si al menos una de las llamadas del metodo devuelve 'true', la proxima vez que los aliens
     		// se muevan sera en la direccion contraria. Ademas, los aliens descenderan una posicion en 
     		// su siguiente movimiento.
     		
-    		if (a.tick(deltaX, deltaY, x, y)) mustFall = true;
+    		if (a.tick(deltaX, deltaY))
+    			mustFall = true;
     	}
-    	
-    	if (willMove) willFall = mustFall && !willFall;
-    	
-    	notifyView();
-    	
+    	return mustFall;
     }
     
-    
+    /**
+     * Calcula los margenes de la 'hurtbox' de la nave del jugador y guarda esa información en atributos.
+     * <p> Este calculo solo deberia de hacerse una vez por partida. En el primer tick.
+     * 
+     * @param pixNaveX - Los componentes x de las posiciones de los pixeles de la nave.
+     * @param pixNaveY - Los componentes x de las posiciones de los pixeles de la nave.
+     * @param naveX - Componente x de la posición central de la nave.
+     * @param naveY - Componente y de la posición central de la nave.
+     */
+    private void calculateHurtbox(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) {
+    	// En resumen, se hace un bucle en el que se calcula la diferencia horizontal y vertical de cada pixel respecto
+    	// al centro de la nave (consideramos que la diferencia solo puede ser positiva). La diferencia mas grande 
+    	// en la coordenada 'x' y en 'y' corresponderan con los margenes horizontales y verticales de la 'hurtbox' del 
+    	// jugador.
+    	
+    	for (int i = 0; i < pixNaveX.length; i++) {
+    		int valX = pixNaveX[i] - naveX;
+    		if (valX < 0)
+    			valX = -valX;
+    		
+    		if (hurtboxX < valX)
+    			hurtboxX = valX;
+    		
+    		int valY = pixNaveY[i] - naveY;
+    		if (valY < 0)
+    			valY = -valY;
+    		
+    		if (hurtboxY < valY)
+    			hurtboxY = valY;
+    	}
+    }
     
    //si se alcanza un alien se elimina de la flota
-    public boolean hit(int x, int y) throws JuegoGanadoException {
+    public boolean hit(int[] pixelesX, int[] pixelesY, int pPosX, int pPosY, int hurtboxX, int hurtboxY) throws JuegoGanadoException {
     	boolean alienEncontrado = false;
     	
         Iterator<Alien> it = listaAliens.iterator();
         while (it.hasNext() && !alienEncontrado) {
             Alien a = it.next();
             // El tick del alien devuelve true si hay colisión
-                if (a.hit(x, y)) {
+                if (a.hit(pixelesX, pixelesY, pPosX, pPosY, hurtboxX, hurtboxY)) {
                     it.remove(); 
                     alienEncontrado = true;
                 }
@@ -139,14 +174,17 @@ public class Flota extends Observable {
         return alienEncontrado;
     }
 
+    
+    public void setState(estadoFlota nuevoEstado) {
+    	estadoActual = nuevoEstado;
+    }
+    
     /**
 	 * Mediante el 'Patron Observer' notifica al vista de las posiciones de los Aliens
 	 */
-	private void notifyView() {
-		for (Alien a : listaAliens) {
-			setChanged();
-			notifyObservers(new int[] {a.getPosX(), a.getPosY()});
-		}
+	public void notifyView(int x, int y) {
+		setChanged();
+		notifyObservers(new int[] {x, y});
 	}
     
 }

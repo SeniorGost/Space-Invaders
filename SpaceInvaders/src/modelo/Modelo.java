@@ -5,13 +5,18 @@ import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import modelo.excepciones.JuegoCambiadoException;
+import modelo.excepciones.JuegoGanadoException;
+import modelo.excepciones.JuegoPerdidoException;
+
 @SuppressWarnings("deprecation")
 public class Modelo extends Observable {
 	private int ventana;
 	private static final int VENTANA_MENU = 0;
-	private static final int VENTANA_JUEGO = 1;
-	private static final int VENTANA_GANADO = 2;
-	private static final int VENTANA_PERDIDO = 3;
+	private static final int VENTANA_MENU2 = 1;
+	private static final int VENTANA_JUEGO = 2;
+	private static final int VENTANA_GANADO = 3;
+	private static final int VENTANA_PERDIDO = 4;
 
 	private static final int GRID_WIDTH = 100;
 	private static final int GRID_HEIGHT = 60;
@@ -30,35 +35,7 @@ public class Modelo extends Observable {
 		//ta vacio, lo chento :c
 	}
 	
-	// Breve disertación de switches en java:
-	/*
-	 * los switches tienen que tener breaks en java porque si no java lo interpreta como; si case A o si case B hacer x
-	 * 
-	 * ej: (hacer import java.util.Scanner; arriba para q funcione)
-	 * 
-	 * Scanner prueba = new Scanner(System.in);
-	 *
-	 * System.out.print("Mete Letra: ");  
-	 * 
-	 * char letra = prueba.nextLine();
-	 * 
-	 * switch(letra){
-	 * case A:
-	 * 		System.out.print("haz esto")
-	 * case B:
-	 * 		System.out.print("y esto")
-	 * case C:
-	 *      System.out.print("Si la letra es A,B,C")
-	 *      break;
-	 * case D:
-	 * 		System.out.print("y haz esto para D")
-	 *      break;
-	 * }
-	 * 
-	 * prueba.close();
-	 * 
-	 * */
-	
+	// (No voy a leer eso)
 	
 	/**
 	 * Siempre llamar este metodo de manera externa (idealmente desde 'Controller'). Cambia la ventana actual del juego
@@ -67,10 +44,8 @@ public class Modelo extends Observable {
 	public void cambiarVentana() {		
 		switch (ventana) {
 		case VENTANA_MENU:
-			cambiarVentana(VENTANA_JUEGO);
-			empezarJuego();
+			cambiarVentana(VENTANA_MENU2);
 			break;
-			
 		case VENTANA_GANADO:
 		case VENTANA_PERDIDO:
 			cambiarVentana(VENTANA_MENU);
@@ -78,9 +53,12 @@ public class Modelo extends Observable {
 		}
 	}
 
-	private void empezarJuego() {
+	public void empezarJuego(int nave) {
 
-		Jugador.getJugador().inicializar();
+		//0 - green, 1 - blue, 2 - red
+		Jugador.getJugador().inicializar(nave);
+		
+		cambiarVentana(VENTANA_JUEGO);
 		
 		//esto esta aqui porque si no, cuando se vuelva a lanzar no va a funcionar
 		miTimer = new Timer();
