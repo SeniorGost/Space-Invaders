@@ -7,11 +7,14 @@ public class Main {
 		//MODELO//
 		Modelo modelo = Modelo.getModelo();
 		
-		//Creamos Pantalla 1//
-		Menu pantalla1=new Menu(modelo);
+		//Creamos Pantalla 0//
+		Menu pantalla=new Menu(modelo);
 		
 		//Hacemos Visible//
-		pantalla1.setVisible(true);
+		pantalla.setVisible(true);
+		
+		//Creamos Pantalla 1//
+		Menu2 pantalla1=new Menu2(modelo);
 		
 		//Creamos Pantalla 2//
 		Juego pantalla2=new Juego(modelo);
