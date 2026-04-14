@@ -148,9 +148,10 @@ public class Ganador extends JFrame implements Observer {
 		public void keyPressed(KeyEvent e) {}
 		@Override
 		public void keyReleased(KeyEvent e) {			
-			Modelo.getModelo().cambiarVentana();
+			//Probablemente el codigo mas complejo que he escrito para hacer tan poco
+			if(((Integer) e.getKeyCode()).equals(KeyEvent.VK_SPACE)) {
+				Modelo.getModelo().cambiarVentana();
+			}
 		}
 	}
 }
-
-
