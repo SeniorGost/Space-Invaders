@@ -5,9 +5,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Observable;
 
-import modelo.balaJugador.BalaJugador;
-import modelo.balaJugador.BalaRombo;
+import modelo.balaJugador.*;
 import modelo.excepciones.JuegoCambiadoException;
+import modelo.naves.Nave;
+import modelo.naves.NaveBlue;
+import modelo.naves.NaveGreen;
+import modelo.naves.NaveRed;
+
 @SuppressWarnings("deprecation")
 public class ArtilleriaJugador extends Observable {
 	private LinkedList<BalaJugador> listaBalas;
@@ -25,8 +29,11 @@ public class ArtilleriaJugador extends Observable {
 	/**
 	 * Debes de llamar a este metodo al pricipio de cada partida, pero solo UNA VEZ
 	 */
-	public void iniciar() {
+	public void iniciar(int tipo) {
 		listaBalas = new LinkedList<BalaJugador>();
+		
+		//esto le pasa al generador el id correspondiente al tipo de nave con el que se quiere jugar para que generador sette la estrategia segun eso
+		BalaGenerator.getBalasGenerator().setEstrategia(tipo);
 		
 		Flota.getFlota().inicializar();
 	}
@@ -40,7 +47,7 @@ public class ArtilleriaJugador extends Observable {
 	 */
 	public void shoot(int posX, int posY) {		
 		if (posY > 0) {
-			BalaJugador nuevaBala = new BalaRombo(posX, posY);
+			BalaJugador nuevaBala = BalaGenerator.getBalasGenerator().generarDesdeVista(posX, posY);
 			// Cuando se implementen las entidades multipixel, cambiar el segundo parametro de la constructora.
 			listaBalas.add(nuevaBala);
 		}
