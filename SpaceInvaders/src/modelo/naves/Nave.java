@@ -24,7 +24,8 @@ public abstract class Nave extends Observable {
     protected static final int LIMITE_DER = Modelo.getModelo().getWidth() - 1;
     protected static final int LIMITE_ABAJO = Modelo.getModelo().getHeight() - 1;
     protected static final int LIMITE_ARRIBA = 0;
-    
+
+	//Ander no te asustes, estas constantes estan PUBLICAS aun si son ATRIBUTOS porque se usan mucho a lo largo y ancho de modelo
 	public static final int NAVE_GREEN = 0;
 	public static final int NAVE_BLUE = 1;
 	public static final int NAVE_RED = 2;
