@@ -132,6 +132,7 @@ public final class Jugador {
         nave.shoot();
     }
 
+    //Devuelve la nave guardada en jugador (WOW NUNCA LO PODRIA HABER ADIVINADO)
     public Nave getNave() {
     	return nave;
     }
