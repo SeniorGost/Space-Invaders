@@ -1,13 +1,13 @@
 package modelo.balaJugador;
 
-public class BalaFlecha extends BalaJugadorMultipixel {
+public class BalaJugadorFlecha extends BalaJugadorMultipixel {
 
     /**
      * Crea una bala en forma de flecha (3 píxeles).
      * @param posX Posición X central
      * @param pPosY Posición Y 
      */
-    public BalaFlecha(int posX, int pPosY) {
+    public BalaJugadorFlecha(int posX, int pPosY) {
      
         super(posX, pPosY - 1, 1, 1);
         

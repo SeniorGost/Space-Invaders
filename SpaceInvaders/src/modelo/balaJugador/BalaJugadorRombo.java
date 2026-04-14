@@ -1,7 +1,7 @@
 package modelo.balaJugador;
 
-public class BalaRombo extends BalaJugadorMultipixel {
-	public BalaRombo(int posX, int pPosY) {
+public class BalaJugadorRombo extends BalaJugadorMultipixel {
+	public BalaJugadorRombo(int posX, int pPosY) {
 		super(posX, pPosY - 3, 2, 2);
 		int posY = getPosY();
 		

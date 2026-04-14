@@ -1,4 +1,4 @@
-package modelo;
+	package modelo;
 
 import java.awt.event.KeyEvent;
 import java.util.Observable;
@@ -76,10 +76,10 @@ public class Modelo extends Observable {
 					} catch (JuegoCambiadoException e) {
 						miTimer.cancel();
 
-						if (e instanceof JuegoGanadoException)
+						if (e.getTipo() == JuegoGanadoException.TIPO)
 							cambiarVentana(VENTANA_GANADO); // 2: Pantalla de ganar
 
-						if (e instanceof JuegoPerdidoException)
+						if (e.getTipo() == JuegoPerdidoException.TIPO)
 							cambiarVentana(VENTANA_PERDIDO); // 3: Pantalla de perder
 					}
 				}

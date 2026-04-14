@@ -7,7 +7,7 @@ import java.util.Observable;
 import java.util.Random;
 
 import modelo.alien.Alien;
-import modelo.alien.alienMultipixel;
+import modelo.alien.AlienMultipixel;
 import modelo.excepciones.JuegoGanadoException;
 import modelo.excepciones.JuegoPerdidoException;
 
@@ -16,7 +16,7 @@ public class Flota extends Observable {
     
     private static Flota miFlota;
     
-    private estadoFlota estadoActual;
+    private EstadoFlota estadoActual;
 
     int hurtboxX;
     int hurtboxY;
@@ -34,7 +34,7 @@ public class Flota extends Observable {
 
     public void inicializar() {
         inicializarAliens();
-		estadoActual = new estadoFlotaEsperar(true, false);
+		estadoActual = new EstadoFlotaEsperar(true, false);
 		hurtboxX = -1;
 		hurtboxY = -1;
     }
@@ -72,12 +72,12 @@ public class Flota extends Observable {
     	}
     	
     	// Intencionalmente se colocan dos aliens en dos extremos de la flota
-    	listaAliens.add(new alienMultipixel(alienSpacing, alienSpacing));
-    	listaAliens.add(new alienMultipixel(maxHPos - alienSpacing, alienSpacing));
+    	listaAliens.add(new AlienMultipixel(alienSpacing, alienSpacing));
+    	listaAliens.add(new AlienMultipixel(maxHPos - alienSpacing, alienSpacing));
     	
     	// Se instancian los aliens en las posiciones aleatorias
     	for (int j : spawnHPos) {
-    		Alien nAlien = new alienMultipixel(j, alienSpacing);
+    		Alien nAlien = new AlienMultipixel(j, alienSpacing);
     		listaAliens.add(nAlien);
     	}
     }
@@ -175,7 +175,7 @@ public class Flota extends Observable {
     }
 
     
-    public void setState(estadoFlota nuevoEstado) {
+    public void setState(EstadoFlota nuevoEstado) {
     	estadoActual = nuevoEstado;
     }
     

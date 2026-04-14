@@ -13,9 +13,9 @@ public class BalaFactory {
 	public BalaJugador generate(String type, int posX, int posY) {
 	    switch (type) {
 	        case EstrategiaDisparo.DISPARO_ROMBO: 
-	            return new BalaRombo(posX, posY);
+	            return new BalaJugadorRombo(posX, posY);
 	        case EstrategiaDisparo.DISPARO_FLECHA: 
-	            return new BalaFlecha(posX, posY); 
+	            return new BalaJugadorFlecha(posX, posY); 
 	        default:
 	            return new BalaJugadorPixel(posX, posY);
 	    }

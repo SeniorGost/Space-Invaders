@@ -5,13 +5,13 @@ import java.util.LinkedList;
 
 import modelo.excepciones.JuegoPerdidoException;
 
-public class alienMultipixel extends Alien {
+public class AlienMultipixel extends Alien {
 	
 	ArrayList<Alien> listaPixeles;
 	int hitboxX;
 	int hitboxY;
 	
-	public alienMultipixel(int x, int y) {
+	public AlienMultipixel(int x, int y) {
 		super(x, y);
 		
 		listaPixeles = new ArrayList<Alien>();
@@ -21,25 +21,25 @@ public class alienMultipixel extends Alien {
 		
 		// le foo fighter:
 		
-		listaPixeles.add(new alienPixel(-2 	+ x, -2	+ y));
-		listaPixeles.add(new alienPixel(2 	+ x, -2	+ y));
+		listaPixeles.add(new AlienPixel(-2 	+ x, -2	+ y));
+		listaPixeles.add(new AlienPixel(2 	+ x, -2	+ y));
 		
-		listaPixeles.add(new alienPixel(-1 	+ x, -1	+ y));
-		listaPixeles.add(new alienPixel( 	  x, -1	+ y));
-		listaPixeles.add(new alienPixel(1 	+ x, -1	+ y));
+		listaPixeles.add(new AlienPixel(-1 	+ x, -1	+ y));
+		listaPixeles.add(new AlienPixel( 	  x, -1	+ y));
+		listaPixeles.add(new AlienPixel(1 	+ x, -1	+ y));
 		
-		listaPixeles.add(new alienPixel(-2 	+ x,	  y));
-		listaPixeles.add(new alienPixel( 	  x,	  y));
-		listaPixeles.add(new alienPixel(2 	+ x,	  y));
+		listaPixeles.add(new AlienPixel(-2 	+ x,	  y));
+		listaPixeles.add(new AlienPixel( 	  x,	  y));
+		listaPixeles.add(new AlienPixel(2 	+ x,	  y));
 		
-		listaPixeles.add(new alienPixel(-2 	+ x, 1	+ y));
-		listaPixeles.add(new alienPixel(-1 	+ x, 1	+ y));
-		listaPixeles.add(new alienPixel( 	  x, 1	+ y));
-		listaPixeles.add(new alienPixel(1 	+ x, 1	+ y));
-		listaPixeles.add(new alienPixel(2 	+ x, 1	+ y));
+		listaPixeles.add(new AlienPixel(-2 	+ x, 1	+ y));
+		listaPixeles.add(new AlienPixel(-1 	+ x, 1	+ y));
+		listaPixeles.add(new AlienPixel( 	  x, 1	+ y));
+		listaPixeles.add(new AlienPixel(1 	+ x, 1	+ y));
+		listaPixeles.add(new AlienPixel(2 	+ x, 1	+ y));
 		
-		listaPixeles.add(new alienPixel(-2 	+ x, 2	+ y));
-		listaPixeles.add(new alienPixel(2 	+ x, 2	+ y));
+		listaPixeles.add(new AlienPixel(-2 	+ x, 2	+ y));
+		listaPixeles.add(new AlienPixel(2 	+ x, 2	+ y));
 	}
 	
 	@Override
@@ -97,12 +97,12 @@ public class alienMultipixel extends Alien {
 		// de que fuesemoms a utilizar hitboxes.
 		boolean rdo = false;
 		
-		int difY = posY - pY;
+		int difY = getPosY() - pY;
 		if (difY < 0) difY = -difY;		
 		int marginY = hitboxY + hurtboxY;
 		
 		if (difY <= marginY) {
-			int difX = posX - pX;
+			int difX = getPosX() - pX;
 			if (difX < 0) difX = -difX;
 			int marginX = hitboxX + hurtboxX;
 			

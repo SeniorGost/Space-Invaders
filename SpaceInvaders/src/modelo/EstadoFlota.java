@@ -2,9 +2,9 @@ package modelo;
 
 import modelo.excepciones.JuegoPerdidoException;
 
-public abstract class estadoFlota {
+public abstract class EstadoFlota {
 
-	protected estadoFlota() {
+	protected EstadoFlota() {
 		
 	}
 	

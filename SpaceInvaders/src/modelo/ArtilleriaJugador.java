@@ -43,7 +43,6 @@ public class ArtilleriaJugador extends Observable {
 	 * 
 	 * @param posX - Componente x de la posicion en la que se desea que aparezca la nueva bala.
 	 * @param posY - Componente y de la posicion en la que se desea que aparezca la nueva bala.
-	 * @param type - Existen diferentes tipos de balas, este paramtro especifica cual es el deseado.
 	 */
 	public void shoot(int posX, int posY) {		
 		if (posY > 0) {

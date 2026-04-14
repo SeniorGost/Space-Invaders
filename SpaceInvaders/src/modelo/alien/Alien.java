@@ -7,8 +7,8 @@ import modelo.Modelo;
 import modelo.excepciones.JuegoPerdidoException;
 
 public abstract class Alien {
-    protected int posX;
-    protected int posY;
+    private int posX;
+    private int posY;
     protected boolean justMoved;
 
     public Alien(int x, int y) {

@@ -2,11 +2,11 @@ package modelo;
 
 import modelo.excepciones.JuegoPerdidoException;
 
-public class estadoFlotaHorizontal extends estadoFlota {
+public class EstadoFlotaHorizontal extends EstadoFlota {
 
 	private boolean direction;
 	
-	public estadoFlotaHorizontal(boolean pDirection) {
+	public EstadoFlotaHorizontal(boolean pDirection) {
 		direction = pDirection;
 	}
 	
@@ -17,6 +17,6 @@ public class estadoFlotaHorizontal extends estadoFlota {
 		
 		boolean limit = Flota.getFlota().move(dir, 0);
 		
-		Flota.getFlota().setState(new estadoFlotaEsperar(direction, limit));
+		Flota.getFlota().setState(new EstadoFlotaEsperar(direction, limit));
 	}
 }

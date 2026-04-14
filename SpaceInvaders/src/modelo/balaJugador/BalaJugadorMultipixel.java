@@ -9,10 +9,10 @@ import modelo.excepciones.JuegoGanadoException;
 
 public abstract class BalaJugadorMultipixel extends BalaJugador {
 
-	ArrayList<BalaJugador> pixeles;
+	private ArrayList<BalaJugador> pixeles;
 	
-	int hurtboxX;
-	int hurtboxY;
+	private int hurtboxX;
+	private int hurtboxY;
 	
 	/**
 	 * @param pPosX - La coordenada x de la posicion central de la bala

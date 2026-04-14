@@ -5,16 +5,16 @@ import java.util.LinkedList;
 import modelo.Modelo;
 import modelo.excepciones.JuegoPerdidoException;
 
-public class alienPixel extends Alien {
+public class AlienPixel extends Alien {
 
-	public alienPixel(int x, int y) {
+	public AlienPixel(int x, int y) {
 		super(x, y);
 	}
 
 	@Override
 	public boolean tick(int deltaX, int deltaY) throws JuegoPerdidoException {    	
     	// Verificación de límite inferior (si el alien llega abajo, se pierde el juego)
-    	if (posY == (Modelo.getModelo().getHeight()-1))
+    	if (getPosY() == (Modelo.getModelo().getHeight()-1))
     		throw new JuegoPerdidoException();
         
     	boolean rdo = super.tick(deltaX, deltaY);
@@ -25,7 +25,7 @@ public class alienPixel extends Alien {
 	@Override
 	public boolean playerCollided(int[] pPosX, int[] pPosY, int offsetX, int offsetY, int hurtboxX, int hurtboxY) {
 		for (int i = 0; i < pPosX.length; i++) {
-			if (posX == pPosX[i] && posY == pPosY[i]) 
+			if (getPosX() == pPosX[i] && getPosY() == pPosY[i]) 
 				return true;
 		}
 		return false;
@@ -40,10 +40,10 @@ public class alienPixel extends Alien {
 			int balaX = pixelesX[i];
 			int balaY = pixelesY[i];
 			
-			if (this.posX == balaX && (this.posY == balaY || this.posY == balaY - 1)) 
+			if (this.getPosX() == balaX && (this.getPosY() == balaY || this.getPosY() == balaY - 1)) 
 				return true;
 			if (justMoved)
-				if (this.posX == balaX && this.posY == balaY + 1) 
+				if (this.getPosX() == balaX && this.getPosY() == balaY + 1) 
 					return true;
 		}
 		return false;
