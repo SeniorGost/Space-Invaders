@@ -144,9 +144,11 @@ public class Perdedor extends JFrame implements Observer {
 		@Override
 		public void keyPressed(KeyEvent e) {}
 		@Override
-		public void keyReleased(KeyEvent e) {			
-			Modelo.getModelo().cambiarVentana();
+		public void keyReleased(KeyEvent e) {
+			//Probablemente el codigo mas complejo que he escrito para hacer tan poco
+			if(((Integer) e.getKeyCode()).equals(KeyEvent.VK_SPACE)) {
+				Modelo.getModelo().cambiarVentana();
+			}
 		}
 	}
 }
-
