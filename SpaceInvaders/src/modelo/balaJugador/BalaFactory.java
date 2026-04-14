@@ -2,9 +2,7 @@ package modelo.balaJugador;
 
 public class BalaFactory {
 	private static BalaFactory balaFactory;
-	private BalaFactory() {
-		
-	}
+	private BalaFactory() {}
 	
 	public static BalaFactory getBalaFactory() {
 		if(balaFactory == null)
@@ -14,9 +12,9 @@ public class BalaFactory {
 	
 	public BalaJugador generate(String type, int posX, int posY) {
 	    switch (type) {
-	        case "Rombo": 
+	        case EstrategiaDisparo.DISPARO_ROMBO: 
 	            return new BalaRombo(posX, posY);
-	        case "Flecha": 
+	        case EstrategiaDisparo.DISPARO_FLECHA: 
 	            return new BalaFlecha(posX, posY); 
 	        default:
 	            return new BalaJugadorPixel(posX, posY);

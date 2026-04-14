@@ -10,20 +10,19 @@ public class EstrategiaBlue implements EstrategiaDisparo {
 	
     @Override
     public String elegirTipoBala(String inputVista) {
-        if (inputVista.equalsIgnoreCase("Pixel")) return "Rombo";
-        return "Pixel";
+        if (inputVista.equalsIgnoreCase(DISPARO_PIXEL)) return DISPARO_ROMBO;
+        return DISPARO_PIXEL;
     }
     
     public boolean puedeDisparar(String disparoTipo) {
         // Aqui tratamos lo de las balas especiales
     	switch (disparoTipo) {
-			case "Rombo":
+			case DISPARO_ROMBO:
 				// Si ya se ha llegado al limite indica que no puede disparar
 				if(cuentaRombo <= 0) {
 					return false;
 				}
 				 // Decrementa los contadores de balas especiales de ser necesario
-				cuentaRombo--;
 				break;
 		}
     	return true;
@@ -32,7 +31,7 @@ public class EstrategiaBlue implements EstrategiaDisparo {
     @Override
     public void disparar(String disparoTipo) {
     	switch (disparoTipo) {
-		case "Rombo":
+		case DISPARO_ROMBO:
 			cuentaRombo--;
 			break;
 		}

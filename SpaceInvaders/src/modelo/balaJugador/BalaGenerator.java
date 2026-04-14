@@ -11,7 +11,7 @@ public class BalaGenerator {
     private BalaGenerator() {
         // Por defecto, empezamos con la básica
         this.estrategiaActual = new EstrategiaGreen();
-        this.disparoTipo = "Pixel";
+        this.disparoTipo = EstrategiaDisparo.DISPARO_PIXEL;
     }
     
     public static BalaGenerator getBalasGenerator() {

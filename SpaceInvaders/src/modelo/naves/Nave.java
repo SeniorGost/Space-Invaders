@@ -3,6 +3,7 @@ package modelo.naves;
 import java.util.Observable;
 
 import modelo.Modelo;
+import modelo.balaJugador.EstrategiaDisparo;
 import modelo.excepciones.JuegoCambiadoException;
 
 @SuppressWarnings("deprecation")
@@ -42,7 +43,6 @@ public abstract class Nave extends Observable {
         movRight = false;
         movUp = false;
         movDown = false;
-        
     	// Posición inicial 
     	posX = pPosX;
         posY = pPosY;

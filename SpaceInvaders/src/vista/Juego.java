@@ -178,7 +178,7 @@ public class Juego extends JFrame implements Observer{
 				}
 				//Esto es pq si no al empezar la partida escribes directamente encima de la matriz otra vez y se notan un segundo los restos de la otra
 				else if(datos[0]==3 || datos[0]==4){
-					cleanClean();System.out.println("SE ME PAROHHHH");
+					cleanClean(); //System.out.println("SE ME PAROHHHH");
 					mataPilas();
 				}
 				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder

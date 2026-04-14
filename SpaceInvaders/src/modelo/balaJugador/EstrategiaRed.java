@@ -5,28 +5,28 @@ public class EstrategiaRed implements EstrategiaDisparo {
 	private int cuentaFlecha;
 	
 	public EstrategiaRed() {
-		cuentaRombo = 30;
-		cuentaFlecha = 20;
+		cuentaRombo = 20;
+		cuentaFlecha = 30;
 	}
 	
     @Override
     public String elegirTipoBala(String inputVista) {
-        if (inputVista.equalsIgnoreCase("Pixel")) return "Rombo";
-        if (inputVista.equalsIgnoreCase("Rombo")) return "Flecha";
-        return "Pixel";
+        if (inputVista.equalsIgnoreCase(DISPARO_PIXEL)) return DISPARO_ROMBO;
+        if (inputVista.equalsIgnoreCase(DISPARO_ROMBO)) return DISPARO_FLECHA;
+        return DISPARO_PIXEL;
     }
     
     public boolean puedeDisparar(String disparoTipo) {
         //Aqui tratamos lo de las balas especiales
     	switch (disparoTipo) {
-		case "Rombo":
+		case DISPARO_ROMBO:
 			// Si ya se ha llegado al limite indica que no puede disparar
 			if(cuentaRombo <= 0) {
 				return false;
 			}
 			break;
 		
-		case "Flecha":
+		case DISPARO_FLECHA:
 			// Si ya se ha llegado al limite indica que no puede disparar
 			if(cuentaFlecha <= 0) {
 				return false;
@@ -39,11 +39,11 @@ public class EstrategiaRed implements EstrategiaDisparo {
     @Override
     public void disparar(String disparoTipo) {
     	switch (disparoTipo) {
-		case "Rombo":
+		case DISPARO_ROMBO:
 			cuentaRombo--;
 			break;
 		
-		case "Flecha":
+		case DISPARO_FLECHA:
 			cuentaFlecha--;
 			break;
 		}
