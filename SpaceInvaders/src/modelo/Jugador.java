@@ -3,6 +3,9 @@ package modelo;
 import modelo.excepciones.JuegoCambiadoException;
 import modelo.naves.Nave;
 import modelo.naves.NaveBlue;
+import modelo.naves.NaveGreen;
+import modelo.naves.NaveRed;
+
 
 public final class Jugador {
     private static Jugador miJugador;
@@ -17,13 +20,24 @@ public final class Jugador {
      * en el parametro.
      * @param tipo - [0]: Nave Green | [1]: Nave Blue | [2]: Nave Red
      */
-    public void inicializar(int tipo) {
-    	
-    	if (tipo == 0) {
-    		nave = new NaveBlue();
-    	}
-        
-        ArtilleriaJugador.getArtilleria().iniciar();
+    public void inicializar(int tipo) 
+    {
+
+        switch (tipo) 
+        {
+        case Nave.NAVE_GREEN:
+            nave = new NaveGreen();
+            break;
+        case Nave.NAVE_BLUE:
+            nave = new NaveBlue();
+            break;
+        case Nave.NAVE_RED:
+        default:
+            nave = new NaveRed();
+        }
+
+
+        ArtilleriaJugador.getArtilleria().iniciar(tipo);
     }
 
     public static Jugador getJugador() {
