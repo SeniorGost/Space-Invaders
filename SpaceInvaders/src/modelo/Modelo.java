@@ -13,9 +13,10 @@ import modelo.excepciones.JuegoPerdidoException;
 public class Modelo extends Observable {
 	private int ventana;
 	private static final int VENTANA_MENU = 0;
-	private static final int VENTANA_JUEGO = 1;
-	private static final int VENTANA_GANADO = 2;
-	private static final int VENTANA_PERDIDO = 3;
+	private static final int VENTANA_MENU2 = 1;
+	private static final int VENTANA_JUEGO = 2;
+	private static final int VENTANA_GANADO = 3;
+	private static final int VENTANA_PERDIDO = 4;
 
 	private static final int GRID_WIDTH = 100;
 	private static final int GRID_HEIGHT = 60;
@@ -43,9 +44,8 @@ public class Modelo extends Observable {
 	public void cambiarVentana() {		
 		switch (ventana) {
 		case VENTANA_MENU:
-			empezarJuego();
+			cambiarVentana(VENTANA_MENU2);
 			break;
-			
 		case VENTANA_GANADO:
 		case VENTANA_PERDIDO:
 			cambiarVentana(VENTANA_MENU);
@@ -53,9 +53,10 @@ public class Modelo extends Observable {
 		}
 	}
 
-	private void empezarJuego() {
+	public void empezarJuego(int nave) {
 
-		Jugador.getJugador().inicializar(0);
+		//0 - green, 1 - blue, 2 - red
+		Jugador.getJugador().inicializar(nave);
 		
 		cambiarVentana(VENTANA_JUEGO);
 		
