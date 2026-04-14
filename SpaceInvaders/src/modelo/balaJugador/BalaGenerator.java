@@ -1,5 +1,7 @@
 package modelo.balaJugador;
 
+import modelo.naves.Nave;
+
 public class BalaGenerator {
     private static BalaGenerator balasGenerator;
     private String disparoTipo;
@@ -21,12 +23,33 @@ public class BalaGenerator {
     }
 
     // Metodo para que el juego cambie la nave (y su estrategia)
-    public void setEstrategia(EstrategiaDisparo nuevaEstrategia) {
-    	this.estrategiaActual = nuevaEstrategia;
-    	// Lo muismo que 'disparoTipo = "Pixel";' pero mas elegante
+    public void setEstrategia(int nave) {
+    	// Esto cambia la estrategia
+    	this.cambiarEstrategiaSegunNave(nave);
+    	// Lo mismo que 'disparoTipo = "Pixel";' pero mas elegante. El disparo con el que empieza cualquier nave siempre son pixeles
         disparoTipo = estrategiaActual.elegirTipoBala(" ");
         this.cuentaFlecha=0;
         this.cuentaRombo=0;
+    }
+    
+    private void cambiarEstrategiaSegunNave(int tipo) {
+		
+        switch (tipo) 
+        {
+        case Nave.NAVE_GREEN:
+            EstrategiaDisparo shrek = new EstrategiaGreen();
+            this.estrategiaActual = shrek;
+            break;
+        case Nave.NAVE_BLUE:
+            EstrategiaDisparo rei_chikita = new EstrategiaBlue();
+            this.estrategiaActual = rei_chikita;
+            break;
+        case Nave.NAVE_RED:
+        default:
+        	 EstrategiaDisparo NaveGenerica = new EstrategiaRed();
+        	 this.estrategiaActual = NaveGenerica;
+        }
+
     }
     
     public void cambiarBala(){
