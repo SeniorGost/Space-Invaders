@@ -17,24 +17,26 @@ import modelo.excepciones.JuegoCambiadoException;
 public abstract class NaveMultipixel extends Nave {
 
 	protected ArrayList<Nave> pixeles;
+	private static final int GUN_COOLDOWN_PERIOD = 6;
 	private boolean willShoot;			// La nave dispara si en su tick este parametro es true.
+    private int gunCooldown;			// Indica los ticks restantes de enfriamiento restantes para poder disparar
+    									// de nuevo
 	
 	// [!] Estos atributos deben de ser definidos en la inicializacion de las naves que hereden de esta clase.
 	private int bulletOffset;			// Determina cuantos pixeles por encima de la posicion central deben de
 										// generarse las balas que dispare la nave.
-	private int[] bulletTypes;			// Determina el tipo de bala que dispara la nave.
 
 	/**
 	 * Define ArrayList y eso...
 	 * <p> Llama a super con una posicion fija.
 	 */
-	public NaveMultipixel(int pBulletOffset, int[] pBulletTypes) {
+	public NaveMultipixel(int pBulletOffset) {
 		// Por defecto, la nave del jugador aparece en esta posicion
 		super(50, 55);
 		
 		bulletOffset = pBulletOffset;
-		bulletTypes = pBulletTypes;
 		willShoot = false;
+		gunCooldown = 0;
 		
 		pixeles = new ArrayList<Nave>();
 	}
@@ -76,11 +78,17 @@ public abstract class NaveMultipixel extends Nave {
 	        setChanged();
 	        notifyObservers(new int[] {n.getPosX(), n.getPosY()});
 		}
-        //logica de Disparo
-        if (willShoot) {
-        	ArtilleriaJugador.getArtilleria().shoot(getPosX(), getPosY() + bulletOffset);
-            willShoot = false;
-        }
+		if (gunCooldown > 0) {
+			gunCooldown--;
+		}
+		else {			
+			//logica de Disparo
+			if (willShoot) {
+				ArtilleriaJugador.getArtilleria().shoot(getPosX(), getPosY() + bulletOffset);
+				willShoot = false;
+				gunCooldown = GUN_COOLDOWN_PERIOD;
+			}
+		}
         
         // Mueve su posicion relativa
         
@@ -154,9 +162,13 @@ public abstract class NaveMultipixel extends Nave {
 	}
 	/**
 	 * Establece que en el siguiente {@code tick} disparará una bala.
+	 * <p> El disparo del jugador tiene cierto tiempo de enfriamiento que no permite volver a disparar poco despues
+	 * de un disparo.
 	 */
 	@Override
 	public void shoot() {
-		willShoot = true;
+		if (gunCooldown <= 3) {			
+			willShoot = true;
+		}
 	}
 }

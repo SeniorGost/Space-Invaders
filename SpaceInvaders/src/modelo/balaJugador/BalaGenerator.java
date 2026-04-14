@@ -5,9 +5,7 @@ import modelo.naves.Nave;
 public class BalaGenerator {
     private static BalaGenerator balasGenerator;
     private String disparoTipo;
-    //Esta info igual es artilleria jugador, pero como controler llama directamente a esta clase es mas comodo para pasar la informacion directamente a cambio de bala
-    private int cuentaFlecha;
-    private int cuentaRombo;
+
     private EstrategiaDisparo estrategiaActual; // El Strategy
 
     private BalaGenerator() {
@@ -28,8 +26,6 @@ public class BalaGenerator {
     	this.cambiarEstrategiaSegunNave(nave);
     	// Lo mismo que 'disparoTipo = "Pixel";' pero mas elegante. El disparo con el que empieza cualquier nave siempre son pixeles
         disparoTipo = estrategiaActual.elegirTipoBala(" ");
-        this.cuentaFlecha=0;
-        this.cuentaRombo=0;
     }
     
     private void cambiarEstrategiaSegunNave(int tipo) {
@@ -61,26 +57,14 @@ public class BalaGenerator {
      * @param inputDeVista Lo que recojas de las flechas del teclado
      */
     public BalaJugador generarDesdeVista(int posX, int posY) {
-        //Aqui tratamos lo de las balas especiales
-    	switch (disparoTipo) {
-		case "Rombo":
-			 //Si se ha llegado al limite se dispara un pixel directamente
-			if(cuentaRombo >= 20) {
-				return BalaFactory.getBalaFactory().generate("Pixel", posX, posY);
-			}
-			 //Incrementamos los contadores de balas especiales de ser necesario
-			cuentaRombo++;
-			break;
-		
-		case "Flecha":
-			//Si ya se ha llegado al limite se dispara un pixel directamente
-			if(cuentaFlecha >= 30) {
-				return BalaFactory.getBalaFactory().generate("Pixel", posX, posY);
-			}
-			 //Incrementamos los contadores de balas especiales de ser necesario
-			cuentaFlecha++;
-			break;
-		}
+    	
+    	if (!estrategiaActual.puedeDisparar(disparoTipo)) {
+    		disparoTipo = estrategiaActual.elegirTipoBala(disparoTipo);
+    		return generarDesdeVista(posX, posY);
+    	}
+    	
+    	estrategiaActual.disparar(disparoTipo);
+    	
     	//Usamos la Factory para crearla
         return BalaFactory.getBalaFactory().generate(disparoTipo, posX, posY);
     }

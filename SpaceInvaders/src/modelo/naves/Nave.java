@@ -17,7 +17,7 @@ public abstract class Nave extends Observable {
     private boolean movRight;		// Se mueve hacia la derecha en su siguiente tick cuando es true
     private boolean movUp;			// Se mueve hacia la arriba en su siguiente tick cuando es true
     private boolean movDown;		// Se mueve hacia la abajo en su siguiente tick cuando es true
-    
+
     // Constantes de juego
     protected static final int VELOCIDAD = 1;
     protected static final int LIMITE_IZQ = 0;

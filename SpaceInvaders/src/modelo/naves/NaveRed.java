@@ -3,7 +3,7 @@ package modelo.naves;
 public class NaveRed extends NaveMultipixel {
 
     public NaveRed() {
-        super(-3, new int[] {0, 1, 2});
+        super(-4);
 
         int posX = getPosX();
         int posY = getPosY();

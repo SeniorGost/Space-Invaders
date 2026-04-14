@@ -8,7 +8,7 @@ public class NaveGreen extends NaveMultipixel {
 	 * nave
 	 */
 	public NaveGreen() {
-		super(-3, new int[] {0, 1});
+		super(-4);
 		
 		int posX = getPosX();
 		int posY = getPosY();
