@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Random;
 
-import modelo.alien.Alien;
-import modelo.alien.AlienMultipixel;
 import modelo.excepciones.JuegoGanadoException;
 import modelo.excepciones.JuegoPerdidoException;
 
@@ -71,39 +69,31 @@ public class Flota extends Observable {
     		i++;
     	}
     	
+    	// GeneradorAliens.getGeneradorAliens().generarAlien
+    	
     	// Intencionalmente se colocan dos aliens en dos extremos de la flota
-    	listaAliens.add(new AlienMultipixel(alienSpacing, alienSpacing));
-    	listaAliens.add(new AlienMultipixel(maxHPos - alienSpacing, alienSpacing));
+    	listaAliens.add(GeneradorAliens.getGeneradorAliens().generarAlien(alienSpacing, alienSpacing));
+    	listaAliens.add(GeneradorAliens.getGeneradorAliens().generarAlien(maxHPos - alienSpacing, alienSpacing));
     	
     	// Se instancian los aliens en las posiciones aleatorias
     	for (int j : spawnHPos) {
-    		Alien nAlien = new AlienMultipixel(j, alienSpacing);
+    		Alien nAlien = GeneradorAliens.getGeneradorAliens().generarAlien(j, alienSpacing);
     		listaAliens.add(nAlien);
     	}
     }
     
     //movimiento cada 4 ticks
-    public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoGanadoException, JuegoPerdidoException {
-    	if (hurtboxX == -1)
-    		calculateHurtbox(pixNaveX, pixNaveY, naveX, naveY);
+    public void tick() throws JuegoGanadoException, JuegoPerdidoException {
+    	if (listaAliens.isEmpty())
+    		throw new JuegoGanadoException();
+    	estadoActual.tick();
     	
-    	estadoActual.tick(pixNaveX, pixNaveY, naveX, naveY);
+    	Iterator<Alien> it = listaAliens.iterator();
     	
-    	for (Alien a : listaAliens) {
-        	// Verifica si su posicion es la misma que la del jugador
-    		boolean con = a.playerCollided(pixNaveX, pixNaveY, naveX, naveY, hurtboxX, hurtboxY);
-    		if (con) {
+    	while(it.hasNext()) {
+    		Alien curAlien = it.next();
+    		if (curAlien.tick())
     			throw new JuegoPerdidoException();
-    		}
-    		
-    		Iterator<Integer> itDisplayX = a.getDisplayX().iterator();
-    		Iterator<Integer> itDisplayY = a.getDisplayY().iterator();
-    		
-    		while (itDisplayX.hasNext() && itDisplayY.hasNext()) {
-    			int posX = itDisplayX.next();
-    			int posY = itDisplayY.next();
-    			Flota.getFlota().notifyView(posX, posY);    			
-    		}
     	}
     }
     
@@ -113,67 +103,30 @@ public class Flota extends Observable {
     		// Si al menos una de las llamadas del metodo devuelve 'true', la proxima vez que los aliens
     		// se muevan sera en la direccion contraria. Ademas, los aliens descenderan una posicion en 
     		// su siguiente movimiento.
+    		if(!a.canMoveV(deltaY))
+    			throw new JuegoPerdidoException();
     		
-    		if (a.tick(deltaX, deltaY))
+    		a.move(deltaX, deltaY);
+    		if (!a.canMoveH(deltaX))
     			mustFall = true;
     	}
     	return mustFall;
     }
     
-    /**
-     * Calcula los margenes de la 'hurtbox' de la nave del jugador y guarda esa información en atributos.
-     * <p> Este calculo solo deberia de hacerse una vez por partida. En el primer tick.
-     * 
-     * @param pixNaveX - Los componentes x de las posiciones de los pixeles de la nave.
-     * @param pixNaveY - Los componentes x de las posiciones de los pixeles de la nave.
-     * @param naveX - Componente x de la posición central de la nave.
-     * @param naveY - Componente y de la posición central de la nave.
-     */
-    private void calculateHurtbox(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) {
-    	// En resumen, se hace un bucle en el que se calcula la diferencia horizontal y vertical de cada pixel respecto
-    	// al centro de la nave (consideramos que la diferencia solo puede ser positiva). La diferencia mas grande 
-    	// en la coordenada 'x' y en 'y' corresponderan con los margenes horizontales y verticales de la 'hurtbox' del 
-    	// jugador.
+    public boolean hit(int offsetX, int offsetY, int hurtboxX, int hurtboxY, int[] pX, int[] pY) {
+    	Iterator<Alien> it = listaAliens.iterator();
+    	boolean rdo = false;
     	
-    	for (int i = 0; i < pixNaveX.length; i++) {
-    		int valX = pixNaveX[i] - naveX;
-    		if (valX < 0)
-    			valX = -valX;
+    	while (it.hasNext() && !rdo) {
+    		Alien curAlien = it.next();
     		
-    		if (hurtboxX < valX)
-    			hurtboxX = valX;
-    		
-    		int valY = pixNaveY[i] - naveY;
-    		if (valY < 0)
-    			valY = -valY;
-    		
-    		if (hurtboxY < valY)
-    			hurtboxY = valY;
+    		if(curAlien.canCollide(offsetX, offsetY, hurtboxX, hurtboxY))
+    			rdo = curAlien.isHit(pX, pY);
+    		if(rdo)
+    			it.remove();
     	}
+    	return rdo;
     }
-    
-   //si se alcanza un alien se elimina de la flota
-    public boolean hit(int[] pixelesX, int[] pixelesY, int pPosX, int pPosY, int hurtboxX, int hurtboxY) throws JuegoGanadoException {
-    	boolean alienEncontrado = false;
-    	
-        Iterator<Alien> it = listaAliens.iterator();
-        while (it.hasNext() && !alienEncontrado) {
-            Alien a = it.next();
-            // El tick del alien devuelve true si hay colisión
-                if (a.hit(pixelesX, pixelesY, pPosX, pPosY, hurtboxX, hurtboxY)) {
-                    it.remove(); 
-                    alienEncontrado = true;
-                }
-         }
-        
-      // Comprobamos si no quedan aliens
-        if (listaAliens.isEmpty()) {
-        	// Si no quedan aliens, se lanza la excepcion
-        	throw new JuegoGanadoException();
-        }
-        return alienEncontrado;
-    }
-
     
     public void setState(EstadoFlota nuevoEstado) {
     	estadoActual = nuevoEstado;

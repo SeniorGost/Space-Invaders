@@ -5,12 +5,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Observable;
 
-import modelo.balaJugador.*;
 import modelo.excepciones.JuegoCambiadoException;
-import modelo.naves.Nave;
-import modelo.naves.NaveBlue;
-import modelo.naves.NaveGreen;
-import modelo.naves.NaveRed;
+
 
 @SuppressWarnings("deprecation")
 public class ArtilleriaJugador extends Observable {
@@ -33,7 +29,7 @@ public class ArtilleriaJugador extends Observable {
 		listaBalas = new LinkedList<BalaJugador>();
 		
 		//esto le pasa al generador el id correspondiente al tipo de nave con el que se quiere jugar para que generador sette la estrategia segun eso
-		BalaGenerator.getBalasGenerator().setEstrategia(tipo);
+		GeneradorBalas.getGeneradorBalas().setEstrategia(tipo);
 		
 		Flota.getFlota().inicializar();
 	}
@@ -45,62 +41,34 @@ public class ArtilleriaJugador extends Observable {
 	 * @param posY - Componente y de la posicion en la que se desea que aparezca la nueva bala.
 	 */
 	public void shoot(int posX, int posY) {		
-		if (posY > 0) {
-			BalaJugador nuevaBala = BalaGenerator.getBalasGenerator().generarDesdeVista(posX, posY);
-			// Cuando se implementen las entidades multipixel, cambiar el segundo parametro de la constructora.
-			listaBalas.add(nuevaBala);
-		}
+		BalaJugador nBala = GeneradorBalas.getGeneradorBalas().generarBalaJugador(posX, posY);
+		if (!nBala.canMoveH(0) && !nBala.canMoveV(0))
+			return;
+		
+		listaBalas.add(nBala);
 	}
 	
 	/**
 	 * Inicia la lógica de las balas disparadas por el jugador. Puede generar una nueva bala del jugador.
 	 * Entre otros, se encarga de mover las balas y envia señales de su posición al vista.
-	 * 
-	 * @param pixNaveX - Componente x de las posiciones de los pixeles de la nave con los que el alien puede impactar.
-	 * @param pixNaveY - Componente y de las posiciones de los pixeles de la nave con los que el alien puede impactar.
-	 * @param naveX - Componente x de la posicion central de la nave.
-	 * @param naveY - Componente y de la posicion central de la nave.
-	 * @throws JuegoCambiadoException Propaga excepciones.
 	*/
-	public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoCambiadoException {		
-		// Se envia el tick a cada una de la balas del jugador
-		if (!listaBalas.isEmpty()) {
-			Iterator<BalaJugador> it = listaBalas.iterator();
+	public void tick() throws JuegoCambiadoException {
+
+		Iterator<BalaJugador> it = listaBalas.iterator();
+		
+		while(it.hasNext()) {
+			BalaJugador curBala = it.next();
 			
-			while (it.hasNext()) {
-				BalaJugador curBala = it.next();
-				
-				LinkedList<Integer> pX = curBala.getDisplayX();
-				LinkedList<Integer> pY = curBala.getDisplayY();
-				
-				Iterator<Integer> iteratorPixelesX = pX.iterator();
-				Iterator<Integer> iteratorPixelesY = pY.iterator();
-				
-				while (iteratorPixelesX.hasNext() && iteratorPixelesY.hasNext()) {
-					notifyView(iteratorPixelesX.next(), iteratorPixelesY.next());
-				}
-				// Una bala es eliminada si devuelve 'true' en su metodo tick
-				if(curBala.tick()) it.remove();
+			if (curBala.canMoveV(-1)) {				
+				curBala.move(0, -1);
+				if(curBala.tick())
+					it.remove();
+			} else {
+				it.remove();
 			}
 		}
 		
 		// Propaga el tick
-		Flota.getFlota().tick(pixNaveX, pixNaveY, naveX, naveY);
-	}
-	
-	/**
-	 * Mediante el 'Patron Observer' notifica al vista de las posiciones dadas.
-	 * 
-	 * @param posX - Posicion horizontal de la bala.
-	 * @param posY - Posicion vertical de la bala.
-	 */
-	private void notifyView(int posX, int posY) {
-		if (posX < 0 || posX > Modelo.getModelo().getWidth() - 1)
-			return;
-		if (posY < 0 || posY > Modelo.getModelo().getHeight() - 1)
-			return;
-		
-		setChanged();
-		notifyObservers(new int[] {posX, posY});
+		Flota.getFlota().tick();
 	}
 }

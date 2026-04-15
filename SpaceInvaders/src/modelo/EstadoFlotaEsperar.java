@@ -12,11 +12,7 @@ public class EstadoFlotaEsperar extends EstadoFlota {
 		fallNext = pFallNext;
 	}
 	
-	public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) {
-		tick();
-	}
-	
-	private void tick() {
+	public void tick() {
 		tickCount++;
 		
 		if (tickCount == 4) {

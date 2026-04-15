@@ -19,17 +19,12 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import modelo.Flota;
+import modelo.GeneradorBalas;
 // MODELO SE IMPORTA PARA LA LINEA 26 Y PARA EL OBSERVABLE, EL RESTO SOLO PARA EL OBSERVABLE
 import modelo.Jugador;
 import modelo.ArtilleriaJugador;
 import modelo.Modelo;
-import modelo.alien.Alien;
-import modelo.balaJugador.BalaGenerator;
-import modelo.balaJugador.BalaJugador;
-import modelo.naves.NaveBlue;
-import modelo.naves.NaveGreen;
-import modelo.naves.NaveRed;
-import modelo.naves.NaveMultipixel;
+import modelo.Pixel;
 
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -52,11 +47,12 @@ public class Juego extends JFrame implements Observer{
 	private int columnas;
 	
 	private JLabel[][] pixel;
-	private ArrayList<JLabel> pixelesPintados = new ArrayList<JLabel>();
+	private Color[][] pixelesQuePintar;
+	private int[][] gridAcciones;
 	
-	// Aqui guardaremos las instrucciones para luego ejecutarlas todas de un tiron cada tick (El tipo de datos Runnable se usa para guardar comandos)
-	private Queue<Runnable> aPintar  = new LinkedList();
-	
+	private static final int ACCION_NADA = 0;
+	private static final int ACCION_LIMPIAR = -1;
+	private static final int ACCION_PINTAR = 1;
 
 	/**
 	 * Launch the application.
@@ -114,49 +110,6 @@ public class Juego extends JFrame implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-	    // 	Metodo de actualización de la vista 
-		
-		//Yo aqui entiendo que cuando le llega una instancia le llegara SOLO la de una bala o un jugador cada vez que se le envia, por aquello de que se envia una bala, se avanza en el bucle, se envia otra...;
-		//De momento se envia solo la posicion actual
-		
-		if (o instanceof NaveMultipixel)
-		{
-			if (arg instanceof int[])
-			{
-				int tipoNave = 0;
-				if (o instanceof NaveBlue) {
-					tipoNave = 1;
-				}
-				if (o instanceof NaveRed) {
-					tipoNave = 2;
-				}
-				int[] datos=(int[])arg;
-				//System.out.println("J: " + datos[0] + " " + datos[1]);
-				moverJugador(datos,tipoNave);
-			}
-		}
-		
-		if (o instanceof ArtilleriaJugador)
-		{
-			if (arg instanceof int[])
-			{
-				int[] datos=(int[])arg;
-				//System.out.println("B: " + datos[0] + " " + datos[1]);
-				moverBala(datos);
-			}
-		}
-		
-		if (o instanceof Flota)
-		{
-			if (arg instanceof int[])
-			{
-				
-				int[] datos=(int[])arg;
-				//System.out.println("M: " + datos[0] + " " + datos[1]);
-				moverMarciano(datos);
-			}
-		}
-		
 		// para hacer lo de matriz de cualquier tamaño voy a necesitar que me envieis el tamaño por aqui
 		if (o instanceof Modelo)
 		{
@@ -169,69 +122,86 @@ public class Juego extends JFrame implements Observer{
 			} else {
 				//Si llegamos a este else sabemos que nos esta llegando instanceof int[], porque no puede ser de otra forma
 				int[] datos=(int[])arg;
-				if(datos[0]==2){
-					//COMO LA NAVE NO EXISTE ANTES DE EMPEZAR EL JUEGO, AQUI ES CUANDO SE LE METE EL OBSERVER
-					//Y ENVIA LA NAVE EL DATO PARA HACER INSTANCE OF
-					Jugador.getJugador().getNave().addObserver(this);
-					//esto le dice que si se pasa a la pantalla 1, que primero defina la matriz con las dimensiones que me pasa modelo
-					definirMatriz(datos[1],datos[2]);
+				
+				if (datos[0] == Modelo.NOTIFY_WINDOW_CHANGE) {	
+					if(datos[1]==2){
+						//esto le dice que si se pasa a la pantalla 1, que primero defina la matriz con las dimensiones que me pasa modelo
+						definirMatriz(datos[2],datos[3]);
+					}
+					//Esto es pq si no al empezar la partida escribes directamente encima de la matriz otra vez y se notan un segundo los restos de la otra
+					else if(datos[1]==3 || datos[1]==4){
+						cleanClean(); //System.out.println("SE ME PAROHHHH");
+					}
+					// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
+					cambiarPantalla(datos[1]);	
 				}
-				//Esto es pq si no al empezar la partida escribes directamente encima de la matriz otra vez y se notan un segundo los restos de la otra
-				else if(datos[0]==3 || datos[0]==4){
-					cleanClean(); //System.out.println("SE ME PAROHHHH");
-					mataPilas();
+				else if (datos[0] == Modelo.NOTIFY_PIXEL_POSITION) {
+
+					int fN = datos[2];
+				    int cN = datos[1];
+				    int colorId = datos[3];
+				    Color color;
+				    
+				    switch (colorId) {
+					case Pixel.COLOR_ID_GREEN:
+						color = Color.GREEN;
+						break;
+					case Pixel.COLOR_ID_BLUE:
+						color = Color.CYAN;
+						break;
+					case Pixel.COLOR_ID_RED:
+						color = Color.RED;
+						break;
+					
+					// NAVES
+					case Pixel.COLOR_ID_GREEN_CUERPO:
+						color = new Color(0, 255, 0);
+						break;
+					case Pixel.COLOR_ID_GREEN_CEJA:
+						color = new Color(106, 168, 79);
+						break;
+					case Pixel.COLOR_ID_GREEN_NARIZ:
+						color = new Color(56, 118, 29);
+						break;
+					case Pixel.COLOR_ID_GREEN_DETALLES:
+						color = new Color(255, 242, 204);
+						break;
+						
+					case Pixel.COLOR_ID_BLUE_FRENTE:
+						color = new Color(28, 69, 135);
+						break;
+					case Pixel.COLOR_ID_BLUE_FONDO:
+						color = new Color(60, 120, 216);
+						break;
+					case Pixel.COLOR_ID_BLUE_BRAZOS:
+						color = new Color(162, 196, 201);
+						break;
+					case Pixel.COLOR_ID_BLUE_DETALLES:
+						color = new Color(234, 153, 153);
+						break;
+						
+					case Pixel.COLOR_ID_RED_FRENTE:
+						color = new Color(102, 0, 0);
+						break;
+					case Pixel.COLOR_ID_RED_FONDO:
+						color = new Color(255, 0, 0);
+						break;
+					case Pixel.COLOR_ID_RED_DETALLES:
+						color = new Color(153, 153, 153);
+						break;
+						
+					case Pixel.COLOR_ID_WHITE:	
+					default:
+						color = Color.WHITE;
+						break;
+					}
+				    
+				    pixelesQuePintar[fN][cN] = color;
+				    gridAcciones[fN][cN] = ACCION_PINTAR;
 				}
-				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
-				cambiarPantalla(datos[0]);	
 			} 
 		}
 		
-	}
-	
-
-	private void moverJugador (int posicion[], int color ){
-    //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
-	    int fN = posicion[1];
-	    int cN = posicion[0];
-	    
-	    //el jugador es ROJO
-	    //AQUI lo que estoy haciendo es meter la instruccion en la pila de instrucciones (El ()-> es para que en lugar de ejecutarse la accion inmediatamente, se guarde la accion, creo, a ver a si lo ponian en StackOverflow y yo confio en esa gente)
-	    switch (color) {
-		case 0:
-		    aPintar.add(() -> pixel[fN][cN].setBackground(Color.GREEN)); // le da el color 
-			break;
-		case 1:
-		    aPintar.add(() -> pixel[fN][cN].setBackground(Color.BLUE)); // le da el color 
-			break;
-		case 2:	
-		default:
-		    aPintar.add(() -> pixel[fN][cN].setBackground(Color.RED)); // le da el color 
-			break;
-		}	    
-	    aPintar.add(() -> pixel[fN][cN].setOpaque(true)); // para que se vea el pixel
-	    aPintar.add(() -> pixelesPintados.add(pixel[fN][cN])); // añadirá el pixel a la lista de pixeles pintados para que sepamos que se ha pintado
-	}
-	
-	private void moverMarciano (int posicion[] ){
-	    //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
-	    int fN = posicion[1];
-	    int cN = posicion[0];
-		    
-		//el marciano es VERDE
-	    aPintar.add(() -> pixel[fN][cN].setBackground(Color.GREEN)); // le da el color  
-	    aPintar.add(() ->pixel[fN][cN].setOpaque(true)); // para que se vea el pixel
-	    aPintar.add(() -> pixelesPintados.add(pixel[fN][cN])); // añadirá el pixel a la lista de pixeles pintados para que sepamos que se ha pintado
-	}
-	
-	private void moverBala (int posicion[] ){
-	   //No se envia anterior y actual, se envia solo actual porque se borra pantalla antes (N es nuevo)  
-	   int fN = posicion[1];
-	   int cN = posicion[0];
-		    
-	   //la bala es BLANCA
-	    aPintar.add(() -> pixel[fN][cN].setBackground(Color.WHITE)); // le da el color  
-	    aPintar.add(() ->pixel[fN][cN].setOpaque(true)); // para que se vea el pixel
-	    aPintar.add(() -> pixelesPintados.add(pixel[fN][cN])); // añadirá el pixel a la lista de pixeles pintados para que sepamos que se ha pintado
 	}
 	
 	//Este es el tema, cada vez que se notifica a los observers, se notifica a todas las pantallas a la vez entonces se tiene que poner una sentencia como esta, donde se distinga el numero de pantalla en que estamos
@@ -244,25 +214,31 @@ public class Juego extends JFrame implements Observer{
 	
 	private void pintarPantalla() {
 		
-		//Como es una pila cada instruccion que saquemos se borrará de la cola, osea acabaremos cuando la cola este vacia
-		while (!aPintar.isEmpty()) {
-			//poll() saca un elemento run() lo ejecuta (Porque es una instruccion)
-		    aPintar.poll().run();
+		
+		for (int fila = 0; fila < this.filas; fila++) {
+			for(int columna = 0; columna < this.columnas; columna++) {
+				if (gridAcciones[fila][columna] == ACCION_PINTAR) {
+					pixel[fila][columna].setBackground(pixelesQuePintar[fila][columna]); 
+					pixel[fila][columna].setOpaque(true); 
+					
+					gridAcciones[fila][columna] = ACCION_LIMPIAR;
+				}
+			}			
 		}
 	}
 	//este método limpia la pantalla
 	private void cleanClean(){
 		
-		for (JLabel pixel : pixelesPintados) {
-			pixel.setOpaque(false); // asi no se ve el pixel (si no estuviese esto aqui al quitarles el color se quedarian como pixeles visibles en gris)
-			pixel.setBackground(null); // asi se quita el color (si no estuviese esto aqui aun poniendo el Opaque a false se queda el pixel coloreado en Rojo visible)
-			//para que el pixel no sea visible tiene que NO ser opaco y NO tener color de fondo
+		for (int fila = 0; fila < this.filas; fila++) {
+			for(int columna = 0; columna < this.columnas; columna++) {
+				if (gridAcciones[fila][columna] == ACCION_LIMPIAR) {					
+					pixel[fila][columna].setOpaque(false);
+					pixel[fila][columna].setBackground(null);
+					
+					gridAcciones[fila][columna] = ACCION_NADA;
+				}
+			}
 		}
-		pixelesPintados.clear();
-	}
-	//esto es para que no se queden los pixeles que no se mostraron en la ejecucion anterior pero quedaron preparados
-	private void mataPilas() {
-		aPintar  = new LinkedList();
 	}
 	
 	private void definirMatriz( int c, int f) {
@@ -289,12 +265,17 @@ public class Juego extends JFrame implements Observer{
 //			}
 			
 			//en el caso de matriz de cualquier tamaño (comentado para hacer las pruebas)
-			
+		 
+		 	gridAcciones = new int[filas][columnas];
+		 	pixelesQuePintar = new Color[filas][columnas];
+		 	
 			for (int fila = 0; fila < this.filas; fila++) {
 				for(int columna = 0; columna < this.columnas; columna++){
 					//Todas las Jlabels se añaden a la matriz para no perderlas y luego se meten en la vista
 			        pixel[fila][columna] = new JLabel();
 			        contentPane.add(pixel[fila][columna]);
+			        
+			        gridAcciones[fila][columna] = ACCION_NADA;
 				}
 			}
 		
@@ -320,7 +301,7 @@ public class Juego extends JFrame implements Observer{
 			switch (keyCode) {
 			case KeyEvent.VK_A:
 				if(!isLeftPressed) {
-					System.out.println("Tecla pulsada: A");
+					//System.out.println("Tecla pulsada: A");
 
 					isLeftPressed = true;
 					Jugador.getJugador().moveLeft();
@@ -328,7 +309,7 @@ public class Juego extends JFrame implements Observer{
 				break;
 			case KeyEvent.VK_D:
 				if(!isRightPressed) {
-					System.out.println("Tecla pulsada: D");
+					//System.out.println("Tecla pulsada: D");
 					
 					isRightPressed = true;
 					Jugador.getJugador().moveRight();
@@ -336,7 +317,7 @@ public class Juego extends JFrame implements Observer{
 				break;
 			case KeyEvent.VK_W:
 				if(!isUpPressed) {
-					System.out.println("Tecla pulsada: W");
+					//System.out.println("Tecla pulsada: W");
 					
 					isUpPressed = true;
 					Jugador.getJugador().moveUp();
@@ -344,7 +325,7 @@ public class Juego extends JFrame implements Observer{
 				break;
 			case KeyEvent.VK_S:
 				if(!isDownPressed) {
-					System.out.println("Tecla pulsada: S");
+					//System.out.println("Tecla pulsada: S");
 					
 					isDownPressed = true;
 					Jugador.getJugador().moveDown();
@@ -364,7 +345,7 @@ public class Juego extends JFrame implements Observer{
 					System.out.println("Recharge\n");
 					
 					isChangingAmmo = true;
-					BalaGenerator.getBalasGenerator().cambiarBala();
+					GeneradorBalas.getGeneradorBalas().cambiarBalas();
 				}
 				break;
 			}					
@@ -379,7 +360,7 @@ public class Juego extends JFrame implements Observer{
 			switch (keyCode) {
 			case KeyEvent.VK_A:
 				if(isLeftPressed) {
-					System.out.println("Tecla soltada: A");
+					//System.out.println("Tecla soltada: A");
 					
 					isLeftPressed = false;
 					Jugador.getJugador().moveLeft(false);
@@ -387,7 +368,7 @@ public class Juego extends JFrame implements Observer{
 				break;
 			case KeyEvent.VK_D:
 				if(isRightPressed) {
-					System.out.println("Tecla soltada: D");
+					//System.out.println("Tecla soltada: D");
 					
 					isRightPressed = false;
 					Jugador.getJugador().moveRight(false);
@@ -395,7 +376,7 @@ public class Juego extends JFrame implements Observer{
 				break;
 			case KeyEvent.VK_W:
 				if(isUpPressed) {
-					System.out.println("Tecla soltada: W");
+					//System.out.println("Tecla soltada: W");
 					
 					isUpPressed = false;
 					Jugador.getJugador().moveUp(false);
@@ -403,7 +384,7 @@ public class Juego extends JFrame implements Observer{
 				break;
 			case KeyEvent.VK_S:
 				if(isDownPressed) {
-					System.out.println("Tecla soltada: S");
+					//System.out.println("Tecla soltada: S");
 					
 					isDownPressed = false;
 					Jugador.getJugador().moveDown(false);

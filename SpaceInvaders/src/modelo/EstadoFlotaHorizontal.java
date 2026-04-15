@@ -9,8 +9,9 @@ public class EstadoFlotaHorizontal extends EstadoFlota {
 	public EstadoFlotaHorizontal(boolean pDirection) {
 		direction = pDirection;
 	}
-	
-	public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoPerdidoException{
+
+	@Override
+	public void tick() throws JuegoPerdidoException {
 		int dir = -1;
 		if (direction)
 			dir = 1;

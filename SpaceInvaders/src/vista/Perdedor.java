@@ -119,8 +119,9 @@ public class Perdedor extends JFrame implements Observer {
 			{
 				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
 				int[] datos=(int[])arg;
-				cambiarPantalla(datos[0]);
 				
+				if (datos[0] == Modelo.NOTIFY_WINDOW_CHANGE)
+					cambiarPantalla(datos[1]);
 			}
 		}
 		
