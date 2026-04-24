@@ -248,6 +248,7 @@ public class Juego extends JFrame implements Observer{
 		while (!aPintar.isEmpty()) {
 			//poll() saca un elemento run() lo ejecuta (Porque es una instruccion)
 		    aPintar.poll().run();
+		    System.out.print(aPintar.size()); //Esto es para el debungin
 		}
 	}
 	//este método limpia la pantalla
