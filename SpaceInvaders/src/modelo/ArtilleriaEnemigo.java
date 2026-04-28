@@ -2,12 +2,12 @@ package modelo;
 
 import java.util.LinkedList;
 
-import modelo.balaJugador.BalaEnemigo;
+//import modelo.balaJugador.BalaEnemigo;
 
 public class ArtilleriaEnemigo {
 	
 	private static ArtilleriaEnemigo miArtilleriaEnemiga;
-	private LinkedList<BalaEnemigo> listaBalas;
+	//private LinkedList<BalaEnemigo> listaBalas;
 	public static ArtilleriaEnemigo getArtilleria() {
 		if (miArtilleriaEnemiga == null) miArtilleriaEnemiga = new ArtilleriaEnemigo();
 		return miArtilleriaEnemiga;
