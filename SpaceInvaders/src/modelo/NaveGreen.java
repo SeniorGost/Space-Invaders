@@ -1,7 +1,5 @@
 package modelo;
 
-import java.awt.Color;
-
 public class NaveGreen extends Nave {
 	public NaveGreen() {
 		super();

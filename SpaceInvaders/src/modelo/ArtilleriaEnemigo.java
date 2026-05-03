@@ -1,7 +1,5 @@
 package modelo;
 
-import java.util.LinkedList;
-
 //import modelo.balaJugador.BalaEnemigo;
 
 public class ArtilleriaEnemigo {
