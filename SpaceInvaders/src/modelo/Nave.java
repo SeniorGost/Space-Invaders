@@ -5,7 +5,8 @@ public abstract class Nave extends GameEntity {
 	public static final int NAVE_BLUE = 1;
 	public static final int NAVE_RED = 2;
 	
-	public Nave() {
+	public Nave(int hp) {
+		super(hp);
 		setCollisionHandler(new CHNave());
 	}
 }

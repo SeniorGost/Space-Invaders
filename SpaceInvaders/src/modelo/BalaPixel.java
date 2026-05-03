@@ -2,7 +2,7 @@ package modelo;
 
 public class BalaPixel extends BalaJugador {
 	public BalaPixel(int posX, int posY) {
-		super();
+		super(1);
 		
 		int[] pX = {0};
 		int[] pY = {0};

@@ -5,7 +5,11 @@ public abstract class GameEntity {
 	private PixelComposite entityManager;
 	private CollisionHandler curCH;
 	
-	public GameEntity() {}
+	private int health;
+	
+	public GameEntity(int pHealth) {
+		health = pHealth;
+	}
 	
 	public void setEntityManager(PixelComposite pEntityManager) {
 		entityManager = pEntityManager;
@@ -35,6 +39,13 @@ public abstract class GameEntity {
 	}
 	public boolean isHit(int[] pX, int[] pY) {
 		return entityManager.isHit(pX, pY);
+	}
+	public void hit() {
+		health--;
+		entityManager.enterHitDisplay();
+	}
+	public boolean isDead() {
+		return health == 0;
 	}
 	protected void setCollisionHandler(CollisionHandler pCH) {
 		curCH = pCH;

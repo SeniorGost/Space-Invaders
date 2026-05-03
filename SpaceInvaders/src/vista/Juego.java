@@ -189,6 +189,9 @@ public class Juego extends JFrame implements Observer{
 					case Pixel.COLOR_ID_RED_DETALLES:
 						color = new Color(153, 153, 153);
 						break;
+					case Pixel.COLOR_ID_STRONGER_GREEN:
+						color = new Color(221, 255, 0);
+						break;
 						
 					case Pixel.COLOR_ID_WHITE:	
 					default:

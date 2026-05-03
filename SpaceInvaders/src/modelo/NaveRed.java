@@ -3,7 +3,7 @@ package modelo;
 public class NaveRed extends Nave {
 	
 	public NaveRed() {
-	super();
+	super(2);
 	
 	int[] pX = {
 			0, 

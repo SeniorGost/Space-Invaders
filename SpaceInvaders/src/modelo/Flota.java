@@ -92,9 +92,14 @@ public class Flota extends Observable {
     	
     	while(it.hasNext()) {
     		Alien curAlien = it.next();
-    		if (curAlien.tick())
-    			throw new JuegoPerdidoException();
+    		if (curAlien.tick()) {
+    			curAlien.hit();
+    			if (curAlien.isDead())
+    				it.remove();
+    		}
     	}
+    	if (listaAliens.isEmpty())
+    		throw new JuegoGanadoException();
     }
     
     public boolean move(int deltaX, int deltaY) throws JuegoPerdidoException {
@@ -122,8 +127,11 @@ public class Flota extends Observable {
     		
     		if(curAlien.canCollide(offsetX, offsetY, hurtboxX, hurtboxY))
     			rdo = curAlien.isHit(pX, pY);
-    		if(rdo)
-    			it.remove();
+    		if(rdo) {
+    			curAlien.hit();
+    			if(curAlien.isDead())
+    				it.remove();
+    		}
     	}
     	return rdo;
     }

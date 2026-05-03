@@ -1,6 +1,7 @@
 package modelo;
 
 import modelo.excepciones.JuegoCambiadoException;
+import modelo.excepciones.JuegoPerdidoException;
 
 
 public final class Jugador {
@@ -97,9 +98,14 @@ public final class Jugador {
         ArtilleriaJugador.getArtilleria().tick();
     }
 
-    public boolean hit(int offsetX, int offsetY, int hurtboxX, int hurtboxY, int[] pX, int[] pY) {
+    public boolean hit(int offsetX, int offsetY, int hurtboxX, int hurtboxY, int[] pX, int[] pY) throws JuegoPerdidoException {
     	if (nave.canCollide(offsetX, offsetY, hurtboxX, hurtboxY))
-    		return nave.isHit(pX, pY);
+    		if (nave.isHit(pX, pY)) {
+    			nave.hit();
+    			if (nave.isDead()) 
+    				throw new JuegoPerdidoException();
+    			return true;
+    		}
     	return false;
     }
     

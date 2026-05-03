@@ -78,19 +78,29 @@ public class Modelo extends Observable implements Observer {
 						notifyObservers(-1);
 
 					} catch (JuegoCambiadoException e) {
-						miTimer.cancel();
-
-						if (e.getTipo() == JuegoGanadoException.TIPO)
-							cambiarVentana(VENTANA_GANADO); // 2: Pantalla de ganar
-
-						if (e.getTipo() == JuegoPerdidoException.TIPO)
-							cambiarVentana(VENTANA_PERDIDO); // 3: Pantalla de perder
+						acabarPartida(e.getTipo());
 					}
 				}
 			}
 		}, 0, 50);
 	}
 
+	/**
+	 * 
+	 * @param tipo - El {@code 'TIPO'} de la excepcion que a causado el final de la partida.
+	 * @see JuegoGanadoException
+	 * @see JuegoPerdidoException
+	 */
+	public void acabarPartida(int tipo) {
+		miTimer.cancel();
+
+		if (tipo == JuegoGanadoException.TIPO)
+			cambiarVentana(VENTANA_GANADO); // 2: Pantalla de ganar
+
+		if (tipo == JuegoPerdidoException.TIPO)
+			cambiarVentana(VENTANA_PERDIDO); // 3: Pantalla de perder
+	}
+	
 	private void cambiarVentana(int pVentana) {
 		ventana = pVentana;
 		setChanged();

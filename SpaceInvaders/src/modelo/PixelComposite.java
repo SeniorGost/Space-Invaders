@@ -131,4 +131,11 @@ public class PixelComposite implements EntityManager {
 	public void setCollisionManager(CollisionHandler pCollisionManager) {
 		collisionHandler = pCollisionManager;
 	}
+
+	@Override
+	public void enterHitDisplay() {
+		for (EntityManager p : pixeles) {
+			p.enterHitDisplay();
+		}
+	}
 }

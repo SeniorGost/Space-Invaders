@@ -1,30 +1,30 @@
 package modelo;
 
-public class AlienDefault extends Alien {
-	public AlienDefault(int posX, int posY) {
-		super(1);
+public class StrongerAlien extends Alien {
+	public StrongerAlien(int posX, int posY) {
+		super(3);
 		
 		int[] pX = {
-				-2, 2, 
-				-1, 0, 1, 
-				-2, -1, 0, 1, 2, 
-				-2, -1, 0, 1, 2, 
-				-2, 2
+				0,
+				-2, 0, 2,
+				-2, -1, 0, 1, 2,
+				-2, -1, 0, 1, 2,
+				-2, -1, 1, 2
 		};
 		int[] pY = {
-				-2, -2, 
+				-2,
 				-1, -1, -1,
 				0, 0, 0, 0, 0,
 				1, 1, 1, 1, 1, 
-				2, 2
+				2, 2, 2, 2
 		};
 		int[] pColor = new int[pY.length];
 		
 		for (int i = 0; i < pX.length; i++) {
-			if (i == 5 || i == 6 || i == 8 || i == 9)
+			if (i == 9 || i == 10 || i == 12 || i == 13)
 				pColor[i] = Pixel.COLOR_ID_WHITE;
 			else
-				pColor[i] = Pixel.COLOR_ID_GREEN;			
+				pColor[i] = Pixel.COLOR_ID_STRONGER_GREEN;			
 		}
 		
 		PixelComposite eM = new PixelComposite(posX, posY, pX, pY, pColor);

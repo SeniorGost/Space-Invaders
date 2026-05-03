@@ -2,7 +2,8 @@ package modelo;
 
 public abstract class BalaJugador extends GameEntity {
 	
-	public BalaJugador() {
+	public BalaJugador(int hp) {
+		super(hp);
 		setCollisionHandler(new CHBalasJugador());
 	}
 

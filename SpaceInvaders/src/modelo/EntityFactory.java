@@ -11,6 +11,7 @@ public class EntityFactory {
 	public static final String BALA_ROMBO_ID = "BalaRombo";
 	
 	public static final String ALIEN_DEFAULT_ID = "AlienDefault";
+	public static final String STRONGER_ALIEN_ID = "StrongerAlien";
 
 	private static EntityFactory miEntityFactory;
 	
@@ -50,8 +51,12 @@ public class EntityFactory {
 		
 		// Aliens
 		case ALIEN_DEFAULT_ID:
-		default:
 			rdo = new AlienDefault(offsetX, offsetY);
+			break;
+		
+		case STRONGER_ALIEN_ID:
+		default:
+			rdo = new StrongerAlien(offsetX, offsetY);
 			break;
 		}
 		

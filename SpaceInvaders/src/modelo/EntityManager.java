@@ -11,5 +11,6 @@ public interface EntityManager {
 	public void move(int deltaX, int deltaY);
 	public boolean canCollide(int offsetX, int offsetY, int hurtBoxX, int hurtBoxY);
 	public boolean isHit(int[] pX, int[] pY);
+	public void enterHitDisplay();
 	
 }

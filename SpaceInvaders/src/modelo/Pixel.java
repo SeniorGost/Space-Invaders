@@ -23,8 +23,9 @@ public class Pixel extends Observable implements EntityManager {
 	public static final int COLOR_ID_RED_FONDO = 13;
 	public static final int COLOR_ID_RED_DETALLES = 14;
 	
+	public static final int COLOR_ID_STRONGER_GREEN = 15;
 	
-	
+	private boolean hitDisplayEnabled;
 	
 	private int posX; 
 	private int posY; 
@@ -34,13 +35,20 @@ public class Pixel extends Observable implements EntityManager {
 		posX = pPosX;
 		posY = pPosY;
 		colorId = pColor;
+		hitDisplayEnabled = false;
 		
 		addObserver(Modelo.getModelo());
 	}
 	@Override
 	public boolean tick() {
 		setChanged();
-		notifyObservers(new int[] {posX, posY, colorId});
+		if (hitDisplayEnabled) {
+			hitDisplayEnabled = false;
+			notifyObservers(new int[] {posX, posY, COLOR_ID_WHITE});			
+		}
+		else
+			notifyObservers(new int[] {posX, posY, colorId});
+		
 		return false;
 	}
 
@@ -101,6 +109,10 @@ public class Pixel extends Observable implements EntityManager {
 	
 	public int getPosY() {
 		return posY;
+	}
+	@Override
+	public void enterHitDisplay() {
+		hitDisplayEnabled = true;
 	}
 
 }

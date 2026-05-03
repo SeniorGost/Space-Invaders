@@ -1,10 +1,8 @@
 package modelo;
 
-import java.awt.Color;
-
 public class NaveGreen extends Nave {
 	public NaveGreen() {
-		super();
+		super(5);
 		
 		int[] pX = {
 				-3, -1, 0, 1, 3,
