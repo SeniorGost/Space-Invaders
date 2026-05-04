@@ -12,6 +12,11 @@ public class EstadoFlotaHorizontal extends EstadoFlota {
 
 	@Override
 	public void tick() throws JuegoPerdidoException {
+		if (Flota.getFlota().isEmpty()) {
+			Flota.getFlota().setState(new EstadoFlotaPostFase1());
+			return;
+		}	
+		
 		int dir = -1;
 		if (direction)
 			dir = 1;
@@ -19,5 +24,7 @@ public class EstadoFlotaHorizontal extends EstadoFlota {
 		boolean limit = Flota.getFlota().move(dir, 0);
 		
 		Flota.getFlota().setState(new EstadoFlotaEsperar(direction, limit));
+		
+		Flota.getFlota().draw();
 	}
 }

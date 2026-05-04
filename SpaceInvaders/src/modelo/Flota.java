@@ -18,6 +18,8 @@ public class Flota extends Observable {
 
     int hurtboxX;
     int hurtboxY;
+    
+    private boolean inTrans = false;
 
     private Flota() {
         listaAliens = new ArrayList<>();
@@ -88,26 +90,28 @@ public class Flota extends Observable {
     }
     
     //movimiento cada 4 ticks
-    public void tick() throws JuegoGanadoException, JuegoPerdidoException {
-    	if (listaAliens.isEmpty())
-    		throw new JuegoGanadoException();
+    public void tick() throws JuegoGanadoException, JuegoPerdidoException {  
     	estadoActual.tick();
     	
-    	Iterator<Alien> it = listaAliens.iterator();
-    	
-    	while(it.hasNext()) {
-    		Alien curAlien = it.next();
-    		if (curAlien.collide()) {
-    			curAlien.hit();
-    			if (curAlien.isDead())
-    				it.remove();
-    		}
-    		curAlien.draw();    				
-    	}
-    	if (listaAliens.isEmpty())
-    		throw new JuegoGanadoException();
-    	
     	ArtilleriaEnemigo.getArtilleria().tick();
+    }
+    
+    public void draw() {
+		Iterator<Alien> it = listaAliens.iterator();
+		
+		while(it.hasNext()) {
+			Alien curAlien = it.next();
+			if (curAlien.collide()) {
+				curAlien.hit();
+				if (curAlien.isDead())
+					it.remove();
+			}
+			curAlien.draw();    				
+		}
+    }
+    
+    public boolean isEmpty() {
+    	return listaAliens.isEmpty();
     }
     
     public boolean move(int deltaX, int deltaY) throws JuegoPerdidoException {
@@ -156,4 +160,15 @@ public class Flota extends Observable {
 		notifyObservers(new int[] {x, y});
 	}
     
+	public void setBoss() {
+		System.out.println("It's boss time");
+		listaAliens.clear();
+		
+		inTrans = false;
+		listaAliens.add(new Espacio());
+	}
+	
+	public void setTrans() {
+		inTrans = true;
+	}
 }
