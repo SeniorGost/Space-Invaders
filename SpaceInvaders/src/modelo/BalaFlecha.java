@@ -2,7 +2,7 @@ package modelo;
 
 public class BalaFlecha extends BalaJugador {
 	public BalaFlecha(int posX, int posY) {
-		super(10);
+		super(3);
 		
 		int[] pX = {0, -1, 1};
 		int[] pY = {-1, 0, 0};

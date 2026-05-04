@@ -16,7 +16,7 @@ public class EstadoFlotaBossEspacio extends EstadoFlota {
 		
 		count++;
 		
-		if (count > 4) {
+		if (count > 7) {
 			count  = 0;
 			Flota.getFlota().move(0, 1);
 		}

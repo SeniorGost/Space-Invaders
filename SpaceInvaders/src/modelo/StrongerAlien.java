@@ -2,7 +2,7 @@ package modelo;
 
 public class StrongerAlien extends Alien {
 	public StrongerAlien(int posX, int posY) {
-		super(10);
+		super(3);
 		
 		int[] pX = {
 				0,

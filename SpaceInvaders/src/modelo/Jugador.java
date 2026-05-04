@@ -16,7 +16,7 @@ public final class Jugador {
 
 	private boolean willShoot;
     
-	private static final int SHOOT_COOLDOWN_PERIOD = 6;
+	private static final int SHOOT_COOLDOWN_PERIOD = 4;
 	private int shootCooldown;
     
 	private Jugador() {
@@ -185,7 +185,7 @@ public final class Jugador {
      * Indica que debe disparar un bala (singular).
      */
     public void shoot() {
-    	if (shootCooldown < 4) {    		
+    	if (shootCooldown < 3) {    		
     		willShoot = true;
     	}
     }

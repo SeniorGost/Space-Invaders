@@ -7,7 +7,7 @@ public class AlienDefault extends Alien {
 	private static final int SHOOT_CHANCE = 10;
 	
 	public AlienDefault(int posX, int posY) {
-		super(4);
+		super(1);
 		rng = new Random();
 		
 		int[] pX = {

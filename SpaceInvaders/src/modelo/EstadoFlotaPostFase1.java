@@ -4,7 +4,7 @@ import modelo.excepciones.JuegoPerdidoException;
 
 public class EstadoFlotaPostFase1 extends EstadoFlota {
 	
-	private static final int TRANS_TIME = 100;
+	private static final int TRANS_TIME = 60;
 	private int counter = 0;
 	
 	public EstadoFlotaPostFase1() {

@@ -2,7 +2,7 @@ package modelo;
 
 public class BalaRombo extends BalaJugador {
 	public BalaRombo(int posX, int posY) {
-		super(20);
+		super(5);
 		
 		int[] pX = {0, -1, 0, 1, -2, -1, 0, 1, 2, -1, 0, 1, 0};
 		int[] pY = {-2, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 2};
