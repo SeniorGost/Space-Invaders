@@ -1,6 +1,5 @@
 package modelo;
 
-import java.awt.event.KeyEvent;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;

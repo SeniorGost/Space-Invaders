@@ -3,6 +3,7 @@ package modelo;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+
 public class ArtilleriaEnemigo {
 	private LinkedList<BalaEnemigo> listaBalas;
 	
