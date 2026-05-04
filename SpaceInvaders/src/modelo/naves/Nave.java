@@ -1,4 +1,7 @@
-package modelo;
+package modelo.naves;
+
+import modelo.CHNave;
+import modelo.GameEntity;
 
 public abstract class Nave extends GameEntity {
 	public static final int NAVE_GREEN = 0;

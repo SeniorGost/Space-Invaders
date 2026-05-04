@@ -1,4 +1,6 @@
-package modelo;
+package modelo.naves;
+
+import modelo.Pixel;
 
 public class NaveRed extends Nave {
 	

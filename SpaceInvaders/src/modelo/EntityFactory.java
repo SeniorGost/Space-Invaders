@@ -1,5 +1,9 @@
 package modelo;
 
+import modelo.naves.NaveBlue;
+import modelo.naves.NaveGreen;
+import modelo.naves.NaveRed;
+
 public class EntityFactory {
 	
 	public static final String NAVE_GREEN_ID = "NaveGreen";

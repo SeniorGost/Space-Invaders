@@ -1,5 +1,7 @@
 package modelo;
 
+import modelo.naves.Nave;
+
 public class GeneradorBalas {
 	private static GeneradorBalas miGenerador;
 	
