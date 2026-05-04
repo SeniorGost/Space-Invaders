@@ -6,59 +6,21 @@ public class PixelComposite implements EntityManager {
 	
 	private ArrayList<Pixel> pixeles;
 	
-	private int offsetX;
-	private int offsetY;
-	private int hitboxX;
-	private int hitboxY;
-	
-	private CollisionHandler collisionHandler;
-	
-	public PixelComposite(int pOffsetX, int pOffsetY, int[] pX, int[] pY, int[] pColors) {
+	public PixelComposite() {
 		pixeles = new ArrayList<Pixel>();
-		
-		hitboxX = -1;
-		hitboxY = -1;
-		
-		offsetX = pOffsetX;
-		offsetY = pOffsetY;
-		
-		for (int i = 0; i < pX.length; i++) {
-			int absX = Math.abs(pX[i]);
-			int absY = Math.abs(pY[i]);
-			
-			if (hitboxX < absX)
-				hitboxX = absX;
-			
-			if (hitboxY < absY)
-				hitboxY = absY;
-			
-			int posX = pX[i] + pOffsetX;
-			int posY = pY[i] + pOffsetY;
-			
-			int color = pColors[i];
-			
-			pixeles.add(new Pixel(posX, posY, color));
-		}
+	}
+	
+	public void addPixel(int pX, int pY, int pColor) {
+		pixeles.add(new Pixel(pX, pY, pColor));
 	}
 	
 	@Override
-	public boolean tick() {
+	public boolean draw() {
 		boolean rdo = false;
-		
-		int[] pX = new int[pixeles.size()];
-		int[] pY = new int[pixeles.size()];
-		
-		for (int i = 0; i < pixeles.size(); i++) {
-			Pixel p = pixeles.get(i);
-			pX[i] = p.getPosX();
-			pY[i] = p.getPosY();
-		}
-		
-		rdo = collisionHandler.collide(offsetX, offsetY, hitboxX, hitboxY, pX, pY);
 		
 		if (!rdo) {
 			for (EntityManager p : pixeles) {			
-				p.tick();
+				p.draw();
 			}
 		}
 		
@@ -88,28 +50,8 @@ public class PixelComposite implements EntityManager {
 		for (EntityManager p : pixeles) {
 			p.move(deltaX, deltaY);
 		}
-		offsetX += deltaX;
-		offsetY += deltaY;
 	}
 
-	@Override
-	public boolean canCollide(int pOffsetX, int pOffsetY, int hurtBoxX, int hurtBoxY) {
-		boolean rdo = false;
-		
-		int difY = offsetY - pOffsetY;
-		if (difY < 0) difY = -difY;		
-		int marginY = hitboxY + hurtBoxY;
-		
-		if (difY <= marginY) {
-			int difX = offsetX - pOffsetX;
-			if (difX < 0) difX = -difX;
-			int marginX = hitboxX + hurtBoxX;
-			
-			rdo = difX <= marginX;
-		}
-		
-		return rdo;
-	}
 	
 	@Override
 	public boolean isHit(int[] pX, int[] pY) {
@@ -121,17 +63,23 @@ public class PixelComposite implements EntityManager {
 		return false;
 	}
 	
-	public int getOffsetX() {
-		return offsetX;
+	public int[] getDisplayX() {
+		int[] pX = new int[pixeles.size()];
+		
+		for (int i = 0; i < pixeles.size(); i++) {
+			Pixel p = pixeles.get(i);
+			pX[i] = p.getPosX();
+		}
+		return pX;
 	}	
-	public int getOffsetY() {
-		return offsetY;
+	public int[] getDisplayY() {
+		int[] pY = new int[pixeles.size()];
+		for (int i = 0; i < pixeles.size(); i++) {
+			Pixel p = pixeles.get(i);
+			pY[i] = p.getPosY();
+		}
+		return pY;
 	}
-	
-	public void setCollisionManager(CollisionHandler pCollisionManager) {
-		collisionHandler = pCollisionManager;
-	}
-
 	@Override
 	public void enterHitDisplay() {
 		for (EntityManager p : pixeles) {

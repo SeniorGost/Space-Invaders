@@ -12,8 +12,6 @@ public class BalaPixel extends BalaJugador {
 			pColor[i] = Pixel.COLOR_ID_WHITE;
 		}
 		
-		PixelComposite eM = new PixelComposite(posX, posY, pX, pY, pColor);
-		eM.setCollisionManager(getCollisionHandler());
-		setEntityManager(eM);
+		setEntityManager(posX, posY, pX, pY, pColor);
 	}
 }

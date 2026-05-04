@@ -2,7 +2,7 @@ package modelo;
 
 public class StrongerAlien extends Alien {
 	public StrongerAlien(int posX, int posY) {
-		super(3);
+		super(10);
 		
 		int[] pX = {
 				0,
@@ -27,8 +27,6 @@ public class StrongerAlien extends Alien {
 				pColor[i] = Pixel.COLOR_ID_STRONGER_GREEN;			
 		}
 		
-		PixelComposite eM = new PixelComposite(posX, posY, pX, pY, pColor);
-		eM.setCollisionManager(getCollisionHandler());
-		setEntityManager(eM);
+		setEntityManager(posX, posY, pX, pY, pColor);
 	}
 }

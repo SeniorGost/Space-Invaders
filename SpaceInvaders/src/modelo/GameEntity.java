@@ -5,24 +5,66 @@ public abstract class GameEntity {
 	private PixelComposite entityManager;
 	private CollisionHandler curCH;
 	
+	private int offsetX;
+	private int offsetY;
+	private int hitboxX;
+	private int hitboxY;
+	
 	private int health;
 	
 	public GameEntity(int pHealth) {
 		health = pHealth;
 	}
 	
-	public void setEntityManager(PixelComposite pEntityManager) {
-		entityManager = pEntityManager;
+	public void setEntityManager(int posX, int posY, int[] dispX, int[] dispY, int[] colors) {
+		entityManager = new PixelComposite();
+		
+		offsetX = posX;
+		offsetY = posY;
+		
+		for (int i = 0; i < dispX.length; i++) {			
+			int absX = Math.abs(dispX[i]);
+			int absY = Math.abs(dispY[i]);
+			
+			if (hitboxX < absX)
+				hitboxX = absX;
+			
+			if (hitboxY < absY)
+				hitboxY = absY;
+			
+			entityManager.addPixel(dispX[i] + posX, dispY[i] + posY, colors[i]);
+		}
 	}
 	
 	/**
 	 * Actualiza el display en pantalla
-	 * 
+	 */
+	public boolean draw() {
+		return entityManager.draw();
+	}
+	/**
 	 * @return {@code true} si esta en collision con otro {@code GameEntity},
 	 * {@code false} en caso contrario.
 	 */
-	public boolean tick() {
-		return entityManager.tick();
+	public boolean collide() {
+		return curCH.collide(offsetX, offsetY, hitboxX, hitboxY, entityManager.getDisplayX(), entityManager.getDisplayY());
+	}
+	
+	public boolean canCollide(int pOffsetX, int pOffsetY, int hurtBoxX, int hurtBoxY) {
+		boolean rdo = false;
+		
+		int difY = offsetY - pOffsetY;
+		if (difY < 0) difY = -difY;		
+		int marginY = hitboxY + hurtBoxY;
+		
+		if (difY <= marginY) {
+			int difX = offsetX - pOffsetX;
+			if (difX < 0) difX = -difX;
+			int marginX = hitboxX + hurtBoxX;
+			
+			rdo = difX <= marginX;
+		}
+		return rdo;
 	}
 	
 	public boolean canMoveH(int deltaX) {
@@ -33,9 +75,8 @@ public abstract class GameEntity {
 	}
 	public void move(int deltaX, int deltaY) {
 		entityManager.move(deltaX, deltaY);
-	}
-	public boolean canCollide(int offsetX, int offsetY, int hurtBoxX, int hurtBoxY) {
-		return entityManager.canCollide(offsetX, offsetY, hurtBoxX, hurtBoxY);
+		offsetX += deltaX;
+		offsetY += deltaY;
 	}
 	public boolean isHit(int[] pX, int[] pY) {
 		return entityManager.isHit(pX, pY);
@@ -51,10 +92,10 @@ public abstract class GameEntity {
 		curCH = pCH;
 	}
 	public int getOffsetX() {
-		return entityManager.getOffsetX();
+		return offsetX;
 	}	
 	public int getOffsetY() {
-		return entityManager.getOffsetY();
+		return offsetY;
 	}
 	
 	protected CollisionHandler getCollisionHandler() {

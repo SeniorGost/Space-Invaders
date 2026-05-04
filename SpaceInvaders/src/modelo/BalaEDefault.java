@@ -1,11 +1,12 @@
 package modelo;
 
-public class BalaFlecha extends BalaJugador {
-	public BalaFlecha(int posX, int posY) {
-		super(10);
+public class BalaEDefault extends BalaEnemigo {
+	
+	public BalaEDefault(int posX, int posY) {
+		super(1);
 		
-		int[] pX = {0, -1, 1};
-		int[] pY = {-1, 0, 0};
+		int[] pX = {0, 0, -1, 1, 0};
+		int[] pY = {-2, -1, 0, 0, 1};
 		int[] pColor = new int[pY.length];
 		
 		for (int i = 0; i < pX.length; i++) {
@@ -13,4 +14,6 @@ public class BalaFlecha extends BalaJugador {
 		}
 		setEntityManager(posX, posY, pX, pY, pColor);
 	}
+	
+	
 }

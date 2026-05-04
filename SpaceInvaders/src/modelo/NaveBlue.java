@@ -2,7 +2,7 @@ package modelo;
 
 public class NaveBlue extends Nave {
 	public NaveBlue() {
-		super(3);
+		super(2);
 		
 		int[] pX = {
 				-1, 0, 1, 
@@ -33,9 +33,7 @@ public class NaveBlue extends Nave {
 				Pixel.COLOR_ID_BLUE_FONDO, Pixel.COLOR_ID_BLUE_FONDO
 		};
 		
-		PixelComposite eM = new PixelComposite(50, 55, pX, pY, pColor);
-		eM.setCollisionManager(getCollisionHandler());
-		setEntityManager(eM);
+		setEntityManager(50, 55, pX, pY, pColor);
 		
 	}
 }

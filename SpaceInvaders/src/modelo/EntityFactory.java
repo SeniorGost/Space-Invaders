@@ -13,6 +13,8 @@ public class EntityFactory {
 	public static final String ALIEN_DEFAULT_ID = "AlienDefault";
 	public static final String STRONGER_ALIEN_ID = "StrongerAlien";
 
+	public static final String DEFAULT_ALIEN_BULLET_ID = "AlienBullet";
+	
 	private static EntityFactory miEntityFactory;
 	
 	private EntityFactory() {}
@@ -53,10 +55,13 @@ public class EntityFactory {
 		case ALIEN_DEFAULT_ID:
 			rdo = new AlienDefault(offsetX, offsetY);
 			break;
-		
 		case STRONGER_ALIEN_ID:
-		default:
 			rdo = new StrongerAlien(offsetX, offsetY);
+			break;
+			
+		case DEFAULT_ALIEN_BULLET_ID:
+		default:
+			rdo = new BalaEDefault(offsetX, offsetY);
 			break;
 		}
 		

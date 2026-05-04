@@ -2,7 +2,7 @@ package modelo;
 
 public class BalaRombo extends BalaJugador {
 	public BalaRombo(int posX, int posY) {
-		super(2);
+		super(20);
 		
 		int[] pX = {0, -1, 0, 1, -2, -1, 0, 1, 2, -1, 0, 1, 0};
 		int[] pY = {-2, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 2};
@@ -12,8 +12,6 @@ public class BalaRombo extends BalaJugador {
 			pColor[i] = Pixel.COLOR_ID_WHITE;
 		}
 		
-		PixelComposite eM = new PixelComposite(posX, posY, pX, pY, pColor);
-		eM.setCollisionManager(getCollisionHandler());
-		setEntityManager(eM);
+		setEntityManager(posX, posY, pX, pY, pColor);
 	}
 }

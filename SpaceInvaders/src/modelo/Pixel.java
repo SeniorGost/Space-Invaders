@@ -40,11 +40,11 @@ public class Pixel extends Observable implements EntityManager {
 		addObserver(Modelo.getModelo());
 	}
 	@Override
-	public boolean tick() {
+	public boolean draw() {
 		setChanged();
 		if (hitDisplayEnabled) {
 			hitDisplayEnabled = false;
-			notifyObservers(new int[] {posX, posY, COLOR_ID_WHITE});			
+			notifyObservers(new int[] {posX, posY, COLOR_ID_RED});			
 		}
 		else
 			notifyObservers(new int[] {posX, posY, colorId});
@@ -73,26 +73,6 @@ public class Pixel extends Observable implements EntityManager {
 		posX += deltaX;
 		posY += deltaY;
 	}
-
-	@Override
-	public boolean canCollide(int offsetX, int offsetY, int hurtBoxX, int hurtBoxY) {
-		boolean rdo = false;
-		
-		int difY = posY - offsetY;
-		if (difY < 0) difY = -difY;		
-		int marginY = 0 + hurtBoxY;
-		
-		if (difY <= marginY) {
-			int difX = posX - offsetX;
-			if (difX < 0) difX = -difX;
-			int marginX = 0 + hurtBoxX;
-			
-			rdo = difX <= marginX;
-		}
-		
-		return rdo;
-	}
-
 	@Override
 	public boolean isHit(int[] pX, int[] pY) {
 		for (int i = 0; i < pX.length; i++) {
@@ -102,11 +82,9 @@ public class Pixel extends Observable implements EntityManager {
 		
 		return false;
 	}
-	
 	public int getPosX() {
 		return posX;
 	}
-	
 	public int getPosY() {
 		return posY;
 	}

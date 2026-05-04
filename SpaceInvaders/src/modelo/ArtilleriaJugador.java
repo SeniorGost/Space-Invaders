@@ -61,11 +61,12 @@ public class ArtilleriaJugador extends Observable {
 			
 			if (curBala.canMoveV(-1)) {				
 				curBala.move(0, -1);
-				if(curBala.tick()) {					
+				if(curBala.collide()) {					
 					curBala.hit();
 					if (curBala.isDead())
 						it.remove();
 				}
+				curBala.draw();
 			} else {
 				it.remove();
 			}

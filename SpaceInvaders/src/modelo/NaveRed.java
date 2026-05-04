@@ -3,7 +3,7 @@ package modelo;
 public class NaveRed extends Nave {
 	
 	public NaveRed() {
-	super(2);
+	super(1);
 	
 	int[] pX = {
 			0, 
@@ -33,8 +33,6 @@ public class NaveRed extends Nave {
 		Pixel.COLOR_ID_RED_FRENTE, Pixel.COLOR_ID_RED_FRENTE, 
 	};
 	
-	PixelComposite eM = new PixelComposite(50, 55, pX, pY, pColor);
-	eM.setCollisionManager(getCollisionHandler());
-	setEntityManager(eM);
+	setEntityManager(50, 55, pX, pY, pColor);
 	}
 }

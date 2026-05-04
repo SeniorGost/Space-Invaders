@@ -1,8 +1,14 @@
 package modelo;
 
+import java.util.Random;
+
 public class AlienDefault extends Alien {
+	Random rng;
+	private static final int SHOOT_CHANCE = 10;
+	
 	public AlienDefault(int posX, int posY) {
-		super(1);
+		super(4);
+		rng = new Random();
 		
 		int[] pX = {
 				-2, 2, 
@@ -26,9 +32,14 @@ public class AlienDefault extends Alien {
 			else
 				pColor[i] = Pixel.COLOR_ID_GREEN;			
 		}
+		setEntityManager(posX, posY, pX, pY, pColor);
+	}
+	
+	@Override
+	public void move(int deltaX, int deltaY) {
+		if (rng.nextInt(SHOOT_CHANCE) == 0)
+			ArtilleriaEnemigo.getArtilleria().crearBala(getOffsetX(), getOffsetY() + 4);
 		
-		PixelComposite eM = new PixelComposite(posX, posY, pX, pY, pColor);
-		eM.setCollisionManager(getCollisionHandler());
-		setEntityManager(eM);
+		super.move(deltaX, deltaY);
 	}
 }

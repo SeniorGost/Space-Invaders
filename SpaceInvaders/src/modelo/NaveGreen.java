@@ -2,7 +2,7 @@ package modelo;
 
 public class NaveGreen extends Nave {
 	public NaveGreen() {
-		super(5);
+		super(3);
 		
 		int[] pX = {
 				-3, -1, 0, 1, 3,
@@ -32,9 +32,7 @@ public class NaveGreen extends Nave {
 				Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO
 		};
 		
-		PixelComposite eM = new PixelComposite(50, 55, pX, pY, pColor);
-		eM.setCollisionManager(getCollisionHandler());
-		setEntityManager(eM);
+		setEntityManager(50, 55, pX, pY, pColor);
 		
 	}
 }

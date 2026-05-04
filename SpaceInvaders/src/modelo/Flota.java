@@ -35,6 +35,8 @@ public class Flota extends Observable {
 		estadoActual = new EstadoFlotaEsperar(true, false);
 		hurtboxX = -1;
 		hurtboxY = -1;
+		
+		ArtilleriaEnemigo.getArtilleria().iniciar();
     }
     
     //Matriz de aliens
@@ -47,39 +49,42 @@ public class Flota extends Observable {
     	// Los aliens tienen que tener al menos un pixel de separacion entre ellos, por lo que vamos a 
     	// considerar solo las posiciones horizontalmente pares como posiciones validas para que aparezca un alien.
     	
-    	int alienSpacing = 7;
+    	int alienSpacing = 6;
     	
-    	ArrayList<Integer> validHPos = new ArrayList<Integer>();
-    	for (int i = alienSpacing * 2; i <= maxHPos - (alienSpacing * 2); i += alienSpacing) {
-    		validHPos.add(i);
-    	}
-    	
-    	// Se encoge una cantidad de aliens aleatoria entre 4 y 6 (ambos incluidos)
-    	Random rand = new Random();
-    	int alienAmount = rand.nextInt(4) + 2; 
-    	
-    	// De manera aleatoria se eligen posiciones de entre las posiciones validas. La cantidad será la misma que la cantidad
-    	// de aliens que queremos crear
-    	int i = 0;
-    	ArrayList<Integer> spawnHPos = new ArrayList<Integer>();
-    	while (i < alienAmount && validHPos.size() > 0) {
-    		int nextSpawnPos = rand.nextInt(validHPos.size() - 1);
-    		spawnHPos.add(validHPos.remove(nextSpawnPos)); 
+    	for (int h = alienSpacing; h <= alienSpacing * 5; h += alienSpacing) {
+    		ArrayList<Integer> validHPos = new ArrayList<Integer>();
+    		for (int i = alienSpacing * 2; i <= maxHPos - (alienSpacing * 1); i += alienSpacing) {
+    			validHPos.add(i);
+    		}
     		
-    		i++;
+    		// Se encoge una cantidad de aliens aleatoria entre 4 y 6 (ambos incluidos)
+    		Random rand = new Random();
+    		int alienAmount = rand.nextInt(4) + 2; 
+    		
+    		// De manera aleatoria se eligen posiciones de entre las posiciones validas. La cantidad será la misma que la cantidad
+    		// de aliens que queremos crear
+    		int i = 0;
+    		ArrayList<Integer> spawnHPos = new ArrayList<Integer>();
+    		while (i < alienAmount && validHPos.size() > 0) {
+    			int nextSpawnPos = rand.nextInt(validHPos.size() - 1);
+    			spawnHPos.add(validHPos.remove(nextSpawnPos)); 
+    			
+    			i++;
+    		}
+    		
+    		// GeneradorAliens.getGeneradorAliens().generarAlien
+    		
+    		// Intencionalmente se colocan dos aliens en dos extremos de la flota
+    		listaAliens.add(GeneradorAliens.getGeneradorAliens().generarAlien(alienSpacing, h));
+    		listaAliens.add(GeneradorAliens.getGeneradorAliens().generarAlien(maxHPos - alienSpacing, h));
+    		
+    		// Se instancian los aliens en las posiciones aleatorias
+    		for (int j : spawnHPos) {
+    			Alien nAlien = GeneradorAliens.getGeneradorAliens().generarAlien(j, h);
+    			listaAliens.add(nAlien);
+    		}
     	}
     	
-    	// GeneradorAliens.getGeneradorAliens().generarAlien
-    	
-    	// Intencionalmente se colocan dos aliens en dos extremos de la flota
-    	listaAliens.add(GeneradorAliens.getGeneradorAliens().generarAlien(alienSpacing, alienSpacing));
-    	listaAliens.add(GeneradorAliens.getGeneradorAliens().generarAlien(maxHPos - alienSpacing, alienSpacing));
-    	
-    	// Se instancian los aliens en las posiciones aleatorias
-    	for (int j : spawnHPos) {
-    		Alien nAlien = GeneradorAliens.getGeneradorAliens().generarAlien(j, alienSpacing);
-    		listaAliens.add(nAlien);
-    	}
     }
     
     //movimiento cada 4 ticks
@@ -92,14 +97,17 @@ public class Flota extends Observable {
     	
     	while(it.hasNext()) {
     		Alien curAlien = it.next();
-    		if (curAlien.tick()) {
+    		if (curAlien.collide()) {
     			curAlien.hit();
     			if (curAlien.isDead())
     				it.remove();
     		}
+    		curAlien.draw();    				
     	}
     	if (listaAliens.isEmpty())
     		throw new JuegoGanadoException();
+    	
+    	ArtilleriaEnemigo.getArtilleria().tick();
     }
     
     public boolean move(int deltaX, int deltaY) throws JuegoPerdidoException {

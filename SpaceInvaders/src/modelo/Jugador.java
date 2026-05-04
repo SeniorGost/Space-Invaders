@@ -83,8 +83,8 @@ public final class Jugador {
         }
         
     	nave.move(deltaX, deltaY);
-        
-        nave.tick();
+    	nave.collide();
+        nave.draw();
         
         if (shootCooldown > 0) {        		
         	shootCooldown--;
