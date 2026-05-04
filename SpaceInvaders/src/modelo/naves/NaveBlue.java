@@ -1,39 +1,39 @@
-package modelo.naves;
+package modelo;
 
-public class NaveBlue extends NaveMultipixel {
-
+public class NaveBlue extends Nave {
 	public NaveBlue() {
-		super(-4);
+		super(2);
 		
-		int posX = getPosX();
-		int posY = getPosY();
+		int[] pX = {
+				-1, 0, 1, 
+				-2, -1, 0, 1, 2,
+				-2, -1, 0, 1, 2,
+				-3, 0, 3,
+				-3, -1, 0, 1, 3,
+				-1, 1,
+				-1, 1
+		};
+		int[] pY = {
+				-3, -3, -3,
+				-2, -2, -2, -2, -2, 
+				-1, -1, -1, -1, -1, 
+				0, 0, 0, 
+				1, 1, 1, 1, 1,
+				2, 2, 
+				3, 3
+				
+		};
+		int[] pColor = {
+				Pixel.COLOR_ID_BLUE_FONDO, Pixel.COLOR_ID_BLUE_FONDO, Pixel.COLOR_ID_BLUE_FONDO, 
+				Pixel.COLOR_ID_BLUE_BRAZOS, Pixel.COLOR_ID_BLUE_FRENTE, Pixel.COLOR_ID_BLUE_DETALLES, Pixel.COLOR_ID_BLUE_FRENTE, Pixel.COLOR_ID_BLUE_BRAZOS, 
+				Pixel.COLOR_ID_BLUE_BRAZOS, Pixel.COLOR_ID_BLUE_FRENTE, Pixel.COLOR_ID_BLUE_FRENTE, Pixel.COLOR_ID_BLUE_FRENTE, Pixel.COLOR_ID_BLUE_BRAZOS, 
+				Pixel.COLOR_ID_BLUE_BRAZOS, Pixel.COLOR_ID_BLUE_FRENTE, Pixel.COLOR_ID_BLUE_BRAZOS, 
+				Pixel.COLOR_ID_BLUE_BRAZOS, Pixel.COLOR_ID_BLUE_FONDO, Pixel.COLOR_ID_BLUE_FRENTE, Pixel.COLOR_ID_BLUE_FONDO, Pixel.COLOR_ID_BLUE_BRAZOS, 
+				Pixel.COLOR_ID_BLUE_FONDO, Pixel.COLOR_ID_BLUE_FONDO, 
+				Pixel.COLOR_ID_BLUE_FONDO, Pixel.COLOR_ID_BLUE_FONDO
+		};
 		
-		//Para intentar que el la vista, cada vez que se recargue la página sea más natural se me ha ocurrido pintarlo de iquierda a derecha en lugar de arriba a abajo
-		pixeles.add(new NavePixel(-3 	+ posX, 0	+ posY));
+		setEntityManager(50, 55, pX, pY, pColor);
 		
-		pixeles.add(new NavePixel(-2 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(-2 	+ posX, 3	+ posY));
-		
-		pixeles.add(new NavePixel(-1 	+ posX, -3	+ posY));
-		pixeles.add(new NavePixel(-1 	+ posX, -2	+ posY));
-		pixeles.add(new NavePixel(-1 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(-1 	+ posX, 2	+ posY));
-		
-		pixeles.add(new NavePixel(0 	+ posX, -3	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, -2	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, -1	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, 1	+ posY));
-		
-		pixeles.add(new NavePixel(1 	+ posX, -3	+ posY));
-		pixeles.add(new NavePixel(1 	+ posX, -2	+ posY));
-		pixeles.add(new NavePixel(1 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(1 	+ posX, 2	+ posY));
-		
-		pixeles.add(new NavePixel(2 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(2 	+ posX, 3	+ posY));
-		
-		pixeles.add(new NavePixel(3 	+ posX, 0	+ posY));		
 	}
-
 }

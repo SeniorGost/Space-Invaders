@@ -1,20 +1,28 @@
 package modelo;
 
 import modelo.excepciones.JuegoCambiadoException;
+import modelo.excepciones.JuegoPerdidoException;
+import modelo.naves.GeneradorNaves;
 import modelo.naves.Nave;
-import modelo.naves.NaveBlue;
-import modelo.naves.NaveGreen;
-import modelo.naves.NaveRed;
 
 public final class Jugador {
     private static Jugador miJugador;
     
     private Nave nave;
     private int puntos;
+    private boolean moveLeft;
+    private boolean moveRight;
+    private boolean moveUp;
+    private boolean moveDown;
+    
+    private boolean willShoot;
+    
+    private static final int SHOOT_COOLDOWN_PERIOD = 4;
+    private int shootCooldown;
 
     private Jugador() {
         puntos = 0;
-    }
+	}
 
     /**
      * Se debe de llamar al comienzo de cada partida. Genera una nave dependiendo del tipo especificado 
@@ -26,19 +34,15 @@ public final class Jugador {
         puntos = 0;
         Modelo.getModelo().notificarPuntos(puntos);
 
-        switch (tipo) 
-        {
-        case Nave.NAVE_GREEN:
-            nave = new NaveGreen();
-            break;
-        case Nave.NAVE_BLUE:
-            nave = new NaveBlue();
-            break;
-        case Nave.NAVE_RED:
-        default:
-            nave = new NaveRed();
-        }
-
+    	moveLeft = false;
+    	moveRight = false;
+    	moveUp = false;
+    	moveDown = false;
+    	
+    	willShoot = false;
+    	shootCooldown = 0;
+    	
+    	nave = GeneradorNaves.getGeneradorNaves().generarNave(tipo);
         ArtilleriaJugador.getArtilleria().iniciar(tipo);
     }
 
@@ -61,21 +65,75 @@ public final class Jugador {
      * @throws JuegoCambiadoException Propaga excepción
      */
     public void tick() throws JuegoCambiadoException {
-        nave.tick();
-        
         this.puntos -= 2;
         if (this.puntos < 0) {
             this.puntos = 0;
         }
         Modelo.getModelo().notificarPuntos(this.puntos);
+
+    	boolean willMoveX = moveRight || moveLeft;
+    	boolean willMoveY = moveDown || moveUp;    	
+    	
+    	int deltaX;
+    	int deltaY;
+    	
+    	if (moveRight && !moveLeft)
+    		deltaX = 1;
+    	else
+    		deltaX = -1;
+    	
+    	if (moveDown && !moveUp)
+    		deltaY = 1;
+    	else
+    		deltaY = -1;
+    	
+        // logica de Movimiento
+        if (willMoveX) {
+            if (!nave.canMoveH(deltaX))
+            	deltaX = 0;
+        } else {
+        	deltaX = 0;
+        }
+        if(willMoveY) {
+            if (!nave.canMoveV(deltaY))
+            	deltaY = 0;
+        } else {
+        	deltaY = 0;
+        }
+        
+    	nave.move(deltaX, deltaY);
+    	nave.collide();
+        nave.draw();
+        
+        if (shootCooldown > 0) {        		
+        	shootCooldown--;
+        } else {
+        	if (willShoot) {
+        		ArtilleriaJugador.getArtilleria().shoot(nave.getOffsetX(), nave.getOffsetY() - 5);
+        		willShoot = false;
+        		shootCooldown = SHOOT_COOLDOWN_PERIOD;
+        	}
+        }
+        ArtilleriaJugador.getArtilleria().tick();
     }
 
+    public boolean hit(int offsetX, int offsetY, int hurtboxX, int hurtboxY, int[] pX, int[] pY) throws JuegoPerdidoException {
+    	if (nave.canCollide(offsetX, offsetY, hurtboxX, hurtboxY))
+    		if (nave.isHit(pX, pY)) {
+    			nave.hit();
+    			if (nave.isDead()) 
+    				throw new JuegoPerdidoException();
+    			return true;
+    		}
+    	return false;
+    }
+    
     /**
      * Indica que la nave del jugador debe empezar a moverse a la izquierda.
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveLeft() {
-        nave.moveLeft(true);
+        moveLeft(true);
     }
     
     /**
@@ -83,7 +141,7 @@ public final class Jugador {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveRight() {
-    	nave.moveRight(true);
+    	moveRight(true);
     }
     
     /**
@@ -91,7 +149,7 @@ public final class Jugador {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveUp() {
-    	nave.moveUp(true);
+    	moveUp(true);
     }
     
     /**
@@ -99,7 +157,7 @@ public final class Jugador {
      * Continuara este movimiento hasta que especifique lo contrario.
      */
     public void moveDown() {
-    	nave.moveDown(true);;
+    	moveDown(true);;
     }
     
     /**
@@ -109,7 +167,7 @@ public final class Jugador {
      * {@code false} detiene el movimiento.
      */
     public void moveLeft(boolean doMove) {
-    	nave.moveLeft(doMove);
+    	moveLeft = doMove;
     }
     
     /**
@@ -119,7 +177,7 @@ public final class Jugador {
      * {@code false} detiene el movimiento.
      */
     public void moveRight(boolean doMove) {
-    	nave.moveRight(doMove);
+    	moveRight = doMove;
     }
     
     /**
@@ -129,7 +187,7 @@ public final class Jugador {
      * {@code false} detiene el movimiento.
      */
     public void moveUp(boolean doMove) {
-    	nave.moveUp(doMove);;
+    	moveUp = doMove;
     }
     
     /**
@@ -139,18 +197,15 @@ public final class Jugador {
      * {@code false} detiene el movimiento.
      */
     public void moveDown(boolean doMove) {
-    	nave.moveDown(doMove);;
+    	moveDown = doMove;
     }
     
     /**
      * Indica que debe disparar un bala (singular).
      */
     public void shoot() {
-        nave.shoot();
-    }
-
-    //Devuelve la nave guardada en jugador (WOW NUNCA LO PODRIA HABER ADIVINADO)
-    public Nave getNave() {
-    	return nave;
+    	if (shootCooldown < 3) {    		
+    		willShoot = true;
+    	}
     }
 }

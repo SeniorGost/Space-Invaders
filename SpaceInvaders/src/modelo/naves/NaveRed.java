@@ -1,43 +1,38 @@
-package modelo.naves;
+package modelo;
 
-public class NaveRed extends NaveMultipixel {
-
-    public NaveRed() {
-        super(-4);
-
-        int posX = getPosX();
-        int posY = getPosY();
-
-        // El 'pixel art' de la nave se hace asi. Esto tambien define su 'hitbox'.
-        pixeles.add(new NavePixel(0     + posX, -3    + posY));
-
-        pixeles.add(new NavePixel(-1     + posX, -2    + posY));
-        pixeles.add(new NavePixel(0     + posX, -2    + posY));
-        pixeles.add(new NavePixel(1     + posX, -2    + posY));
-
-        pixeles.add(new NavePixel(-1     + posX, -1    + posY));
-        pixeles.add(new NavePixel(0     + posX, -1    + posY));
-        pixeles.add(new NavePixel(1     + posX, -1    + posY));
-
-        pixeles.add(new NavePixel(-2     + posX, 0    + posY));
-        pixeles.add(new NavePixel(-1     + posX, 0    + posY));
-        pixeles.add(new NavePixel(0     + posX, 0    + posY));
-        pixeles.add(new NavePixel(1     + posX, 0    + posY));
-        pixeles.add(new NavePixel(2     + posX, 0    + posY));
-
-        pixeles.add(new NavePixel(-2     + posX, 1    + posY));
-        pixeles.add(new NavePixel(-1     + posX, 1    + posY));
-        pixeles.add(new NavePixel(0     + posX, 1    + posY));
-        pixeles.add(new NavePixel(1     + posX, 1    + posY));
-        pixeles.add(new NavePixel(2     + posX, 1    + posY));
-
-        pixeles.add(new NavePixel(-2     + posX, 2    + posY));
-        pixeles.add(new NavePixel(0     + posX, 2    + posY));
-        pixeles.add(new NavePixel(2     + posX, 2    + posY));
-
-        pixeles.add(new NavePixel(-2     + posX, 3    + posY));
-        pixeles.add(new NavePixel(2     + posX, 3    + posY));
-
-    }
-
+public class NaveRed extends Nave {
+	
+	public NaveRed() {
+	super(1);
+	
+	int[] pX = {
+			0, 
+			-1, 0, 1, 
+			-1, 0, 1, 
+			-2, -1, 0, 1, 2, 
+			-2, -1, 0, 1, 2, 
+			-2, 0, 2, 
+			-2, 2
+	};
+	int[] pY = {
+			-3, 
+			-2, -2, -2, 
+			-1, -1, -1, 
+			0, 0, 0, 0, 0,
+			1, 1, 1, 1, 1, 
+			2, 2, 2, 
+			3, 3 
+	};
+	int[] pColor = new int[] {
+		Pixel.COLOR_ID_RED_FONDO, 
+		Pixel.COLOR_ID_RED_FRENTE, Pixel.COLOR_ID_RED_FONDO, Pixel.COLOR_ID_RED_FRENTE, 
+		Pixel.COLOR_ID_RED_FRENTE, Pixel.COLOR_ID_RED_DETALLES, Pixel.COLOR_ID_RED_FRENTE, 
+		Pixel.COLOR_ID_RED_FRENTE, Pixel.COLOR_ID_RED_FRENTE, Pixel.COLOR_ID_RED_DETALLES, Pixel.COLOR_ID_RED_FRENTE, Pixel.COLOR_ID_RED_FRENTE,
+		Pixel.COLOR_ID_RED_FRENTE, Pixel.COLOR_ID_RED_FONDO, Pixel.COLOR_ID_RED_DETALLES, Pixel.COLOR_ID_RED_FONDO, Pixel.COLOR_ID_RED_FRENTE,
+		Pixel.COLOR_ID_RED_FRENTE, Pixel.COLOR_ID_RED_DETALLES, Pixel.COLOR_ID_RED_FRENTE, 
+		Pixel.COLOR_ID_RED_FRENTE, Pixel.COLOR_ID_RED_FRENTE, 
+	};
+	
+	setEntityManager(50, 55, pX, pY, pColor);
+	}
 }

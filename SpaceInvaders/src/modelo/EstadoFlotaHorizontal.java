@@ -9,8 +9,14 @@ public class EstadoFlotaHorizontal extends EstadoFlota {
 	public EstadoFlotaHorizontal(boolean pDirection) {
 		direction = pDirection;
 	}
-	
-	public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoPerdidoException{
+
+	@Override
+	public void tick() throws JuegoPerdidoException {
+		if (Flota.getFlota().isEmpty()) {
+			Flota.getFlota().setState(new EstadoFlotaPostFase1());
+			return;
+		}	
+		
 		int dir = -1;
 		if (direction)
 			dir = 1;
@@ -18,5 +24,7 @@ public class EstadoFlotaHorizontal extends EstadoFlota {
 		boolean limit = Flota.getFlota().move(dir, 0);
 		
 		Flota.getFlota().setState(new EstadoFlotaEsperar(direction, limit));
+		
+		Flota.getFlota().draw();
 	}
 }

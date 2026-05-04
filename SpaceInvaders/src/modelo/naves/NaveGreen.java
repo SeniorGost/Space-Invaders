@@ -1,60 +1,38 @@
-package modelo.naves;
+package modelo;
 
-/**
- * Entre sus primos cromaticos, el verde es el más diplomatico.
- */
-public class NaveGreen extends NaveMultipixel {
-	/**
-	 * nave
-	 */
+public class NaveGreen extends Nave {
 	public NaveGreen() {
-		super(-4);
+		super(3);
 		
-		int posX = getPosX();
-		int posY = getPosY();
+		int[] pX = {
+				-3, -1, 0, 1, 3,
+				-2, -1, 0, 1, 2,
+				-2, -1, 0, 1, 2,
+				-3, -2, -1, 0, 1, 2, 3,
+				-3, -2, -1, 0, 1, 2, 3,				
+				-3, -2, -1, 0, 1, 2, 3,
+				-2, -1, 0, 1, 2
+		};
+		int[] pY = {
+				-3, -3, -3, -3, -3,
+				-2, -2, -2, -2, -2,
+				-1, -1, -1, -1, -1,
+				0, 0, 0, 0, 0, 0, 0,
+				1, 1, 1, 1, 1, 1, 1,
+				2, 2, 2, 2, 2, 2, 2,
+				3, 3, 3, 3, 3
+		};
+		int[] pColor = {
+				Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, 
+				Pixel.COLOR_ID_GREEN_CEJA, Pixel.COLOR_ID_GREEN_CEJA, Pixel.COLOR_ID_GREEN_NARIZ, Pixel.COLOR_ID_GREEN_CEJA, Pixel.COLOR_ID_GREEN_CEJA, 
+				Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_DETALLES, Pixel.COLOR_ID_GREEN_NARIZ, Pixel.COLOR_ID_GREEN_DETALLES, Pixel.COLOR_ID_GREEN_CUERPO, 
+				Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_NARIZ, Pixel.COLOR_ID_GREEN_NARIZ, Pixel.COLOR_ID_GREEN_NARIZ, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO,
+				Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_DETALLES, Pixel.COLOR_ID_GREEN_DETALLES, Pixel.COLOR_ID_GREEN_DETALLES, Pixel.COLOR_ID_GREEN_DETALLES, Pixel.COLOR_ID_GREEN_DETALLES, Pixel.COLOR_ID_GREEN_CUERPO,
+				Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO,
+				Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO, Pixel.COLOR_ID_GREEN_CUERPO
+		};
 		
-		// El 'pixel art' de la nave se hace asi. Esto tambien define su 'hitbox'.
-		pixeles.add(new NavePixel(-3 	+ posX, -3	+ posY));
-		pixeles.add(new NavePixel(-1 	+ posX, -3	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, -3	+ posY));
-		pixeles.add(new NavePixel(1 	+ posX, -3	+ posY));
-		pixeles.add(new NavePixel(3 	+ posX, -3	+ posY));
-		
-		pixeles.add(new NavePixel(-2 	+ posX, -2	+ posY));
-		pixeles.add(new NavePixel(-1 	+ posX, -2	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, -2	+ posY));
-		pixeles.add(new NavePixel(1 	+ posX, -2	+ posY));
-		pixeles.add(new NavePixel(2 	+ posX, -2	+ posY));
-
-		pixeles.add(new NavePixel(-2 	+ posX, -1	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, -1	+ posY));
-		pixeles.add(new NavePixel(2 	+ posX, -1	+ posY));
-		
-		pixeles.add(new NavePixel(-3 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(-2 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(-1 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(1 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(2 	+ posX, 0	+ posY));
-		pixeles.add(new NavePixel(3 	+ posX, 0	+ posY));
-			
-		pixeles.add(new NavePixel(-3 	+ posX, 1	+ posY));
-		pixeles.add(new NavePixel(3 	+ posX, 1	+ posY));
-		
-		pixeles.add(new NavePixel(-3 	+ posX, 2	+ posY));
-		pixeles.add(new NavePixel(-2 	+ posX, 2	+ posY));
-		pixeles.add(new NavePixel(-1 	+ posX, 2	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, 2	+ posY));
-		pixeles.add(new NavePixel(1 	+ posX, 2	+ posY));
-		pixeles.add(new NavePixel(2 	+ posX, 2	+ posY));
-		pixeles.add(new NavePixel(3 	+ posX, 2	+ posY));
-		
-		pixeles.add(new NavePixel(-2 	+ posX, 3	+ posY));
-		pixeles.add(new NavePixel(-1 	+ posX, 3	+ posY));
-		pixeles.add(new NavePixel(0 	+ posX, 3	+ posY));
-		pixeles.add(new NavePixel(1 	+ posX, 3	+ posY));
-		pixeles.add(new NavePixel(2 	+ posX, 3	+ posY));
+		setEntityManager(50, 55, pX, pY, pColor);
 		
 	}
-
 }

@@ -8,5 +8,5 @@ public abstract class EstadoFlota {
 		
 	}
 	
-	public abstract void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) throws JuegoPerdidoException;
+	public abstract void tick() throws JuegoPerdidoException;
 }

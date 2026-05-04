@@ -12,11 +12,12 @@ public class EstadoFlotaEsperar extends EstadoFlota {
 		fallNext = pFallNext;
 	}
 	
-	public void tick(int[] pixNaveX, int[] pixNaveY, int naveX, int naveY) {
-		tick();
-	}
-	
-	private void tick() {
+	public void tick() {
+		if (Flota.getFlota().isEmpty()) {
+			Flota.getFlota().setState(new EstadoFlotaPostFase1());
+			return;
+		}	
+		
 		tickCount++;
 		
 		if (tickCount == 4) {
@@ -25,6 +26,8 @@ public class EstadoFlotaEsperar extends EstadoFlota {
 			else
 				Flota.getFlota().setState(new EstadoFlotaHorizontal(direction));
 		}
+		
+		Flota.getFlota().draw();
 	}
 	
 }
