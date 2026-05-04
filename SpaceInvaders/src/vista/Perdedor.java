@@ -1,7 +1,9 @@
 package vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color; // Importado para el color de la fuente
 import java.awt.EventQueue;
+import java.awt.Font; // Importado para la fuente
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -25,6 +27,7 @@ public class Perdedor extends JFrame implements Observer {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JLabel labelPuntuacion; // Etiqueta para mostrar los puntos finales
 
 	/**
 	 * Launch the application.
@@ -88,6 +91,13 @@ public class Perdedor extends JFrame implements Observer {
 		Title.setIcon(new ImageIcon(Menu.class.getResource("/spritesEpicos/loser-text.png")));
 		upper_panel.add(Title, BorderLayout.CENTER);
 		
+		// Añadimos el JLabel de la puntuación en la parte inferior del panel superior
+		labelPuntuacion = new JLabel("PUNTUACIÓN FINAL: 0");
+		labelPuntuacion.setHorizontalAlignment(SwingConstants.CENTER);
+		labelPuntuacion.setFont(new Font("Arial", Font.BOLD, 45));
+		labelPuntuacion.setForeground(Color.WHITE);
+		upper_panel.add(labelPuntuacion, BorderLayout.SOUTH);
+		
 		JPanel lower_panel = new JPanel();
 		contentPane.add(lower_panel);
 		lower_panel.setLayout(new GridLayout(0, 3, 0, 0));
@@ -115,7 +125,14 @@ public class Perdedor extends JFrame implements Observer {
 		
 		if (o instanceof Modelo)
 		{
-			if (arg instanceof int[])
+			// Interceptamos el String de los puntos para actualizar la etiqueta
+			if (arg instanceof String) {
+				String mensaje = (String) arg;
+				if (mensaje.startsWith("PUNTOS:")) {
+					labelPuntuacion.setText("PUNTUACIÓN FINAL: " + mensaje.split(":")[1]);
+				}
+			}
+			else if (arg instanceof int[])
 			{
 				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
 				int[] datos=(int[])arg;

@@ -123,8 +123,7 @@ public class Flota extends Observable {
     /**
      * Calcula los margenes de la 'hurtbox' de la nave del jugador y guarda esa información en atributos.
      * <p> Este calculo solo deberia de hacerse una vez por partida. En el primer tick.
-     * 
-     * @param pixNaveX - Los componentes x de las posiciones de los pixeles de la nave.
+     * * @param pixNaveX - Los componentes x de las posiciones de los pixeles de la nave.
      * @param pixNaveY - Los componentes x de las posiciones de los pixeles de la nave.
      * @param naveX - Componente x de la posición central de la nave.
      * @param naveY - Componente y de la posición central de la nave.
@@ -163,6 +162,8 @@ public class Flota extends Observable {
                 if (a.hit(pixelesX, pixelesY, pPosX, pPosY, hurtboxX, hurtboxY)) {
                     it.remove(); 
                     alienEncontrado = true;
+                    // ++ SUMAMOS LOS PUNTOS AL JUGADOR ++
+                    Jugador.getJugador().sumarPuntos(100); 
                 }
          }
         

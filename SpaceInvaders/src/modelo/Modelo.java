@@ -1,4 +1,4 @@
-	package modelo;
+package modelo;
 
 import java.awt.event.KeyEvent;
 import java.util.Observable;
@@ -97,6 +97,11 @@ public class Modelo extends Observable {
 			System.out.println("Cambio:" + pVentana);
 			notifyObservers(new int[] { pVentana, GRID_WIDTH, GRID_HEIGHT });
 		}
+	}
+
+	public void notificarPuntos(int puntos) {
+		setChanged();
+		notifyObservers("PUNTOS:" + puntos);
 	}
 
 	public int getWidth() {

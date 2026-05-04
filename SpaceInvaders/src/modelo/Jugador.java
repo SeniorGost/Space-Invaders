@@ -6,13 +6,14 @@ import modelo.naves.NaveBlue;
 import modelo.naves.NaveGreen;
 import modelo.naves.NaveRed;
 
-
 public final class Jugador {
     private static Jugador miJugador;
     
     private Nave nave;
+    private int puntos;
 
     private Jugador() {
+        puntos = 0;
     }
 
     /**
@@ -22,6 +23,8 @@ public final class Jugador {
      */
     public void inicializar(int tipo) 
     {
+        puntos = 0;
+        Modelo.getModelo().notificarPuntos(puntos);
 
         switch (tipo) 
         {
@@ -36,7 +39,6 @@ public final class Jugador {
             nave = new NaveRed();
         }
 
-
         ArtilleriaJugador.getArtilleria().iniciar(tipo);
     }
 
@@ -45,12 +47,27 @@ public final class Jugador {
         return miJugador;
     }
 
+    public void sumarPuntos(int cantidad) {
+        this.puntos += cantidad;
+        Modelo.getModelo().notificarPuntos(this.puntos);
+    }
+
+    public int getPuntos() {
+        return this.puntos;
+    }
+
     /**
      * Tick es un brawler que puede disparar minas y hacer explotar su cabeza y tal...
      * @throws JuegoCambiadoException Propaga excepción
      */
     public void tick() throws JuegoCambiadoException {
         nave.tick();
+        
+        this.puntos -= 2;
+        if (this.puntos < 0) {
+            this.puntos = 0;
+        }
+        Modelo.getModelo().notificarPuntos(this.puntos);
     }
 
     /**

@@ -57,6 +57,8 @@ public class Juego extends JFrame implements Observer{
 	// Aqui guardaremos las instrucciones para luego ejecutarlas todas de un tiron cada tick (El tipo de datos Runnable se usa para guardar comandos)
 	private Queue<Runnable> aPintar  = new LinkedList();
 	
+	private int puntosActuales = 0;
+	
 
 	/**
 	 * Launch the application.
@@ -98,6 +100,9 @@ public class Juego extends JFrame implements Observer{
 		    protected void paintComponent(java.awt.Graphics componente) {
 		         super.paintComponent(componente);
 		         componente.drawImage(new ImageIcon(Menu.class.getResource("/spritesEpicos/background.jpg")).getImage(),0, 0, getWidth(), getHeight(), this);
+		         componente.setColor(Color.WHITE);
+		         componente.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
+		         componente.drawString("PUNTOS: " + puntosActuales, 30, 40);
 		    }
 		};
 		
@@ -160,10 +165,14 @@ public class Juego extends JFrame implements Observer{
 		// para hacer lo de matriz de cualquier tamaño voy a necesitar que me envieis el tamaño por aqui
 		if (o instanceof Modelo)
 		{
-
+			if (arg instanceof String) {
+				String mensaje = (String) arg;
+				if (mensaje.startsWith("PUNTOS:")) {
+					puntosActuales = Integer.parseInt(mensaje.split(":")[1]);
+				}
+			} else if (arg instanceof Integer) {
 			//Aqui he cambiado el orden para revisar primero si se ha dado un tick y después si se ha cambiado a esta pantalla (Esto es porque como ocurrirá más frecuentemente que se de un tick a que se cambie a esta pantalla es ligeramente más eficiente)
 			//Por cierto, esta comprobación de aqui abajo funciona porque desde modelo enviamos solo notifyobservers(-1), luego por lo del 'autoboxing' que hace el metodo, java asume que el -1 es integer, luego no hay instancia de int (Lo mismo ocurre si envias un objeto int tal que: int a = -1; notifyObservers(a); por defecto java lo combierte a integer al enviarlo)
-			if (arg instanceof Integer) {
 				cleanClean();
 				pintarPantalla();		
 			} else {
@@ -250,6 +259,7 @@ public class Juego extends JFrame implements Observer{
 		    aPintar.poll().run();
 		    System.out.print(aPintar.size()); //Esto es para el debungin
 		}
+		contentPane.repaint();
 	}
 	//este método limpia la pantalla
 	private void cleanClean(){
