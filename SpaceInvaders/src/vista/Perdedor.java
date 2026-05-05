@@ -47,14 +47,7 @@ public class Perdedor extends JPanel implements Observer {
 	 * Create the frame.
 	 */
 	public Perdedor() {
-		//esto es para pillar el tamaño de la pantalla del usuario
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
-		double height = screenSize.getHeight();
-
-		//le damos a la ventana las dimensiones de la pantalla de usuario
-		setBounds(0, 0, (int)width, (int)height);
-
+		//Ya no es necesario adaptar aqui a las dimensiones de la pantalla de usuario porque ya se hace en MyFrame
 		Modelo.getModelo().addObserver(this);
 
 		//Keylistener
@@ -81,8 +74,8 @@ public class Perdedor extends JPanel implements Observer {
 		// Añadimos el JLabel de la puntuación en la parte inferior del panel superior
 		labelPuntuacion = new JLabel("PUNTUACIÓN FINAL: 0");
 		labelPuntuacion.setHorizontalAlignment(SwingConstants.CENTER);
-		labelPuntuacion.setFont(new Font("Arial", Font.BOLD, 45));
-		labelPuntuacion.setForeground(Color.WHITE);
+		labelPuntuacion.setFont(new Font("Comic Sans MS", Font.BOLD, 45));
+		labelPuntuacion.setForeground(Color.BLACK);
 		upper_panel.add(labelPuntuacion, BorderLayout.SOUTH);
 		JPanel lower_panel = new JPanel();
 		add(lower_panel);
