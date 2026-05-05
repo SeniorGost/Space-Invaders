@@ -17,9 +17,17 @@ public class Modelo extends Observable implements Observer {
 	private static final int VENTANA_JUEGO = 2;
 	private static final int VENTANA_GANADO = 3;
 	private static final int VENTANA_PERDIDO = 4;
+	private static final int VENTANA_MENU_REAL = 5;
+	private static final int VENTANA_MENU3 = 6;
+	private static final int VENTANA_CREDITOS = 7;
 
-	private static final int GRID_WIDTH = 100;
-	private static final int GRID_HEIGHT = 60;
+	//Guarda las dimensiones de la pantalla (Se usa para varios calculos en muchos sitios, cuidado con esto)
+	private int GRID_WIDTH = 100;
+	private int GRID_HEIGHT = 60;
+	
+	//Guarda la nave seleccionada por el usuario (Se usa en empezarJuego)
+	//Por Defecto, Shreck
+	private int nave;
 	
 	public static final int NOTIFY_WINDOW_CHANGE = 0;
 	public static final int NOTIFY_PIXEL_POSITION = 1;
@@ -47,7 +55,10 @@ public class Modelo extends Observable implements Observer {
 	public void cambiarVentana() {		
 		switch (ventana) {
 		case VENTANA_MENU:
-			cambiarVentana(VENTANA_MENU2);
+		case VENTANA_MENU2:
+		case VENTANA_MENU3:
+		case VENTANA_CREDITOS:
+			cambiarVentana(VENTANA_MENU_REAL);
 			break;
 		case VENTANA_GANADO:
 		case VENTANA_PERDIDO:
@@ -55,8 +66,13 @@ public class Modelo extends Observable implements Observer {
 			break;
 		}
 	}
-
-	public void empezarJuego(int nave) {
+	
+	public void cambiarNave(int nave) {
+			//0 - green, 1 - blue, 2 - red
+			this.nave = nave;
+	}
+	
+	public void empezarJuego() {
 
 		//0 - green, 1 - blue, 2 - red
 		Jugador.getJugador().inicializar(nave);
@@ -83,6 +99,14 @@ public class Modelo extends Observable implements Observer {
 			}
 		}, 0, 50);
 	}
+	public void nuevaAltura(int altura) {
+		//0 - green, 1 - blue, 2 - red
+		this.GRID_HEIGHT = altura;
+	}
+	public void nuevaAchura(int anchura) {
+		//0 - green, 1 - blue, 2 - red
+		this.GRID_WIDTH = anchura;
+	}
 
 	/**
 	 * 
@@ -100,7 +124,8 @@ public class Modelo extends Observable implements Observer {
 			cambiarVentana(VENTANA_PERDIDO); // 3: Pantalla de perder
 	}
 	
-	private void cambiarVentana(int pVentana) {
+	//Aqui va a tener que ser publico porque MenuREAL le tiene que decir a que ventana se cambia o si se empieza el juego segun que boton se ha pulsado
+	public void cambiarVentana(int pVentana) {
 		ventana = pVentana;
 		setChanged();
 		if(ventana != VENTANA_JUEGO) {
