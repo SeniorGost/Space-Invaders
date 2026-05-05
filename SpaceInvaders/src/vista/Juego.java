@@ -75,7 +75,6 @@ public class Juego extends JPanel implements Observer {
 		Flota.getFlota().addObserver(this);
 		ArtilleriaJugador.getArtilleria().addObserver(this);
 		
-		
 		addKeyListener(new Controller());
 		
 		//esto lo que hace es hacer que el Pane empieze a capturar teclas, es como clicar en una barra donde puedes empezar a rellenar
