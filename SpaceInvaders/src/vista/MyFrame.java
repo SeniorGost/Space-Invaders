@@ -19,16 +19,26 @@ public class MyFrame extends JFrame {
 
 		double width = screenSize.getWidth();
 		double height = screenSize.getHeight();
+		
+		//Mostramos por pantalla por si las moscas
+		System.out.println("Dimensiones de Pantalla PC: " + width + "," + height);
 
 		//le damos a la ventana las dimensiones de la pantalla de usuario
+		//Los dos primeros numeros son la posicion en la que 'spawnea' la ventana, la pongo en el 0,0 porque va ha ser tan grande como la pantalla, luego de estar movida se vería cortada
 		setBounds(0, 0, (int)width, (int)height);
+		
 		setExtendedState(MAXIMIZED_BOTH);
+		
 		//Creamos Pantalla 0//
 		menu = new Menu();
 
 		//Hacemos Visible//
 		menu.setVisible(true);
-
+		
+		//Añadimos al Frame(para que salga Pantalla 0 por defecto)//
+		getContentPane().add(menu);
+	    setVisible(true);
+		
 		//Creamos Pantalla 1//
 		menu2 = new Menu2();
 
@@ -40,8 +50,6 @@ public class MyFrame extends JFrame {
 
 	    //Creamos Pantalla 4//
 	    panelGanador = new Ganador();
-	    getContentPane().add(menu);
-	    setVisible(true);
 	}
 
 	public static MyFrame getMyFrame() {
