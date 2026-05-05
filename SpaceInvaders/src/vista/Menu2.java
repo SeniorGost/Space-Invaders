@@ -195,7 +195,7 @@ public class Menu2 extends JPanel implements Observer{
 		{
 			if (arg instanceof int[])
 			{
-				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
+				// 0 Menu, 5 MenuREAL, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder, 6 Menu3, 7 Creditos
 				int[] datos=(int[])arg;
 				
 				if (datos[0] == Modelo.NOTIFY_WINDOW_CHANGE)
@@ -208,7 +208,7 @@ public class Menu2 extends JPanel implements Observer{
 	//Este es el tema, cada vez que se notifica a los observers, se notifica a todas las pantallas a la vez entonces se tiene que poner una sentencia como esta, donde se distinga el numero de pantalla en que estamos
 	private void cambiarPantalla (int pValor){
 		if(pValor == 1)
-			MyFrame.getMyFrame().cambiarVentana(1);
+			MyFrame.getMyFrame().cambiarVentana(pValor);
 	}
 	
 	private class Controller implements MouseListener {
@@ -221,16 +221,18 @@ public class Menu2 extends JPanel implements Observer{
 			//ESTO ES INFORMACION DE LA VISTA PORQUE ES QUE BOTON SE HA PULSADO
 			switch (keyCode) {
 			case "btnBlue":
-				Modelo.getModelo().empezarJuego(1);
+				Modelo.getModelo().cambiarNave(1);
 				break;
 			case "btnGreen":
-				Modelo.getModelo().empezarJuego(0);
+				Modelo.getModelo().cambiarNave(0);
 				break;
 			case "btnRed":
 			default:
-				Modelo.getModelo().empezarJuego(2);
+				Modelo.getModelo().cambiarNave(2);
 				break;
 			}
+			Modelo.getModelo().cambiarVentana();
+			System.out.print("vuelta Menu");
 		}
 
 		@Override
