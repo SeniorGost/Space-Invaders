@@ -46,17 +46,7 @@ public class Menu extends JPanel implements Observer{
 	 * Create the frame.
 	 */
 	public Menu() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
-		double height = screenSize.getHeight();
-
-		//Mostramos por pantalla por si las moscas
-		System.out.println("Dimensiones de Pantalla PC: " + width + "," + height);
-
-		//Hacemos la ventana tan grande como la pantalla (Los castings son porque el dato es double no int)
-		//Los dos primeros numeros son la posicion en la que 'spawnea' la ventana, la pongo en el 0,0 porque va ha ser tan grande como la pantalla, luego de estar movida se vería cortada
-		setBounds(0, 0, (int)width, (int)height);
-
+		//Ya no es necesario adaptar aqui a las dimensiones de la pantalla de usuario porque ya se hace en MyFrame
 	    Modelo.getModelo().addObserver(this);
 
 		//Se activa el "COCO TACTICO", EXTREMADAMENTE IMPORTANTE: NO TOCAR//
