@@ -113,7 +113,7 @@ public class Perdedor extends JPanel implements Observer {
 			}
 			else if (arg instanceof int[])
 			{
-				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
+				// 0 Menu, 5 MenuREAL, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder, 6 Menu3, 7 Creditos
 				int[] datos=(int[])arg;
 				
 				if (datos[0] == Modelo.NOTIFY_WINDOW_CHANGE)
@@ -149,3 +149,4 @@ public class Perdedor extends JPanel implements Observer {
          componente.drawImage(new ImageIcon(Menu.class.getResource("/spritesEpicos/lose.jpg")).getImage(),0, 0, getWidth(), getHeight(), this);
     }
 }
+
