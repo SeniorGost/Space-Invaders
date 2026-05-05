@@ -84,16 +84,6 @@ public class Juego extends JPanel implements Observer {
 		
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(new GridLayout(60, 100, 0, 0));
-
-		addKeyListener(new Controller());
-
-		// esto lo que hace es hacer que el Pane empieze a capturar teclas, es como
-		// clicar en una barra donde puedes empezar a rellenar
-		setFocusable(true);
-		requestFocusInWindow();
-
-		setBorder(new EmptyBorder(5, 5, 5, 5));
-		setLayout(new GridLayout(60, 100, 0, 0));
 	}
 
 	@Override
