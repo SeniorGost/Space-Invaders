@@ -15,34 +15,21 @@ public class PixelComposite implements EntityManager {
 	}
 	
 	@Override
-	public boolean draw() {
-		boolean rdo = false;
-		
-		if (!rdo) {
-			for (EntityManager p : pixeles) {			
-				p.draw();
-			}
-		}
-		
-		return rdo;
+	public void draw() {
+		for (EntityManager p : pixeles)		
+			p.draw();
 	}
 	
 	@Override
 	public boolean canMoveH(int deltaX) {
-		for (EntityManager p : pixeles) {
-			if (!p.canMoveH(deltaX))
-				return false;
-		}
-		return true;	
+		boolean rdo = pixeles.stream().allMatch(p -> p.canMoveH(deltaX));
+		return rdo;
 	}
 	
 	@Override
 	public boolean canMoveV(int deltaY) {
-		for (EntityManager p : pixeles) {
-			if (!p.canMoveV(deltaY))
-				return false;
-		}
-		return true;	
+		boolean rdo = pixeles.stream().allMatch(p -> p.canMoveV(deltaY));
+		return rdo;	
 	}
 	
 	@Override
@@ -52,33 +39,19 @@ public class PixelComposite implements EntityManager {
 		}
 	}
 
-	
 	@Override
 	public boolean isHit(int[] pX, int[] pY) {
-		for (EntityManager p : pixeles) {
-			if (p.isHit(pX, pY))
-				return true;
-		}
-
-		return false;
+		boolean rdo = pixeles.stream().anyMatch(p -> p.isHit(pX, pY));
+		return rdo;
 	}
 	
 	public int[] getDisplayX() {
-		int[] pX = new int[pixeles.size()];
-		
-		for (int i = 0; i < pixeles.size(); i++) {
-			Pixel p = pixeles.get(i);
-			pX[i] = p.getPosX();
-		}
-		return pX;
+		int[] rdo = pixeles.stream().mapToInt(p -> p.getPosX()).toArray();
+		return rdo;
 	}	
 	public int[] getDisplayY() {
-		int[] pY = new int[pixeles.size()];
-		for (int i = 0; i < pixeles.size(); i++) {
-			Pixel p = pixeles.get(i);
-			pY[i] = p.getPosY();
-		}
-		return pY;
+		int[] rdo = pixeles.stream().mapToInt(p -> p.getPosY()).toArray();
+		return rdo;
 	}
 	@Override
 	public void enterHitDisplay() {

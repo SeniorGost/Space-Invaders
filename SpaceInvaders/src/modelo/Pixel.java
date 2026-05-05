@@ -40,7 +40,7 @@ public class Pixel extends Observable implements EntityManager {
 		addObserver(Modelo.getModelo());
 	}
 	@Override
-	public boolean draw() {
+	public void draw() {
 		setChanged();
 		if (hitDisplayEnabled) {
 			hitDisplayEnabled = false;
@@ -48,8 +48,6 @@ public class Pixel extends Observable implements EntityManager {
 		}
 		else
 			notifyObservers(new int[] {posX, posY, colorId});
-		
-		return false;
 	}
 
 	@Override

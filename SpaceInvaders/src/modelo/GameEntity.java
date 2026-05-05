@@ -39,8 +39,8 @@ public abstract class GameEntity {
 	/**
 	 * Actualiza el display en pantalla
 	 */
-	public boolean draw() {
-		return entityManager.draw();
+	public void draw() {
+		entityManager.draw();
 	}
 	/**
 	 * @return {@code true} si esta en collision con otro {@code GameEntity},

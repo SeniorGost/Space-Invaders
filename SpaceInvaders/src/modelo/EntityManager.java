@@ -5,7 +5,7 @@ public interface EntityManager {
 	/**
 	 * @return {@code true} si ha collisionado con algo, {@code false} en caso contrario.
 	 */
-	public boolean draw();
+	public void draw();
 	public boolean canMoveH(int deltaX);
 	public boolean canMoveV(int deltaY);
 	public void move(int deltaX, int deltaY);
