@@ -8,10 +8,13 @@ import javax.swing.JFrame;
 public class MyFrame extends JFrame {
 	private static MyFrame frame;
 	private Menu menu;
+	private MenuREAL menuREAL;
 	private Menu2 menu2;
+	private Menu3 menu3;
 	private Juego panelJuego;
 	private Perdedor panelPerdedor;
 	private Ganador panelGanador;
+	private Creditos creditos;
 	private MyFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//esto es para pillar el tamaño de la pantalla del usuario
@@ -39,8 +42,14 @@ public class MyFrame extends JFrame {
 		getContentPane().add(menu);
 	    setVisible(true);
 		
+	    //Creamos Pantalla REAL (Pantalla 5)//
+	    menuREAL = new MenuREAL();
+	    
 		//Creamos Pantalla 1//
 		menu2 = new Menu2();
+		
+		//Creamos Pantalla 6//
+		menu3 = new Menu3();
 
 		//Creamos Pantalla 2//
 		panelJuego = new Juego();
@@ -50,6 +59,9 @@ public class MyFrame extends JFrame {
 
 	    //Creamos Pantalla 4//
 	    panelGanador = new Ganador();
+	    
+	    //Creamos Pantalla 7//
+	    creditos = new Creditos();
 	}
 
 	public static MyFrame getMyFrame() {
@@ -85,6 +97,23 @@ public class MyFrame extends JFrame {
 			getContentPane().add(panelPerdedor);
 			panelPerdedor.setFocusable(true);
 			panelPerdedor.requestFocusInWindow();
+			break;
+		case 5:
+			getContentPane().add(menuREAL);
+			menuREAL.setFocusable(true);
+			menuREAL.requestFocusInWindow();
+			break;
+		case 6:
+			//Como hay que reiniciar el mensaje de 'escribe el tamaño' de haber cambiado cada vez que se relanza la ventana, re-inicializamos la ventana cada vez que se vuelve a ella
+			menu3 = new Menu3();
+			getContentPane().add(menu3);
+			menu3.setFocusable(true);
+			menu3.requestFocusInWindow();
+			break;
+		case 7:
+			getContentPane().add(creditos);
+			creditos.setFocusable(true);
+			creditos.requestFocusInWindow();
 			break;
 		}
 		repaint();
