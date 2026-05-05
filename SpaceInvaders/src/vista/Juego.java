@@ -70,14 +70,7 @@ public class Juego extends JPanel implements Observer {
 	 */
 	public Juego() {
 
-		// esto es para pillar el tamaño de la pantalla del usuario
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
-		double height = screenSize.getHeight();
-
-		// le damos a la ventana las dimensiones de la pantalla de usuario
-		setBounds(0, 0, (int) width, (int) height);
-
+		//Ya no es necesario adaptar aqui a las dimensiones de la pantalla de usuario porque ya se hace en MyFrame
 		Modelo.getModelo().addObserver(this);
 		Flota.getFlota().addObserver(this);
 		ArtilleriaJugador.getArtilleria().addObserver(this);
