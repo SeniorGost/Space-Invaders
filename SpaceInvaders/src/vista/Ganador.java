@@ -48,13 +48,8 @@ public class Ganador extends JPanel implements Observer {
 	 * Create the frame.
 	 */
 	public Ganador() {
-		//esto es para pillar el tamaño de la pantalla del usuario
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
-		double height = screenSize.getHeight();
-
+		//Ya no es necesario adaptar aqui a las dimensiones de la pantalla de usuario porque ya se hace en MyFrame
 		Modelo.getModelo().addObserver(this);
-
 		
 		addKeyListener(new Controller());
 		
@@ -79,7 +74,7 @@ public class Ganador extends JPanel implements Observer {
 		// Añadimos el JLabel de la puntuación en la parte inferior del panel superior
 		labelPuntuacion = new JLabel("PUNTUACIÓN FINAL: 0");
 		labelPuntuacion.setHorizontalAlignment(SwingConstants.CENTER);
-		labelPuntuacion.setFont(new Font("Arial", Font.BOLD, 45));
+		labelPuntuacion.setFont(new Font("Comic Sans MS", Font.BOLD, 45));
 		labelPuntuacion.setForeground(Color.WHITE);
 		upper_panel.add(labelPuntuacion, BorderLayout.SOUTH);
 		
@@ -104,52 +99,6 @@ public class Ganador extends JPanel implements Observer {
 		lower_panel.add(Cat_label);
 		
 		setBorder(new EmptyBorder(5, 5, 5, 5));
-//=======
-//				//le damos a la ventana las dimensiones de la pantalla de usuario
-//				setBounds(0, 0, (int)width, (int)height);
-//				setBorder(new EmptyBorder(5, 5, 5, 5));
-//				setLayout(new GridLayout(2, 0, 0, 0));
-//
-//
-//				addKeyListener(new Controller());
-//
-//				//esto lo que hace es hacer que el Pane empieze a capturar teclas, es como clicar en una barra donde puedes empezar a rellenar
-//				setFocusable(true);
-//				requestFocusInWindow();
-//
-//				JPanel upper_panel = new JPanel();
-//				add(upper_panel);
-//				upper_panel.setLayout(new BorderLayout(0, 0));
-//				//esto permite que panel_1 no obstruya la imagen
-//				upper_panel.setOpaque(false); 
-//
-//				JLabel Title = new JLabel("");
-//				Title.setHorizontalAlignment(SwingConstants.CENTER);
-//				Title.setIcon(new ImageIcon(Menu.class.getResource("/spritesEpicos/winner-text.png")));
-//				upper_panel.add(Title, BorderLayout.CENTER);
-//
-//				JPanel lower_panel = new JPanel();
-//				add(lower_panel);
-//				lower_panel.setLayout(new GridLayout(0, 3, 0, 0));
-//				//esto permite que panel_1 no obstruya la imagen
-//				lower_panel.setOpaque(false); 
-//
-//				JLabel BlowMe_label = new JLabel("");
-//				BlowMe_label.setIcon(new ImageIcon(Menu.class.getResource("/spritesEpicos/happy2.png")));
-//				lower_panel.add(BlowMe_label);
-//
-//				JLabel Haru_Urara_label = new JLabel("");
-//				Haru_Urara_label.setHorizontalAlignment(SwingConstants.CENTER);
-//				Haru_Urara_label.setIcon(new ImageIcon(Menu.class.getResource("/spritesEpicos/happy.png")));
-//				lower_panel.add(Haru_Urara_label);
-//
-//				JLabel Cat_label = new JLabel("");
-//				Cat_label.setHorizontalAlignment(SwingConstants.RIGHT);
-//				Cat_label.setIcon(new ImageIcon(Menu.class.getResource("/spritesEpicos/happy6.png")));
-//				lower_panel.add(Cat_label);
-//
-//				Modelo.getModelo().addObserver(this);
-//>>>>>>> pruebaGorka
 
 	}
 	
