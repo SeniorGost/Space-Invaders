@@ -117,7 +117,7 @@ public class Ganador extends JPanel implements Observer {
 			}
 			else if (arg instanceof int[])
 			{
-				// 0 Menu, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder
+				// 0 Menu, 5 MenuREAL, 1 Menu2, 2 Juego, 3 Ganar, 4 Perder, 6 Menu3, 7 Creditos
 				int[] datos=(int[])arg;
 				
 				if (datos[0] == Modelo.NOTIFY_WINDOW_CHANGE)
@@ -130,7 +130,7 @@ public class Ganador extends JPanel implements Observer {
 	//Este es el tema, cada vez que se notifica a los observers, se notifica a todas las pantallas a la vez entonces se tiene que poner una sentencia como esta, donde se distinga el numero de pantalla en que estamos
 	private void cambiarPantalla (int pValor){
 		if(pValor == 3)
-			MyFrame.getMyFrame().cambiarVentana(3);
+			MyFrame.getMyFrame().cambiarVentana(pValor);
 	}
 	
 	private class Controller implements KeyListener {
